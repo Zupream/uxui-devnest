@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMDAY — สั่งเครื่องดื่มออนไลน์ ☕</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF4EA; --surface:#FFFFFF; --surface-2:#FBF5EB;
+    --border:#ECE0CD; --border-2:#E0D1B8;
+    --ink:#3E3127; --ink-soft:#6E5D4B; --muted:#A1907A;
+    --primary:#2E42C9; --primary-soft:#EEF0FC;
+    --accent:#EC6450; --gold:#F2B233; --green:#3FAE7E; --yellow:#FFCE1F;
+    --r:18px; --r-lg:26px;
+    --sh-sm:0 4px 16px rgba(86,62,38,.07);
+    --sh:0 16px 44px rgba(86,62,38,.13);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'IBM Plex Sans Thai',sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased;}
+  body.lock{overflow:hidden;}
+  a{text-decoration:none;color:inherit;}
+  img{display:block;max-width:100%;}
+  h1,h2,h3,.fred{font-family:'Fredoka','IBM Plex Sans Thai',sans-serif;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  [hidden]{display:none!important;}
+
+  /* ---------- buttons ---------- */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15.5px;
+    padding:13px 26px;border-radius:50px;transition:transform .16s ease,box-shadow .16s ease,background .16s;white-space:nowrap;}
+  .btn-primary{background:var(--primary);color:#fff;box-shadow:0 8px 20px rgba(46,66,201,.28);}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(46,66,201,.36);}
+  .btn-accent{background:var(--accent);color:#fff;box-shadow:0 8px 20px rgba(236,100,80,.28);}
+  .btn-accent:hover{transform:translateY(-2px);}
+  .btn-ghost{background:var(--surface);color:var(--ink);border:1.5px solid var(--border-2);box-shadow:var(--sh-sm);}
+  .btn-ghost:hover{transform:translateY(-2px);border-color:var(--ink-soft);}
+  .btn-green{background:var(--green);color:#fff;box-shadow:0 8px 20px rgba(63,174,126,.28);}
+  .btn-green:hover{transform:translateY(-2px);}
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
+  .btn-block{width:100%;}
+
+  /* ---------- header ---------- */
+  .header{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+    padding:10px clamp(16px,4vw,48px);background:var(--yellow);border-bottom:1px solid rgba(62,49,39,.14);}
+  .brand{display:flex;align-items:center;}
+  .brand img{height:56px;width:auto;}
+  .cart-btn{position:relative;display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;font-weight:600;font-size:15px;
+    padding:11px 20px;border-radius:50px;transition:transform .15s,box-shadow .15s;box-shadow:0 8px 18px rgba(62,49,39,.22);}
+  .cart-btn:hover{transform:translateY(-2px);}
+  .cart-count{position:absolute;top:-7px;right:-7px;min-width:23px;height:23px;padding:0 6px;background:var(--accent);color:#fff;
+    border-radius:50px;font-size:12px;font-weight:700;display:grid;place-items:center;border:2px solid var(--bg);}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;width:100%;aspect-ratio:851/315;min-height:280px;overflow:hidden;background:#1f43d6;}
+  .hero::before{content:"";position:absolute;inset:0;z-index:0;background:url('../img/banner/FB%20Cover.png') center/cover no-repeat;
+    filter:blur(34px) saturate(1.2);transform:scale(1.25);opacity:.55;}
+  .hero-bg{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;}
+  .hero::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(to bottom,transparent 62%,rgba(20,25,80,.42));}
+  .hero-cta{position:absolute;left:0;right:0;bottom:clamp(18px,3.5vw,40px);z-index:3;display:flex;gap:13px;justify-content:center;flex-wrap:wrap;padding:0 18px;}
+
+  /* ---------- marquee ---------- */
+  .marquee{background:var(--gold);overflow:hidden;white-space:nowrap;padding:10px 0;border-bottom:1px solid var(--border-2);}
+  .mq{display:inline-flex;animation:scroll 24s linear infinite;font-family:'Fredoka';font-weight:600;font-size:16px;color:#5a3d12;}
+  .mq span{padding:0 20px;}
+  .mq b{color:#fff;}
+  @keyframes scroll{to{transform:translateX(-50%);}}
+
+  /* ---------- sections ---------- */
+  .wrap{max-width:1180px;margin:0 auto;padding:clamp(40px,6vw,72px) clamp(16px,4vw,40px);}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px;}
+  .sec-head .tag{font-family:'Fredoka';font-weight:600;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;font-size:13px;}
+  .sec-head h2{font-size:clamp(28px,4.6vw,44px);font-weight:700;line-height:1.05;letter-spacing:-.01em;}
+  .see-all{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--primary);font-size:15px;}
+  .see-all:hover{gap:10px;}
+
+  /* ---------- menu cards ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:clamp(14px,2vw,24px);align-items:stretch;grid-auto-rows:1fr;}
+  .grid-home{grid-template-columns:repeat(4,1fr);}
+  @media(max-width:680px){.grid-home{grid-template-columns:repeat(2,1fr);}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-sm);
+    cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;display:flex;flex-direction:column;}
+  .card:hover{transform:translateY(-6px);box-shadow:var(--sh);}
+  .card .thumb{position:relative;aspect-ratio:1/1;flex:none;min-height:0;overflow:hidden;background:var(--surface-2);display:grid;place-items:center;}
+  .card .thumb img{width:82%;height:90%;object-fit:contain;mix-blend-mode:multiply;transition:transform .28s ease;}
+  .card:hover .thumb img{transform:scale(1.07) translateY(-3px);}
+  .card .badge{position:absolute;top:11px;left:11px;font-family:'Fredoka';font-weight:600;font-size:11px;padding:4px 11px;border-radius:50px;background:#fff;color:var(--ink);box-shadow:var(--sh-sm);}
+  .card .badge.hot{background:var(--accent);color:#fff;} .card .badge.new{background:var(--primary);color:#fff;}
+  .card .add{position:absolute;bottom:11px;right:11px;width:38px;height:38px;border-radius:50%;background:var(--primary);color:#fff;
+    font-size:23px;line-height:1;display:grid;place-items:center;box-shadow:0 6px 14px rgba(46,66,201,.34);transition:transform .15s,background .15s;}
+  .card .add:hover{background:var(--accent);transform:scale(1.1);}
+  .card .body{padding:14px 15px 16px;display:flex;flex-direction:column;gap:2px;flex:1;}
+  .card .body h3{font-size:16.5px;font-weight:600;line-height:1.18;}
+  .card .body .th{font-size:13px;color:var(--muted);}
+  .card .body .price{margin-top:auto;padding-top:9px;font-family:'Fredoka';font-weight:700;font-size:20px;color:var(--primary);}
+
+  /* ---------- poster carousel ---------- */
+  .pcar{position:relative;}
+  .ptrack{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:6px 2px 14px;}
+  .ptrack::-webkit-scrollbar{display:none;}
+  .poster{flex:0 0 auto;width:clamp(168px,42vw,216px);scroll-snap-align:start;border-radius:var(--r);overflow:hidden;
+    box-shadow:var(--sh-sm);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease;background:#fff;border:1px solid var(--border);}
+  .poster:hover{transform:translateY(-5px);box-shadow:var(--sh);}
+  .poster img{width:100%;aspect-ratio:3/4;object-fit:cover;}
+  .pnav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:var(--surface);
+    box-shadow:var(--sh);font-size:20px;display:grid;place-items:center;z-index:3;border:1px solid var(--border);color:var(--ink);}
+  .pnav:hover{background:var(--gold);} .pprev{left:-8px;} .pnext{right:-8px;}
+  @media(max-width:640px){.pnav{display:none;}}
+
+  /* ---------- menu page (view) ---------- */
+  .page-bar{position:sticky;top:77px;z-index:30;background:rgba(250,244,234,.92);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);}
+  .page-bar-in{max-width:1180px;margin:0 auto;padding:14px clamp(16px,4vw,40px) 0;}
+  .page-bar .top{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+  .back-btn{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:15px;color:var(--ink-soft);
+    background:var(--surface);padding:9px 16px;border-radius:50px;border:1px solid var(--border);box-shadow:var(--sh-sm);}
+  .back-btn:hover{color:var(--ink);transform:translateX(-2px);}
+  .page-bar h2{font-size:clamp(22px,3.5vw,30px);font-weight:700;}
+  .tabs{display:flex;gap:10px;overflow-x:auto;padding-bottom:14px;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14.5px;padding:9px 18px;border-radius:50px;
+    background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);transition:all .15s;white-space:nowrap;box-shadow:var(--sh-sm);}
+  .tab:hover{border-color:var(--border-2);color:var(--ink);}
+  .tab.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 8px 18px rgba(46,66,201,.26);}
+
+  /* ---------- footer ---------- */
+  footer{background:var(--surface-2);border-top:1px solid var(--border);}
+  .foot{max-width:1180px;margin:0 auto;padding:48px clamp(16px,4vw,40px) 30px;display:grid;
+    grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px;}
+  .foot-logo{width:175px;max-width:62%;height:auto;margin:0 0 4px;mix-blend-mode:multiply;}
+  .foot-brand p{color:var(--muted);font-size:14px;margin-top:8px;max-width:240px;}
+  .foot h4{font-family:'Fredoka';font-weight:600;font-size:16px;margin-bottom:10px;color:var(--ink);}
+  .foot p,.foot a{color:var(--ink-soft);font-size:14px;line-height:1.9;}
+  .foot a:hover{color:var(--primary);}
+  .socials{display:flex;gap:10px;margin-top:12px;}
+  .socials a{width:40px;height:40px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:grid;place-items:center;
+    font-weight:600;font-size:14px;color:var(--ink-soft);transition:all .15s;box-shadow:var(--sh-sm);}
+  .socials a:hover{background:var(--primary);color:#fff;transform:translateY(-3px);}
+  .foot-bottom{border-top:1px solid var(--border);text-align:center;padding:18px;color:var(--muted);font-size:13px;}
+  @media(max-width:760px){.foot{grid-template-columns:1fr 1fr;}}
+  @media(max-width:460px){.foot{grid-template-columns:1fr;}}
+
+  /* ---------- custom menu card + modal ---------- */
+  .card-custom{border:1.5px dashed var(--border-2);}
+  .card-custom:hover{border-color:var(--accent);}
+  .card-custom .thumb{overflow:hidden;}
+  .card-custom .thumb img.cc-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:0;
+    mix-blend-mode:normal;filter:blur(3px);opacity:.34;transform:scale(1.04);box-shadow:none;}
+  .card-custom .cc-text{position:relative;z-index:1;font-family:'Fredoka';font-weight:700;font-size:30px;letter-spacing:.06em;
+    color:rgba(31,67,214,.6);text-transform:uppercase;text-shadow:0 1px 0 rgba(255,255,255,.5);}
+  .card-custom .body .price{color:var(--accent)!important;font-size:14px!important;}
+  .infobar{display:flex;gap:10px;background:#FFF3DD;border:1px solid #F1D49A;border-radius:14px;padding:12px 14px;
+    margin-bottom:18px;font-size:13px;color:#86601f;line-height:1.55;}
+  .infobar .ib-ic{flex:0 0 auto;font-size:16px;}
+  .infobar a{color:#9a5a16;font-weight:700;text-decoration:underline;}
+  .menu-ref{display:block;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);margin-bottom:18px;cursor:zoom-in;line-height:0;}
+  .menu-ref img{width:100%;height:auto;transition:transform .25s ease;}
+  .menu-ref:hover img{transform:scale(1.02);}
+  .price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:22px;}
+  .price-chip{padding:13px 4px;border-radius:14px;background:var(--surface-2);border:1.5px solid transparent;text-align:center;
+    font-family:'Fredoka';font-weight:700;font-size:18px;color:var(--ink);transition:all .15s;}
+  .price-chip:hover{border-color:var(--border-2);}
+  .price-chip.active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 6px 14px rgba(46,66,201,.26);}
+  .ci-cc{font-size:30px;}
+
+  /* ---------- map ---------- */
+  .map-card{display:grid;grid-template-columns:1.45fr 1fr;gap:22px;background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--r-lg);padding:18px;box-shadow:var(--sh-sm);align-items:center;}
+  .map-img{display:block;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);line-height:0;}
+  .map-img img{width:100%;height:100%;object-fit:cover;transition:transform .3s ease;}
+  .map-img:hover img{transform:scale(1.03);}
+  .map-info h3{font-size:21px;font-weight:700;margin-bottom:8px;}
+  .map-info .addr{color:var(--ink-soft);font-size:15px;margin-bottom:16px;}
+  .map-points{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:20px;}
+  .map-points li{font-size:14px;color:var(--ink-soft);}
+  @media(max-width:760px){.map-card{grid-template-columns:1fr;}}
+
+  /* ---------- overlay / modal ---------- */
+  .overlay{position:fixed;inset:0;z-index:60;background:rgba(62,49,39,.42);backdrop-filter:blur(4px);
+    display:none;align-items:center;justify-content:center;padding:18px;}
+  .overlay.open{display:flex;}
+  .modal{background:var(--surface);border-radius:var(--r-lg);width:100%;max-width:430px;max-height:92vh;overflow:auto;
+    box-shadow:0 30px 70px rgba(40,28,18,.34);animation:pop .26s cubic-bezier(.2,1.1,.4,1);scrollbar-width:thin;}
+  @keyframes pop{from{transform:scale(.94) translateY(12px);opacity:0;}to{transform:none;opacity:1;}}
+  .m-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-bottom:1px solid var(--border);
+    position:sticky;top:0;background:var(--surface);z-index:2;}
+  .m-head h3{font-size:20px;font-weight:700;}
+  .m-head .sub{font-size:13px;color:var(--muted);}
+  .x{width:36px;height:36px;border-radius:50%;background:var(--surface-2);font-size:16px;color:var(--ink-soft);display:grid;place-items:center;flex:0 0 auto;transition:all .15s;}
+  .x:hover{background:var(--accent);color:#fff;}
+  .m-body{padding:22px;}
+  .m-foot{padding:16px 22px 22px;position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);}
+
+  /* product modal */
+  .pm-img{aspect-ratio:1.15/1;background:var(--surface-2);border-radius:var(--r);display:grid;place-items:center;margin-bottom:18px;}
+  .pm-img img{width:60%;height:90%;object-fit:contain;mix-blend-mode:multiply;}
+  .pm-title{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:22px;}
+  .pm-title h3{font-size:23px;font-weight:700;line-height:1.1;}
+  .pm-title .th{font-size:14px;color:var(--muted);margin-top:2px;}
+  .pm-title .price{font-family:'Fredoka';font-weight:700;font-size:24px;color:var(--primary);white-space:nowrap;}
+  .label{font-weight:600;font-size:15px;margin-bottom:11px;display:block;}
+  .sweet-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:24px;}
+  .sweet{padding:11px 4px;border-radius:14px;background:var(--surface-2);border:1.5px solid transparent;text-align:center;transition:all .15s;}
+  .sweet:hover{border-color:var(--border-2);}
+  .sweet .pc{font-family:'Fredoka';font-weight:700;font-size:16px;}
+  .sweet small{display:block;font-size:10.5px;color:var(--muted);margin-top:1px;line-height:1.2;}
+  .sweet.active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 6px 14px rgba(46,66,201,.26);}
+  .sweet.active small{color:rgba(255,255,255,.85);}
+  .stepper{display:inline-flex;align-items:center;border:1.5px solid var(--border-2);border-radius:50px;overflow:hidden;background:var(--surface-2);}
+  .stepper button{width:46px;height:46px;font-size:22px;font-weight:600;color:var(--ink);transition:background .14s;}
+  .stepper button:hover{background:var(--border);}
+  .stepper .qv{min-width:46px;text-align:center;font-family:'Fredoka';font-weight:700;font-size:19px;}
+
+  /* cart drawer */
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(410px,100%);background:var(--bg);z-index:70;
+    transform:translateX(100%);transition:transform .34s cubic-bezier(.5,.05,.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(40,28,18,.2);}
+  .drawer.open{transform:none;}
+  .cart-items{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:13px;}
+  .citem{display:flex;gap:13px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:11px;box-shadow:var(--sh-sm);}
+  .ci-img{width:64px;height:64px;border-radius:13px;background:var(--surface-2);display:grid;place-items:center;flex:0 0 auto;}
+  .ci-img img{width:82%;height:82%;object-fit:contain;mix-blend-mode:multiply;}
+  .ci-info{flex:1;min-width:0;}
+  .ci-info h4{font-size:15px;font-weight:600;line-height:1.2;}
+  .ci-info .sw{font-size:12px;color:var(--muted);margin-top:1px;}
+  .ci-info .pr{font-family:'Fredoka';font-weight:700;color:var(--primary);margin-top:3px;}
+  .ci-side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;}
+  .mini-step{display:inline-flex;align-items:center;border:1.5px solid var(--border-2);border-radius:50px;overflow:hidden;background:var(--surface-2);}
+  .mini-step button{width:28px;height:28px;font-size:16px;font-weight:600;}
+  .mini-step button:hover{background:var(--border);}
+  .mini-step .q{min-width:26px;text-align:center;font-weight:700;font-size:14px;}
+  .ci-rm{font-size:12.5px;color:var(--accent);font-weight:600;}
+  .cart-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);text-align:center;padding:30px;}
+  .cart-empty .em{font-size:56px;}
+  .cart-foot{background:var(--surface);border-top:1px solid var(--border);padding:18px;}
+  .row{display:flex;justify-content:space-between;align-items:center;}
+  .total-row{font-family:'Fredoka';font-weight:700;font-size:21px;margin-bottom:13px;}
+
+  /* forms */
+  .opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:20px;}
+  .opt{border:1.5px solid var(--border);border-radius:var(--r);padding:15px 12px;background:var(--surface-2);cursor:pointer;transition:all .15s;text-align:center;}
+  .opt:hover{border-color:var(--border-2);}
+  .opt .oi{font-size:25px;}
+  .opt b{display:block;font-size:14.5px;margin-top:5px;}
+  .opt small{font-size:11.5px;color:var(--muted);}
+  .opt.active{background:var(--primary);border-color:var(--primary);color:#fff;}
+  .opt.active small{color:rgba(255,255,255,.82);}
+  .field{margin-bottom:15px;}
+  .field label{font-weight:600;font-size:14px;display:block;margin-bottom:7px;}
+  .field .req{color:var(--accent);}
+  .field input,.field textarea{width:100%;font-family:inherit;font-size:15px;padding:12px 15px;border:1.5px solid var(--border);
+    border-radius:14px;background:var(--surface-2);color:var(--ink);transition:all .15s;}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--primary);background:#fff;box-shadow:0 0 0 4px var(--primary-soft);}
+  .field textarea{resize:vertical;}
+  .err{color:var(--accent);font-size:12.5px;margin-top:5px;font-weight:600;display:none;}
+  .err.show{display:block;}
+
+  /* payment */
+  .amount-box{background:linear-gradient(135deg,var(--primary),#4256e0);color:#fff;border-radius:var(--r);text-align:center;
+    padding:20px;margin-bottom:18px;box-shadow:0 14px 30px rgba(46,66,201,.3);}
+  .amount-box .lb{font-size:13px;opacity:.85;}
+  .amount-box .amt{font-family:'Fredoka';font-weight:700;font-size:42px;line-height:1.15;}
+  .pay-method{display:flex;align-items:center;gap:13px;border:1.5px solid var(--primary);border-radius:var(--r);padding:14px 16px;background:var(--primary-soft);margin-bottom:16px;}
+  .pay-method .pic{width:42px;height:42px;border-radius:11px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:20px;}
+  .pay-method b{font-size:15px;} .pay-method small{display:block;font-size:12px;color:var(--ink-soft);}
+  .pay-method .check{margin-left:auto;width:24px;height:24px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:13px;}
+  .qr-box{border:1px solid var(--border);border-radius:var(--r);padding:20px;text-align:center;background:var(--surface-2);margin-bottom:18px;}
+  .qr-img{width:212px;max-width:78%;height:auto;margin:0 auto 10px;display:block;border-radius:12px;background:#fff;box-shadow:var(--sh-sm);}
+  .qr-box .pp{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14px;}
+  .qr-box .num{font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:4px;color:var(--ink);}
+  .qr-box .nm{font-size:12px;color:var(--muted);}
+  .upload{display:flex;flex-direction:column;align-items:center;gap:5px;padding:24px 18px;border:1.5px dashed var(--border-2);
+    border-radius:var(--r);background:var(--surface-2);text-align:center;cursor:pointer;transition:all .15s;}
+  .upload:hover{border-color:var(--primary);background:var(--primary-soft);}
+  .upload svg{width:34px;height:34px;color:var(--primary);}
+  .upload b{font-size:14.5px;font-weight:600;}
+  .upload small{font-size:12px;color:var(--muted);}
+  .slip-preview{margin-top:13px;display:none;border:1px solid var(--border);border-radius:14px;overflow:hidden;position:relative;background:#fff;}
+  .slip-preview.show{display:block;}
+  .slip-preview img{width:100%;max-height:230px;object-fit:contain;}
+  .slip-preview .ok{position:absolute;top:9px;left:9px;background:var(--green);color:#fff;border-radius:50px;font-size:12px;font-weight:600;padding:4px 13px;box-shadow:var(--sh-sm);}
+  .slip-preview .del{position:absolute;top:9px;right:9px;background:rgba(62,49,39,.78);color:#fff;border-radius:50px;font-size:12px;font-weight:600;padding:4px 13px;}
+
+  /* success */
+  .success{text-align:center;padding:10px 4px;}
+  .success .seal{width:86px;height:86px;border-radius:50%;background:var(--gold);display:grid;place-items:center;font-size:44px;
+    margin:6px auto 16px;box-shadow:0 14px 30px rgba(242,178,51,.4);animation:pop .35s ease;}
+  .success h3{font-size:25px;font-weight:700;margin-bottom:6px;}
+  .success>p{color:var(--muted);font-size:14px;}
+  .order-no{display:inline-block;font-family:'Fredoka';font-weight:700;font-size:18px;background:var(--surface-2);border:1px solid var(--border);
+    border-radius:50px;padding:8px 22px;margin:15px 0;}
+  .summary{text-align:left;border:1px solid var(--border);border-radius:var(--r);padding:15px 17px;background:var(--surface-2);margin-bottom:18px;}
+  .summary .sr{display:flex;justify-content:space-between;font-size:14px;padding:4px 0;}
+
+  /* lightbox */
+  .lightbox{position:fixed;inset:0;z-index:80;background:rgba(40,28,18,.86);display:none;align-items:center;justify-content:center;padding:24px;}
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:92vw;max-height:86vh;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+  .lb-x{position:absolute;top:20px;right:20px;width:46px;height:46px;border-radius:50%;background:var(--surface);font-size:19px;color:var(--ink);}
+
+  /* toast */
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(130px);z-index:90;background:var(--ink);color:#fff;
+    font-weight:500;padding:13px 24px;border-radius:50px;box-shadow:0 12px 30px rgba(40,28,18,.35);
+    transition:transform .32s cubic-bezier(.2,1.2,.4,1);display:flex;align-items:center;gap:9px;font-size:14.5px;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .toast .ti{color:var(--gold);}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:860px){
+    #menuGrid{grid-template-columns:repeat(3,1fr);}
+  }
+  @media(max-width:600px){
+    .header{padding:9px 16px;}
+    .brand img{height:46px;}
+    .cart-btn{padding:10px 15px;font-size:14px;}
+    .cart-label{display:none;}
+    .page-bar{top:71px;}
+    .hero{min-height:240px;}
+    .hero-bg{object-fit:cover;}
+    .hero-cta{gap:10px;bottom:15px;}
+    .hero-cta .btn{padding:11px 17px;font-size:14px;}
+    .wrap{padding:34px 16px;}
+    .sec-head{margin-bottom:18px;gap:8px;}
+    .sec-head h2{font-size:26px;}
+    #menuGrid,.grid-home{grid-template-columns:repeat(2,1fr);}
+    .grid{gap:13px;}
+    .card .body{padding:11px 12px 13px;}
+    .card .body h3{font-size:15px;}
+    .card .body .price{font-size:18px;}
+    .card .add{width:34px;height:34px;font-size:21px;}
+    .sweet-grid{grid-template-columns:repeat(3,1fr);}
+    .pm-img{aspect-ratio:1.3/1;}
+    .pm-img img{width:52%;}
+    .m-head{padding:15px 18px;}
+    .m-body{padding:18px;}
+    .m-foot{padding:14px 18px 18px;}
+    .amount-box .amt{font-size:36px;}
+    .qr-img{width:188px;}
+  }
+  @media(max-width:380px){
+    .grid{gap:11px;}
+    .hero-cta{flex-direction:column;align-items:stretch;left:14px;right:14px;padding:0;}
+    .opt-grid{grid-template-columns:1fr;}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;}}
+</style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <a href="#" class="brand" onclick="showHome();return false;"><img src="../img/logo/image.png" alt="SUMDAY"></a>
+    <button class="cart-btn" onclick="openCart()">🛒 <span class="cart-label">ตะกร้า</span><span class="cart-count" id="cartCount" hidden>0</span></button>
+  </header>
+
+  <!-- ===== HOME VIEW ===== -->
+  <main id="viewHome">
+    <section class="hero">
+      <img class="hero-bg" src="../img/banner/FB%20Cover.png" alt="SUMDAY Cafe &amp; Workspace">
+      <div class="hero-cta">
+        <button class="btn btn-accent" onclick="scrollToRec()">🍵 ดูเมนูแนะนำ</button>
+        <button class="btn btn-ghost" onclick="showMenu()">เมนูทั้งหมด →</button>
+      </div>
+    </section>
+
+    <div class="marquee">
+      <div class="mq">
+        <span>FRESH COFFEE <b>★</b></span><span>GOOD VIBES <b>★</b></span><span>ORGANIC 100% <b>★</b></span><span>SOMEDAY STARTS WITH SUMDAY <b>★</b></span><span>ENJOY YOUR DAY <b>★</b></span>
+        <span>FRESH COFFEE <b>★</b></span><span>GOOD VIBES <b>★</b></span><span>ORGANIC 100% <b>★</b></span><span>SOMEDAY STARTS WITH SUMDAY <b>★</b></span><span>ENJOY YOUR DAY <b>★</b></span>
+      </div>
+    </div>
+
+    <section class="wrap" id="recSection">
+      <div class="sec-head">
+        <div><span class="tag">Best Sellers</span><h2>เมนูแนะนำ</h2></div>
+        <a class="see-all" href="#" onclick="showMenu();return false;">ดูเมนูทั้งหมด →</a>
+      </div>
+      <div class="grid grid-home" id="homeGrid"></div>
+    </section>
+
+    <section class="wrap" style="padding-top:0;">
+      <div class="sec-head">
+        <div><span class="tag">Gallery</span><h2>โปสเตอร์ &amp; โปรโมชั่น</h2></div>
+        <span style="color:var(--muted);font-size:14px;">เลื่อนดู · แตะเพื่อขยาย</span>
+      </div>
+      <div class="pcar">
+        <button class="pnav pprev" onclick="scrollPosters(-1)" aria-label="ก่อนหน้า">‹</button>
+        <div class="ptrack" id="posterTrack"></div>
+        <button class="pnav pnext" onclick="scrollPosters(1)" aria-label="ถัดไป">›</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== MENU VIEW ===== -->
+  <section id="viewMenu" hidden>
+    <div class="page-bar">
+      <div class="page-bar-in">
+        <div class="top">
+          <button class="back-btn" onclick="showHome()">‹ กลับ</button>
+          <h2>เมนูทั้งหมด</h2>
+        </div>
+        <div class="tabs" id="tabs"></div>
+      </div>
+    </div>
+    <div class="wrap" style="padding-top:26px;">
+      <div class="grid" id="menuGrid"></div>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section class="wrap" id="mapSection" style="padding-top:0;">
+    <div class="sec-head"><div><span class="tag">Visit Us</span><h2>มาหาเราได้ที่นี่</h2></div></div>
+    <div class="map-card">
+      <a class="map-img" href="https://maps.app.goo.gl/UWwtbhgofcox4LjW8" target="_blank" rel="noopener">
+        <img src="../img/banner/26%202.png" alt="แผนที่ร้าน SUMDAY Cafe พระราม 9 ซอย 9 แยก 4">
+      </a>
+      <div class="map-info">
+        <h3>SUMDAY Cafe &amp; Workspace</h3>
+        <p class="addr">📍 351/81 ถ.พระราม 9 ซอย 9 แยก 4<br>กรุงเทพมหานคร</p>
+        <ul class="map-points">
+          <li>🚇 ใกล้ MRT พระราม 9 ราว 900 ม.</li>
+          <li>🅿️ มีที่จอดรถยนต์ &amp; มอเตอร์ไซค์</li>
+          <li>🕐 เปิด จันทร์–ศุกร์ 10:00–17:00 น.</li>
+        </ul>
+        <a class="btn btn-primary" href="https://maps.app.goo.gl/UWwtbhgofcox4LjW8" target="_blank" rel="noopener">เปิดใน Google Maps →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="foot">
+      <div class="foot-brand">
+        <img class="foot-logo" src="../img/logo/image%20copy.png" alt="SUMDAY">
+        <p>Someday starts with Sumday. คาเฟ่ &amp; workspace สำหรับทุกวันดีๆ ของคุณ</p>
+        <div class="socials">
+          <a href="https://www.instagram.com/sumday.cafe?igsh=MWUwaml3NXV0YWwwZQ%3D%3D&utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+          <a href="https://lin.ee/qMdRmSO" target="_blank" rel="noopener" aria-label="LINE">LINE</a>
+        </div>
+      </div>
+      <div><h4>เมนู</h4><p><a href="#" onclick="showMenu();return false;">เมนูทั้งหมด</a><br><a href="#" onclick="showHome();return false;">เมนูแนะนำ</a><br><a href="#" onclick="showMenu();return false;">กาแฟ</a></p></div>
+      <div><h4>ติดต่อร้าน</h4><p>351/81 ถ.พระราม 9<br>ซอย 9 แยก 4<br>โทร 095-956-7514</p></div>
+      <div><h4>เวลาเปิด</h4><p>จันทร์–ศุกร์<br>10:00 – 17:00 น.<br>เสาร์–อาทิตย์ ปิดทำการ</p></div>
+    </div>
+    <div class="foot-bottom">© 2026 SUMDAY Cafe · All rights reserved</div>
+  </footer>
+
+  <!-- ========== MODALS ========== -->
+  <div class="overlay" id="ovProduct" onclick="bgClose(event,'ovProduct')">
+    <div class="modal">
+      <div class="m-head"><h3>เลือกตัวเลือก</h3><button class="x" onclick="closeAll()">✕</button></div>
+      <div class="m-body" id="pmBody"></div>
+      <div class="m-foot"><button class="btn btn-accent btn-block" id="pmAdd" onclick="addFromModal()">เพิ่มลงตะกร้า</button></div>
+    </div>
+  </div>
+
+  <!-- custom / other menu -->
+  <div class="overlay" id="ovCustom" onclick="bgClose(event,'ovCustom')">
+    <div class="modal">
+      <div class="m-head"><div><h3>เมนูอื่นๆ</h3><div class="sub">กรอกเมนู &amp; เลือกราคาเอง</div></div><button class="x" onclick="closeAll()">✕</button></div>
+      <div class="m-body" id="ocBody"></div>
+      <div class="m-foot"><button class="btn btn-accent btn-block" id="cAdd" onclick="addCustom()">เพิ่มลงตะกร้า</button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovCart" onclick="bgClose(event,'ovCart')" style="justify-content:flex-end;padding:0;">
+    <div class="drawer" id="drawer" onclick="event.stopPropagation()">
+      <div class="m-head"><div><h3>ตะกร้าของคุณ</h3><div class="sub" id="cartSub">0 รายการ</div></div><button class="x" onclick="closeAll()">✕</button></div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-foot" id="cartFoot" hidden>
+        <div class="row total-row"><span>ยอดรวม</span><span id="cartTotal">฿0</span></div>
+        <button class="btn btn-primary btn-block" onclick="openCheckout()">สั่งซื้อ &amp; ชำระเงิน →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovCheckout" onclick="bgClose(event,'ovCheckout')">
+    <div class="modal">
+      <div class="m-head"><div><h3>ข้อมูลการรับ</h3><div class="sub">ไม่ต้องสมัครสมาชิก</div></div><button class="x" onclick="closeAll()">✕</button></div>
+      <div class="m-body">
+        <span class="label">รูปแบบการรับเครื่องดื่ม</span>
+        <div class="opt-grid">
+          <div class="opt active" data-type="pickup" onclick="setType('pickup')"><div class="oi">🏃</div><b>รับเองที่ร้าน</b><small>มารับที่เคาน์เตอร์</small></div>
+          <div class="opt" data-type="callback" onclick="setType('callback')"><div class="oi">📞</div><b>ให้ติดต่อกลับ</b><small>โทรแจ้งเมื่อพร้อม</small></div>
+        </div>
+        <div class="field"><label>ชื่อผู้สั่ง <span class="req">*</span></label><input id="fName" placeholder="เช่น อริสา" autocomplete="off"><div class="err" id="errName">กรุณากรอกชื่อ</div></div>
+        <div class="field"><label>เบอร์โทรติดต่อ <span class="req">*</span></label><input id="fPhone" inputmode="tel" placeholder="08x-xxx-xxxx" autocomplete="off"><div class="err" id="errPhone">กรุณากรอกเบอร์โทร 9–10 หลัก</div></div>
+        <div class="field"><label>หมายเหตุถึงร้าน <span style="color:var(--muted);font-weight:400">(ไม่บังคับ)</span></label><textarea id="fNote" rows="2" placeholder="เช่น หวานน้อยทุกแก้ว / ขอหลอดเพิ่ม"></textarea></div>
+      </div>
+      <div class="m-foot"><button class="btn btn-primary btn-block" onclick="openPayment()">ไปชำระเงิน →</button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovPayment" onclick="bgClose(event,'ovPayment')">
+    <div class="modal">
+      <div class="m-head"><div><h3>ชำระเงิน</h3><div class="sub">พร้อมเพย์ / QR PromptPay</div></div><button class="x" onclick="closeAll()">✕</button></div>
+      <div class="m-body">
+        <div class="amount-box"><div class="lb">ยอดที่ต้องชำระ</div><div class="amt" id="payAmt">฿0</div></div>
+        <div class="pay-method"><div class="pic">▣</div><div><b>พร้อมเพย์ / QR</b><small>สแกนจ่ายผ่านแอปธนาคาร</small></div><div class="check">✓</div></div>
+        <div class="qr-box">
+          <img class="qr-img" src="../img/logo/S__3964954.jpg" alt="QR Code ชำระเงิน SUMDAY">
+          <div class="nm">สแกน QR ด้วยแอปธนาคารเพื่อชำระเงิน</div>
+        </div>
+        <span class="label">อัปโหลดสลิปการโอน <span class="req">*</span></span>
+        <label class="upload" for="slipInput">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <b>แตะเพื่ออัปโหลดสลิป</b>
+          <small>รองรับไฟล์รูปภาพ (JPG, PNG)</small>
+        </label>
+        <input type="file" id="slipInput" accept="image/*" hidden onchange="onSlip(event)">
+        <div class="slip-preview" id="slipPreview"><span class="ok">✓ แนบสลิปแล้ว</span><button class="del" onclick="removeSlip()">ลบ</button><img id="slipImg" alt="สลิป"></div>
+        <div class="err" id="errSlip" style="margin-top:10px">กรุณาอัปโหลดสลิปก่อนยืนยัน</div>
+      </div>
+      <div class="m-foot"><button class="btn btn-green btn-block" id="confirmPay" onclick="finishOrder()" disabled>🔒 ยืนยันการชำระเงิน</button></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="ovSuccess">
+    <div class="modal"><div class="m-body"><div class="success">
+      <div class="seal">🎉</div>
+      <h3>สั่งซื้อสำเร็จ!</h3>
+      <p>ขอบคุณที่อุดหนุน SUMDAY ☕</p>
+      <div class="order-no" id="orderNo">#SD-0000</div>
+      <div class="summary" id="successSummary"></div>
+      <p style="margin-bottom:18px;color:var(--ink-soft)">เราได้รับสลิปของคุณแล้ว กำลังเตรียมเครื่องดื่มให้นะคะ 💛</p>
+      <button class="btn btn-primary btn-block" onclick="resetAll()">เริ่มสั่งใหม่</button>
+    </div></div></div>
+  </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()"><button class="lb-x" onclick="closeLightbox()">✕</button><img id="lbImg" alt="โปสเตอร์"></div>
+
+  <div class="toast" id="toast"><span class="ti">✓</span><span id="toastMsg"></span></div>
+
+<script>
+/* ============ DATA ============ */
+const SWEET=[{v:'0%',t:'ไม่หวาน'},{v:'25%',t:'น้อย'},{v:'50%',t:'กลาง'},{v:'75%',t:'ค่อนข้าง'},{v:'100%',t:'ปกติ'}];
+const CATS=[{k:'all',n:'ทั้งหมด'},{k:'rec',n:'⭐ แนะนำ'},{k:'coffee',n:'☕ กาแฟ'},{k:'milk',n:'🥛 นม & ชานม'},{k:'tea',n:'🍵 ชา & น้ำผลไม้'}];
+const PRODUCTS=[
+  {id:35,en:'Americano',th:'อเมริกาโน่',price:55,cat:'coffee',img:'35.png',tag:'hot'},
+  {id:36,en:'Black Orange',th:'แบล็คออเรนจ์',price:65,cat:'coffee',img:'36.png',rec:true},
+  {id:37,en:'Latte',th:'ลาเต้',price:60,cat:'coffee',img:'37.png',rec:true},
+  {id:38,en:'Cappuccino',th:'คาปูชิโน่',price:60,cat:'coffee',img:'38.png'},
+  {id:39,en:'Banana Coffee',th:'กาแฟกล้วย',price:65,cat:'coffee',img:'39.png',rec:true},
+  {id:40,en:'Thai Tea',th:'ชาไทย',price:60,cat:'milk',img:'40.png',tag:'hot',rec:true},
+  {id:43,en:'Rose Milk Tea',th:'ชานมกุหลาบ',price:60,cat:'milk',img:'43.png'},
+  {id:44,en:'Rose Tea',th:'ชากุหลาบ',price:60,cat:'milk',img:'44.png',tag:'new'},
+  {id:46,en:'Banana Milk',th:'บานาน่ามิลค์',price:60,cat:'milk',img:'46.png'},
+  {id:47,en:'Fresh Milk',th:'นมสด',price:60,cat:'milk',img:'47.png'},
+  {id:48,en:'Melon Milk',th:'นมเมล่อน',price:60,cat:'milk',img:'48.png',tag:'new'},
+  {id:49,en:'Taro Milk',th:'นมเผือก',price:60,cat:'milk',img:'49.png'},
+  {id:50,en:'Green Tea Latte',th:'ชาเขียวนม',price:60,cat:'milk',img:'50.png'},
+  {id:52,en:'Matcha Latte',th:'มัทฉะลาเต้',price:70,cat:'milk',img:'52.png',tag:'hot',rec:true},
+  {id:33,en:'Orange Juice',th:'น้ำส้มคั้นสด',price:65,cat:'tea',img:'33.png',tag:'new'},
+  {id:34,en:'Punch',th:'น้ำพั้นซ์',price:65,cat:'tea',img:'34.png'},
+  {id:41,en:'Lemon Tea',th:'ชามะนาว',price:60,cat:'tea',img:'41.png',rec:true},
+  {id:42,en:'Jasmine Tea',th:'ชามะลิ',price:60,cat:'tea',img:'42.png'},
+  {id:45,en:'Lemon Honey',th:'น้ำผึ้งมะนาว',price:60,cat:'tea',img:'45.png'},
+  {id:51,en:'Pure Matcha',th:'มัทฉะเพียว',price:65,cat:'tea',img:'51.png'},
+  {id:53,en:'Coconut Matcha',th:'มัทฉะมะพร้าว',price:65,cat:'tea',img:'53.png'},
+];
+const HOME_IDS=[40,37,39,52,36,41,44];
+const POSTERS=['6','8','9','10','11','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','54'];
+const TAGMAP={hot:{c:'hot',t:'ขายดี'},new:{c:'new',t:'ใหม่'}};
+
+/* ============ STATE ============ */
+let cart=[],activeCat='all',pmProduct=null,pmSweet=4,pmQty=1,orderType='pickup',slipData=null;
+let cPrice=null,cSweet=4,cQty=1,customSeq=0;
+
+/* ============ CARD + MENU ============ */
+function cardHTML(p){
+  const badge=p.tag?`<span class="badge ${TAGMAP[p.tag].c}">${TAGMAP[p.tag].t}</span>`:'';
+  return `<div class="card" onclick="openProduct(${p.id})">
+    <div class="thumb">${badge}<img src="../img/menu/${p.img}" alt="${p.th}" loading="lazy">
+      <button class="add" onclick="event.stopPropagation();openProduct(${p.id})" aria-label="เพิ่ม">+</button></div>
+    <div class="body"><h3>${p.en}</h3><div class="th">${p.th}</div><div class="price">฿${p.price}</div></div>
+  </div>`;
+}
+function renderHome(){ document.getElementById('homeGrid').innerHTML=HOME_IDS.map(id=>cardHTML(PRODUCTS.find(p=>p.id===id))).join('')+customCardHTML(); }
+function buildTabs(){ document.getElementById('tabs').innerHTML=CATS.map(c=>`<button class="tab ${c.k===activeCat?'active':''}" onclick="setCat('${c.k}')">${c.n}</button>`).join(''); }
+function setCat(k){ activeCat=k; buildTabs(); renderMenu(); }
+function customCardHTML(){
+  return `<div class="card card-custom" onclick="openCustom()">
+    <div class="thumb"><img class="cc-bg" src="../img/poster/11.png" alt=""><span class="cc-text">Custom</span>
+      <button class="add" onclick="event.stopPropagation();openCustom()" aria-label="สั่งเมนูอื่นๆ">+</button></div>
+    <div class="body"><h3>เมนูอื่นๆ</h3><div class="th">กรอกเมนู &amp; ราคาเอง</div><div class="price">แตะเพื่อสั่ง →</div></div>
+  </div>`;
+}
+function renderMenu(){
+  const list=PRODUCTS.filter(p=>activeCat==='all'?true:activeCat==='rec'?p.rec:p.cat===activeCat);
+  document.getElementById('menuGrid').innerHTML=list.map(cardHTML).join('')+customCardHTML();
+}
+
+/* ============ VIEW ROUTING ============ */
+function showMenu(){ document.getElementById('viewHome').hidden=true; document.getElementById('viewMenu').hidden=false; renderMenu(); window.scrollTo(0,0); history.replaceState(null,'','#menu'); }
+function showHome(){ document.getElementById('viewMenu').hidden=true; document.getElementById('viewHome').hidden=false; window.scrollTo(0,0); history.replaceState(null,'','#'); }
+function scrollToRec(){ document.getElementById('recSection').scrollIntoView({behavior:'smooth'}); }
+
+/* ============ POSTERS ============ */
+function renderPosters(){ document.getElementById('posterTrack').innerHTML=POSTERS.map(n=>`<div class="poster" onclick="openLightbox('${n}')"><img src="../img/poster/${n}.png" alt="โปสเตอร์ ${n}" loading="lazy"></div>`).join(''); }
+function scrollPosters(d){ const t=document.getElementById('posterTrack'); t.scrollBy({left:d*t.clientWidth*0.8,behavior:'smooth'}); }
+function openLightbox(n){ openLightboxImg(`../img/poster/${n}.png`); }
+function openLightboxImg(src){ document.getElementById('lbImg').src=src; document.getElementById('lightbox').classList.add('open'); document.body.classList.add('lock'); }
+function closeLightbox(){ document.getElementById('lightbox').classList.remove('open'); if(!anyOpen())document.body.classList.remove('lock'); }
+
+/* ============ CUSTOM MENU ============ */
+function openCustom(){
+  cPrice=null; cSweet=4; cQty=1;
+  document.getElementById('ocBody').innerHTML=`
+    <div class="infobar"><span class="ib-ic">⚠️</span><div>หากเมนูที่ต้องการ<b>ไม่มีในรายการ</b> กรุณาสอบถามราคากับทางร้านก่อนสั่งซื้อ<br>
+      📞 <a href="tel:0959567514">095-956-7514</a> &nbsp;·&nbsp; 💬 <a href="https://lin.ee/qMdRmSO" target="_blank" rel="noopener">LINE @sumdaycafe</a></div></div>
+    <span class="label">เมนูทั้งหมด <small style="color:var(--muted);font-weight:400">(แตะรูปเพื่อขยาย)</small></span>
+    <a class="menu-ref" onclick="openLightboxImg('../img/banner/Menu.png')"><img src="../img/banner/Menu.png" alt="เมนู SUMDAY ทั้งหมด"></a>
+    <div class="field"><label>ชื่อเมนูที่ต้องการ <span class="req">*</span></label>
+      <input id="cName" placeholder="เช่น โกโก้มิ้นต์, มอคค่า ..." autocomplete="off" oninput="toggleErr('errCName',false)">
+      <div class="err" id="errCName">กรุณากรอกชื่อเมนู</div></div>
+    <span class="label">เลือกราคา (ตามเมนูในรูป) <span class="req">*</span></span>
+    <div class="price-grid">${[55,60,65,70].map(p=>`<button class="price-chip" onclick="selectCPrice(${p},this)">฿${p}</button>`).join('')}</div>
+    <div class="err" id="errCPrice" style="margin-top:-16px;margin-bottom:16px">กรุณาเลือกราคา</div>
+    <span class="label">ระดับความหวาน</span>
+    <div class="sweet-grid">${SWEET.map((s,i)=>`<button class="sweet ${i===4?'active':''}" onclick="selectCSweet(${i},this)"><span class="pc">${s.v}</span><small>${s.t}</small></button>`).join('')}</div>
+    <span class="label">จำนวน</span>
+    <div class="stepper"><button onclick="cStep(-1)">−</button><span class="qv" id="cQv">1</span><button onclick="cStep(1)">+</button></div>`;
+  updateCustomBtn(); open('ovCustom');
+}
+function selectCPrice(p,el){ cPrice=p; document.querySelectorAll('#ocBody .price-chip').forEach(c=>c.classList.remove('active')); el.classList.add('active'); toggleErr('errCPrice',false); updateCustomBtn(); }
+function selectCSweet(i,el){ cSweet=i; document.querySelectorAll('#ocBody .sweet').forEach(c=>c.classList.remove('active')); el.classList.add('active'); }
+function cStep(d){ cQty=Math.max(1,Math.min(20,cQty+d)); document.getElementById('cQv').textContent=cQty; updateCustomBtn(); }
+function updateCustomBtn(){ document.getElementById('cAdd').textContent= cPrice? `เพิ่มลงตะกร้า · ฿${cPrice*cQty}` : 'เพิ่มลงตะกร้า'; }
+function addCustom(){
+  const name=document.getElementById('cName').value.trim();
+  let ok=true;
+  toggleErr('errCName',!name); if(!name)ok=false;
+  toggleErr('errCPrice',!cPrice); if(!cPrice)ok=false;
+  if(!ok)return;
+  cart.push({key:'custom-'+(++customSeq),custom:true,en:name,th:'เมนูพิเศษ',price:cPrice,sweet:SWEET[cSweet].v,qty:cQty});
+  updateCart(); closeAll(); toast(`เพิ่ม ${name} (${cQty}) แล้ว`);
+}
+
+/* ============ PRODUCT MODAL ============ */
+function openProduct(id){ pmProduct=PRODUCTS.find(p=>p.id===id); pmSweet=4; pmQty=1; renderPM(); open('ovProduct'); }
+function renderPM(){
+  const p=pmProduct;
+  document.getElementById('pmBody').innerHTML=`
+    <div class="pm-img"><img src="../img/menu/${p.img}" alt="${p.th}"></div>
+    <div class="pm-title"><div><h3>${p.en}</h3><div class="th">${p.th}</div></div><div class="price">฿${p.price}</div></div>
+    <span class="label">ระดับความหวาน</span>
+    <div class="sweet-grid">${SWEET.map((s,i)=>`<button class="sweet ${i===pmSweet?'active':''}" onclick="pmSweet=${i};renderPM()"><span class="pc">${s.v}</span><small>${s.t}</small></button>`).join('')}</div>
+    <span class="label">จำนวน</span>
+    <div class="stepper"><button onclick="pmStep(-1)">−</button><span class="qv">${pmQty}</span><button onclick="pmStep(1)">+</button></div>`;
+  document.getElementById('pmAdd').textContent=`เพิ่มลงตะกร้า · ฿${p.price*pmQty}`;
+}
+function pmStep(d){ pmQty=Math.max(1,Math.min(20,pmQty+d)); renderPM(); }
+function addFromModal(){
+  const p=pmProduct,sweet=SWEET[pmSweet].v,key=p.id+'|'+sweet,ex=cart.find(c=>c.key===key);
+  if(ex)ex.qty+=pmQty; else cart.push({key,id:p.id,en:p.en,th:p.th,price:p.price,img:p.img,sweet,qty:pmQty});
+  updateCart(); closeAll(); toast(`เพิ่ม ${p.en} (${pmQty}) แล้ว`);
+}
+
+/* ============ CART ============ */
+function cartQty(){ return cart.reduce((s,c)=>s+c.qty,0); }
+function cartTotal(){ return cart.reduce((s,c)=>s+c.price*c.qty,0); }
+function updateCart(){
+  const q=cartQty(),badge=document.getElementById('cartCount');
+  badge.textContent=q; badge.hidden=!q;
+  document.getElementById('cartSub').textContent=q+' รายการ';
+  const box=document.getElementById('cartItems'),foot=document.getElementById('cartFoot');
+  if(!cart.length){ box.innerHTML=`<div class="cart-empty"><div class="em">🧋</div><b>ตะกร้ายังว่างอยู่</b><span>เลือกเครื่องดื่มที่ชอบแล้วกดเพิ่มได้เลย</span></div>`; foot.hidden=true; return; }
+  foot.hidden=false;
+  box.innerHTML=cart.map(c=>`<div class="citem">
+    <div class="ci-img">${c.custom?'<span class="ci-cc">✏️</span>':`<img src="../img/menu/${c.img}" alt="${escapeHtml(c.th)}">`}</div>
+    <div class="ci-info"><h4>${escapeHtml(c.en)}</h4><div class="sw">หวาน ${c.sweet} · ฿${c.price}</div><div class="pr">฿${c.price*c.qty}</div></div>
+    <div class="ci-side"><button class="ci-rm" onclick="removeItem('${c.key}')">ลบ</button>
+      <div class="mini-step"><button onclick="chQty('${c.key}',-1)">−</button><span class="q">${c.qty}</span><button onclick="chQty('${c.key}',1)">+</button></div></div>
+  </div>`).join('');
+  document.getElementById('cartTotal').textContent='฿'+cartTotal();
+}
+function chQty(key,d){ const c=cart.find(x=>x.key===key); if(!c)return; c.qty+=d; if(c.qty<=0)cart=cart.filter(x=>x.key!==key); updateCart(); }
+function removeItem(key){ cart=cart.filter(x=>x.key!==key); updateCart(); }
+function openCart(){ open('ovCart'); }
+
+/* ============ CHECKOUT ============ */
+function openCheckout(){ if(!cart.length)return; open('ovCheckout'); }
+function setType(t){ orderType=t; document.querySelectorAll('.opt').forEach(o=>o.classList.toggle('active',o.dataset.type===t)); }
+function openPayment(){
+  const name=document.getElementById('fName').value.trim();
+  const phone=document.getElementById('fPhone').value.replace(/\D/g,'');
+  let ok=true;
+  toggleErr('errName',!name); if(!name)ok=false;
+  const phoneOk=phone.length>=9&&phone.length<=10; toggleErr('errPhone',!phoneOk); if(!phoneOk)ok=false;
+  if(!ok)return;
+  document.getElementById('payAmt').textContent='฿'+cartTotal();
+  open('ovPayment');
+}
+function toggleErr(id,show){ document.getElementById(id).classList.toggle('show',show); }
+
+/* ============ PAYMENT / SLIP ============ */
+function onSlip(e){
+  const f=e.target.files[0]; if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{ slipData=ev.target.result; document.getElementById('slipImg').src=slipData;
+    document.getElementById('slipPreview').classList.add('show'); document.getElementById('confirmPay').disabled=false; toggleErr('errSlip',false); };
+  r.readAsDataURL(f);
+}
+function removeSlip(){ slipData=null; document.getElementById('slipInput').value=''; document.getElementById('slipPreview').classList.remove('show'); document.getElementById('confirmPay').disabled=true; }
+function finishOrder(){
+  if(!slipData){ toggleErr('errSlip',true); return; }
+  const name=document.getElementById('fName').value.trim(),phone=document.getElementById('fPhone').value.trim(),note=document.getElementById('fNote').value.trim();
+  document.getElementById('orderNo').textContent='#SD-'+String(Math.floor(1000+Math.random()*9000));
+  document.getElementById('successSummary').innerHTML=`
+    <div class="sr"><span>ชื่อผู้สั่ง</span><b>${escapeHtml(name)}</b></div>
+    <div class="sr"><span>เบอร์ติดต่อ</span><b>${escapeHtml(phone)}</b></div>
+    <div class="sr"><span>รูปแบบ</span><b>${orderType==='pickup'?'รับเองที่ร้าน':'ให้ติดต่อกลับ'}</b></div>
+    ${note?`<div class="sr"><span>หมายเหตุ</span><b>${escapeHtml(note)}</b></div>`:''}
+    <div class="sr"><span>จำนวน</span><b>${cartQty()} แก้ว</b></div>
+    <div class="sr" style="border-top:1px dashed var(--border-2);margin-top:6px;padding-top:9px;font-size:17px"><span><b>ยอดชำระ</b></span><b style="color:var(--primary)">฿${cartTotal()}</b></div>`;
+  closeAll(); open('ovSuccess');
+}
+function resetAll(){ cart=[];slipData=null;orderType='pickup'; ['fName','fPhone','fNote'].forEach(id=>document.getElementById(id).value=''); removeSlip(); setType('pickup'); updateCart(); closeAll(); showHome(); }
+
+/* ============ MODAL HELPERS ============ */
+function open(id){ document.getElementById(id).classList.add('open'); if(id==='ovCart')document.getElementById('drawer').classList.add('open'); document.body.classList.add('lock'); }
+function anyOpen(){ return [...document.querySelectorAll('.overlay')].some(o=>o.classList.contains('open'))||document.getElementById('lightbox').classList.contains('open'); }
+function closeAll(){ document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('open')); document.getElementById('drawer').classList.remove('open'); document.getElementById('lightbox').classList.remove('open'); document.body.classList.remove('lock'); }
+function bgClose(e,id){ if(e.target.id===id)closeAll(); }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeAll(); });
+function escapeHtml(s){ return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* ============ TOAST ============ */
+let toastTimer;
+function toast(msg){ document.getElementById('toastMsg').textContent=msg; const t=document.getElementById('toast'); t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),1900); }
+
+/* ============ INIT ============ */
+renderHome(); buildTabs(); renderPosters(); updateCart();
+if(location.hash==='#menu')showMenu();
+</script>
+</body>
+</html>

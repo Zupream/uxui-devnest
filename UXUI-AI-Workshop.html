@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design × AI — Vibe UX/UI Workshop · DevNest</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root{
+  --primary:#7C3AED; --primary-dark:#5B21B6; --primary-light:#A78BFA;
+  --secondary:#EC4899; --secondary-dark:#DB2777; --secondary-light:#F472B6;
+  --accent-orange:#F59E0B; --accent-red:#EF4444; --accent-purple:#8B5CF6;
+  --accent-pink:#EC4899; --accent-amber:#FBBF24; --accent-cyan:#06B6D4;
+  --bg-dark:#F7F3FF; --bg-card:rgba(124,58,237,0.05); --bg-card-hover:rgba(124,58,237,0.10);
+  --text-primary:#1E1B2E; --text-secondary:#4B445E; --text-muted:#8B84A0;
+  --grid-color:rgba(124,58,237,0.06); --border-color:rgba(124,58,237,0.13);
+  --transition-fast:200ms; --transition-normal:350ms; --transition-slow:500ms;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dark);color:var(--text-primary);overflow:hidden;width:100vw;height:100vh;-webkit-font-smoothing:antialiased;}
+
+/* Grid bg */
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(var(--grid-color) 1px,transparent 1px),linear-gradient(90deg,var(--grid-color) 1px,transparent 1px);background-size:40px 40px;z-index:0;pointer-events:none;}
+.grid-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,var(--bg-card-hover) 0%,transparent 60%);}
+
+/* Floating animated blobs */
+.blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:0.40;z-index:0;pointer-events:none;}
+.blob.b1{width:46vw;height:46vw;left:-12vw;top:-14vw;background:radial-gradient(circle,#A78BFA,transparent 70%);animation:float1 18s ease-in-out infinite;}
+.blob.b2{width:40vw;height:40vw;right:-12vw;bottom:-14vw;background:radial-gradient(circle,#F472B6,transparent 70%);animation:float2 22s ease-in-out infinite;}
+.blob.b3{width:30vw;height:30vw;right:18vw;top:-8vw;background:radial-gradient(circle,#22D3EE,transparent 70%);opacity:0.22;animation:float3 26s ease-in-out infinite;}
+@keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(6vw,5vw) scale(1.12)}}
+@keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-5vw,-4vw) scale(1.15)}}
+@keyframes float3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-4vw,4vw) scale(0.9)}}
+
+/* Top progress */
+.progress-top{position:fixed;top:0;left:0;height:4px;z-index:120;background:linear-gradient(90deg,var(--primary),var(--secondary));box-shadow:0 0 12px rgba(124,58,237,0.5);transition:width var(--transition-slow) ease;width:0;}
+
+/* App layout + Sidebar */
+.app{display:flex;width:100vw;height:100vh;position:relative;z-index:1;}
+.sidebar{width:clamp(232px,18vw,300px);flex-shrink:0;height:100vh;overflow-y:auto;background:rgba(255,255,255,0.78);backdrop-filter:blur(12px);border-right:1px solid var(--border-color);padding:clamp(16px,1.5vw,24px) clamp(12px,1vw,16px);transition:margin-left 0.32s cubic-bezier(0.4,0,0.2,1);z-index:60;}
+.sidebar.hidden{margin-left:calc(-1 * clamp(232px,18vw,300px));}
+.sb-head{position:relative;padding:0 8px clamp(12px,1.2vw,18px);border-bottom:1px solid var(--border-color);margin-bottom:clamp(8px,1vw,14px);}
+.sb-collapse{position:absolute;top:-2px;right:4px;width:26px;height:26px;border-radius:8px;border:1px solid var(--border-color);background:#fff;color:var(--text-muted);font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.sb-collapse:hover{color:var(--primary);border-color:var(--primary);}
+.sb-logo{display:flex;align-items:center;gap:7px;font-size:clamp(10px,0.85vw,12px);font-weight:800;letter-spacing:0.04em;color:var(--primary);}
+.sb-logo .sq{width:12px;height:12px;border-radius:4px;background:linear-gradient(135deg,var(--primary),var(--secondary));}
+.sb-title{font-size:clamp(15px,1.25vw,19px);font-weight:800;margin-top:8px;line-height:1.2;background:linear-gradient(135deg,var(--text-primary),var(--primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sb-sub{font-size:clamp(9px,0.78vw,11px);color:var(--text-muted);margin-top:3px;font-weight:500;}
+.sb-nav{display:flex;flex-direction:column;gap:1px;}
+.sb-group-label{font-size:clamp(8px,0.68vw,10px);font-weight:800;letter-spacing:0.13em;text-transform:uppercase;color:var(--text-muted);margin:clamp(10px,1vw,15px) 0 4px;padding-left:10px;}
+.sb-item{display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:clamp(10.5px,0.9vw,13px);color:var(--text-secondary);line-height:1.3;transition:background 0.15s,color 0.15s;}
+.sb-item:hover{background:var(--bg-card-hover);color:var(--text-primary);}
+.sb-item.active{background:linear-gradient(135deg,rgba(124,58,237,0.13),rgba(236,72,153,0.10));color:var(--primary);font-weight:700;}
+.sb-item .ix{font-size:9.5px;font-family:'Inter',monospace;color:var(--text-muted);min-width:16px;text-align:right;flex-shrink:0;}
+.sb-item.active .ix{color:var(--primary);}
+.sb-item .ic{font-size:1.05em;flex-shrink:0;}
+.sidebar-toggle{position:fixed;top:14px;left:14px;z-index:70;width:36px;height:36px;border-radius:9px;border:1px solid var(--border-color);background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);color:var(--primary);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;opacity:0;pointer-events:none;}
+.sidebar.hidden ~ .sidebar-toggle{opacity:1;pointer-events:auto;}
+.sidebar-toggle:hover{background:#fff;box-shadow:0 4px 14px rgba(124,58,237,0.18);}
+.stage{flex:1;min-width:0;height:100vh;position:relative;overflow:hidden;}
+
+/* Presentation */
+.presentation{position:relative;width:100%;height:100%;overflow:hidden;z-index:1;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;padding:clamp(28px,3.5vw,58px);opacity:0;visibility:hidden;transform:translateX(60px);transition:opacity var(--transition-slow) ease,transform var(--transition-slow) cubic-bezier(0.34,1.56,0.64,1),visibility 0s var(--transition-slow);}
+.slide.active{opacity:1;visibility:visible;transform:translateX(0);transition-delay:0s;}
+.slide.prev{transform:translateX(-60px);}
+
+/* Header */
+.slide-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:clamp(18px,2.2vw,32px);flex-shrink:0;}
+.slide-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 15px;border-radius:20px;font-size:clamp(10px,1vw,13px);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;background:var(--bg-card);color:var(--primary);border:1px solid var(--border-color);}
+.slide-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--primary);}
+.slide-badge.work{background:rgba(236,72,153,0.10);color:var(--secondary-dark);border-color:rgba(236,72,153,0.3);}
+.slide-badge.work .dot{background:var(--secondary);}
+.slide-badge.d2{background:rgba(6,182,212,0.10);color:#0E7490;border-color:rgba(6,182,212,0.3);}
+.slide-badge.d2 .dot{background:var(--accent-cyan);}
+.slide-number{font-size:clamp(11px,1vw,14px);font-weight:600;color:var(--text-muted);font-family:'Inter',monospace;}
+
+/* Titles */
+.slide-title{font-size:clamp(24px,3.4vw,54px);font-weight:800;line-height:1.13;margin-bottom:clamp(8px,1vw,16px);letter-spacing:-0.02em;background:linear-gradient(135deg,var(--text-primary) 0%,var(--primary) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.slide-subtitle{font-size:clamp(13px,1.4vw,20px);color:var(--text-secondary);font-weight:400;line-height:1.6;max-width:760px;}
+.slide-content{flex:1;display:flex;flex-direction:column;justify-content:center;overflow:hidden;}
+
+/* Cover */
+.cover-content{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(14px,1.8vw,26px);}
+.cover-kicker{font-size:clamp(12px,1.3vw,18px);font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:var(--secondary);}
+.cover-title{font-size:clamp(40px,6.4vw,98px);font-weight:900;letter-spacing:-0.03em;line-height:0.98;background:linear-gradient(120deg,var(--primary) 0%,var(--primary-light) 35%,var(--secondary) 70%,var(--accent-amber) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 5s ease infinite;background-size:240% 240%;}
+.cover-subtitle{font-size:clamp(14px,1.8vw,25px);color:var(--text-secondary);font-weight:400;max-width:640px;line-height:1.6;}
+.cover-roles{display:flex;gap:clamp(10px,1.4vw,20px);margin-top:clamp(6px,1vw,14px);flex-wrap:wrap;justify-content:center;}
+.role-chip{padding:clamp(8px,0.8vw,13px) clamp(16px,1.6vw,28px);border-radius:50px;font-size:clamp(11px,1.1vw,15px);font-weight:600;border:1px solid var(--border-color);background:rgba(255,255,255,0.6);backdrop-filter:blur(6px);color:var(--text-secondary);transition:all var(--transition-fast) ease;}
+.role-chip:hover{transform:translateY(-3px) scale(1.06);color:var(--primary);box-shadow:0 8px 22px rgba(124,58,237,0.18);}
+.cover-logo{font-size:clamp(13px,1.3vw,17px);font-weight:800;letter-spacing:0.04em;color:var(--primary);display:flex;align-items:center;gap:8px;}
+.cover-logo .sq{width:14px;height:14px;border-radius:4px;background:linear-gradient(135deg,var(--primary),var(--secondary));}
+
+/* Section divider */
+.divider-content{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(14px,1.6vw,22px);height:100%;position:relative;}
+.divider-eyebrow{font-size:clamp(12px,1.3vw,17px);font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--secondary);}
+.divider-title{font-size:clamp(38px,6.2vw,104px);font-weight:900;letter-spacing:-0.03em;line-height:0.98;background:linear-gradient(120deg,var(--primary),var(--secondary),var(--primary-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s ease infinite;background-size:220% 220%;}
+.divider-sub{font-size:clamp(14px,1.7vw,23px);color:var(--text-secondary);max-width:680px;line-height:1.55;}
+.divider-meme{position:absolute;border-radius:14px;box-shadow:0 16px 40px rgba(30,27,46,0.22);border:5px solid #fff;object-fit:cover;transform:rotate(-6deg);max-height:clamp(120px,20vh,230px);}
+.divider-meme.r1{right:clamp(20px,5vw,90px);bottom:clamp(24px,6vh,80px);transform:rotate(7deg);}
+.divider-meme.l1{left:clamp(20px,5vw,80px);top:clamp(40px,8vh,110px);transform:rotate(-8deg);}
+
+/* End */
+.end-content{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:22px;}
+.end-title{font-size:clamp(40px,6.4vw,96px);font-weight:900;background:linear-gradient(135deg,var(--primary),var(--secondary),var(--accent-amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 3s ease infinite;background-size:220% 220%;}
+
+/* Cards */
+.cards-grid{display:grid;gap:clamp(12px,1.4vw,20px);max-width:1240px;margin:0 auto;width:100%;}
+.cards-grid.cols-2{grid-template-columns:repeat(2,1fr);}
+.cards-grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.cards-grid.cols-4{grid-template-columns:repeat(4,1fr);}
+.card{padding:clamp(15px,1.7vw,26px);border-radius:16px;border:1px solid var(--border-color);background:rgba(255,255,255,0.55);backdrop-filter:blur(6px);transition:all var(--transition-fast) ease;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--primary),var(--secondary));opacity:0;transition:opacity var(--transition-fast) ease;}
+.card:hover{transform:translateY(-5px);background:rgba(255,255,255,0.9);box-shadow:0 14px 34px rgba(124,58,237,0.14);}
+.card:hover::before{opacity:1;}
+.card-icon{font-size:clamp(24px,2.5vw,40px);margin-bottom:clamp(7px,1vw,12px);display:block;}
+.card-title{font-size:clamp(13px,1.3vw,18px);font-weight:700;margin-bottom:clamp(4px,0.5vw,8px);}
+.card-desc{font-size:clamp(10px,1vw,14px);color:var(--text-secondary);line-height:1.6;}
+.card-tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:clamp(9px,0.8vw,12px);font-weight:600;margin-top:8px;}
+.tag-blue{background:var(--bg-card-hover);color:var(--primary);}
+.tag-green{background:rgba(16,185,129,0.12);color:#0E9F6E;}
+.tag-orange{background:rgba(245,158,11,0.15);color:var(--accent-orange);}
+.tag-red{background:rgba(239,68,68,0.12);color:var(--accent-red);}
+.tag-pink{background:rgba(236,72,153,0.12);color:var(--secondary-dark);}
+
+/* Flow */
+.flow-container{display:flex;flex-direction:column;gap:clamp(12px,1.4vw,20px);max-width:1240px;margin:0 auto;width:100%;}
+.flow-row{display:flex;align-items:center;gap:clamp(6px,0.8vw,12px);flex-wrap:wrap;justify-content:center;}
+.flow-step{display:flex;align-items:center;gap:clamp(6px,0.6vw,10px);padding:clamp(11px,1.1vw,18px) clamp(15px,1.5vw,24px);border-radius:12px;font-size:clamp(11px,1.1vw,15px);font-weight:600;transition:all var(--transition-fast) ease;white-space:nowrap;border:1px solid var(--border-color);background:rgba(255,255,255,0.6);}
+.flow-step:hover{transform:translateY(-3px);background:#fff;box-shadow:0 10px 24px rgba(124,58,237,0.14);}
+.flow-step .icon{font-size:clamp(15px,1.5vw,22px);}
+.flow-arrow{color:var(--secondary);font-size:clamp(15px,1.6vw,24px);flex-shrink:0;font-weight:800;}
+
+/* Two col */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.4vw,40px);max-width:1240px;margin:0 auto;width:100%;}
+.col-section{display:flex;flex-direction:column;gap:clamp(10px,1.2vw,16px);}
+.section-label{font-size:clamp(10px,0.9vw,13px);font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:clamp(6px,0.8vw,12px);padding-bottom:8px;border-bottom:1px solid var(--border-color);}
+
+/* Bullet */
+.bullet-list{list-style:none;display:flex;flex-direction:column;gap:clamp(8px,0.8vw,12px);}
+.bullet-list li{display:flex;align-items:flex-start;gap:clamp(8px,0.8vw,12px);font-size:clamp(11px,1.1vw,15px);color:var(--text-secondary);line-height:1.55;}
+.bullet-list li .bullet{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));flex-shrink:0;margin-top:7px;}
+
+/* Split / mini cards */
+.split-row{display:flex;gap:clamp(10px,1.4vw,22px);justify-content:center;flex-wrap:wrap;}
+.mini-card{flex:1;min-width:220px;max-width:380px;padding:clamp(15px,1.6vw,26px);border-radius:16px;border:1px solid var(--border-color);background:rgba(255,255,255,0.6);transition:all var(--transition-fast) ease;}
+.mini-card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(124,58,237,0.13);}
+.mini-card-title{font-size:clamp(13px,1.3vw,18px);font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.mini-card ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.mini-card ul li{font-size:clamp(10px,1vw,14px);color:var(--text-secondary);padding-left:16px;position:relative;line-height:1.5;}
+.mini-card ul li::before{content:'\203A';position:absolute;left:0;color:var(--primary);font-weight:800;}
+
+/* Agenda */
+.agenda-list{display:flex;flex-direction:column;gap:clamp(10px,1.2vw,16px);max-width:820px;margin:0 auto;width:100%;}
+.agenda-item{display:flex;align-items:center;gap:clamp(14px,1.8vw,22px);padding:clamp(13px,1.4vw,22px) clamp(16px,1.8vw,26px);border-radius:16px;border:1px solid var(--border-color);background:rgba(255,255,255,0.6);transition:all var(--transition-fast) ease;}
+.agenda-item:hover{transform:translateX(6px);background:#fff;box-shadow:0 10px 26px rgba(124,58,237,0.13);}
+.agenda-num{width:clamp(38px,3.6vw,52px);height:clamp(38px,3.6vw,52px);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:clamp(15px,1.5vw,22px);font-weight:800;flex-shrink:0;color:white;background:linear-gradient(135deg,var(--primary),var(--primary-light));}
+.agenda-item:nth-child(2) .agenda-num{background:linear-gradient(135deg,var(--secondary),var(--secondary-light));}
+.agenda-text{font-size:clamp(13px,1.4vw,19px);font-weight:700;}
+.agenda-sub{font-size:clamp(10px,1vw,14px);color:var(--text-secondary);margin-top:3px;}
+
+/* Quote */
+.quote-block{max-width:860px;margin:0 auto;text-align:center;padding:clamp(24px,3.2vw,52px);}
+.quote-text{font-size:clamp(20px,2.7vw,40px);font-weight:600;line-height:1.5;color:var(--text-primary);position:relative;}
+.quote-text .em{background:linear-gradient(120deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.quote-text::before{content:'\201C';font-size:clamp(60px,7vw,120px);color:var(--primary);opacity:0.16;position:absolute;top:clamp(-30px,-3vw,-46px);left:clamp(-14px,-1.4vw,-26px);font-family:Georgia,serif;line-height:1;}
+.quote-author{margin-top:clamp(14px,1.8vw,26px);font-size:clamp(12px,1.2vw,16px);font-weight:600;color:var(--primary);}
+
+/* Definition layout (UX/UI) */
+.def-wrap{display:grid;grid-template-columns:0.85fr 1.15fr;gap:clamp(20px,3vw,52px);align-items:center;max-width:1240px;margin:0 auto;width:100%;}
+.def-left{display:flex;flex-direction:column;gap:clamp(8px,1vw,16px);}
+.def-tag{font-size:clamp(10px,0.9vw,13px);font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--secondary);}
+.def-big{font-size:clamp(48px,7vw,120px);font-weight:900;line-height:0.95;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.def-en{font-size:clamp(13px,1.3vw,18px);color:var(--text-muted);font-weight:500;}
+.def-quote{padding:clamp(18px,2.2vw,32px);border-radius:18px;background:rgba(255,255,255,0.65);border:1px solid var(--border-color);font-size:clamp(15px,1.7vw,24px);font-weight:600;line-height:1.5;text-align:center;box-shadow:0 12px 30px rgba(124,58,237,0.08);}
+.def-quote .em{color:var(--primary);}
+.def-cards{display:grid;grid-template-columns:1fr 1fr;gap:clamp(8px,1vw,14px);margin-top:clamp(10px,1.4vw,18px);}
+.def-mini{display:flex;align-items:center;gap:10px;padding:clamp(9px,1vw,15px) clamp(11px,1.2vw,18px);border-radius:12px;background:rgba(255,255,255,0.6);border:1px solid var(--border-color);}
+.def-mini .di{font-size:clamp(16px,1.7vw,24px);}
+.def-mini .dt{font-size:clamp(11px,1.1vw,15px);font-weight:700;}
+.def-mini .ds{font-size:clamp(9px,0.85vw,12px);color:var(--text-muted);}
+.def-goal{margin-top:clamp(10px,1.4vw,18px);padding:clamp(11px,1.3vw,18px);border-radius:14px;text-align:center;font-weight:700;color:#fff;font-size:clamp(13px,1.3vw,18px);background:linear-gradient(120deg,var(--primary),var(--secondary));}
+
+/* Polaroid (bad UX images) */
+.polaroid-row{display:flex;gap:clamp(14px,2.2vw,40px);justify-content:center;align-items:flex-start;flex-wrap:wrap;}
+.polaroid{background:#fff;padding:clamp(8px,0.9vw,14px) clamp(8px,0.9vw,14px) clamp(28px,2.6vw,42px);border-radius:6px;box-shadow:0 18px 44px rgba(30,27,46,0.24);transition:all var(--transition-normal) ease;position:relative;}
+.polaroid:nth-child(odd){transform:rotate(-3deg);}
+.polaroid:nth-child(even){transform:rotate(3deg);}
+.polaroid:hover{transform:rotate(0deg) scale(1.05);z-index:5;box-shadow:0 26px 60px rgba(30,27,46,0.32);}
+.polaroid img{display:block;max-height:clamp(180px,30vh,340px);max-width:clamp(220px,30vw,420px);object-fit:cover;border-radius:3px;cursor:zoom-in;}
+.polaroid .cap{position:absolute;bottom:clamp(6px,0.8vw,12px);left:0;right:0;text-align:center;font-size:clamp(11px,1.1vw,15px);font-weight:600;color:#3a3550;font-family:'IBM Plex Sans Thai',sans-serif;}
+.stamp{position:absolute;top:clamp(-10px,-1vw,-16px);right:clamp(-10px,-1vw,-16px);background:var(--accent-red);color:#fff;font-weight:900;font-size:clamp(11px,1.2vw,17px);padding:6px 13px;border-radius:8px;transform:rotate(9deg);box-shadow:0 6px 16px rgba(239,68,68,0.4);letter-spacing:0.05em;z-index:6;}
+.stamp.good{background:#10B981;box-shadow:0 6px 16px rgba(16,185,129,0.4);transform:rotate(-7deg);}
+
+/* analysis panel beside image */
+.ba-wrap{display:grid;grid-template-columns:1fr 0.95fr;gap:clamp(20px,3vw,56px);align-items:center;max-width:1240px;margin:0 auto;width:100%;}
+.ba-points{display:flex;flex-direction:column;gap:clamp(10px,1.2vw,16px);}
+.ba-point{display:flex;gap:12px;align-items:flex-start;padding:clamp(11px,1.2vw,18px);border-radius:13px;background:rgba(255,255,255,0.6);border:1px solid var(--border-color);}
+.ba-point .em{font-size:clamp(18px,1.9vw,26px);flex-shrink:0;}
+.ba-point .tt{font-size:clamp(12px,1.2vw,16px);font-weight:700;margin-bottom:2px;}
+.ba-point .dd{font-size:clamp(10px,1vw,13px);color:var(--text-secondary);line-height:1.5;}
+
+/* eq-row (dev mental model) */
+.eq-list{display:flex;flex-direction:column;gap:clamp(9px,1.1vw,15px);max-width:1080px;margin:0 auto;width:100%;}
+.eq-row{display:grid;grid-template-columns:1fr auto 1fr;gap:clamp(10px,1.4vw,22px);align-items:center;}
+.eq-side{padding:clamp(11px,1.2vw,18px) clamp(13px,1.4vw,22px);border-radius:13px;border:1px solid var(--border-color);display:flex;align-items:center;gap:10px;font-weight:700;font-size:clamp(11px,1.2vw,16px);}
+.eq-fig{background:rgba(124,58,237,0.08);color:var(--primary);}
+.eq-code{background:rgba(6,182,212,0.08);color:#0E7490;font-family:'Inter',monospace;}
+.eq-side .ei{font-size:clamp(16px,1.7vw,24px);}
+.eq-eq{font-size:clamp(16px,1.7vw,26px);font-weight:900;color:var(--secondary);text-align:center;}
+
+/* VS comparison */
+.vs-wrap{position:relative;display:flex;align-items:stretch;justify-content:center;max-width:1120px;margin:0 auto;width:100%;gap:clamp(24px,3.4vw,56px);}
+.vs-card{flex:1;background:rgba(255,255,255,0.62);border:1px solid var(--border-color);border-radius:22px;padding:clamp(20px,2.4vw,40px);display:flex;flex-direction:column;gap:clamp(10px,1.2vw,18px);transition:all 0.2s ease;box-shadow:0 10px 30px rgba(124,58,237,0.06);}
+.vs-card:hover{transform:translateY(-5px);box-shadow:0 20px 46px rgba(124,58,237,0.14);}
+.vs-icon{width:clamp(48px,4.2vw,66px);height:clamp(48px,4.2vw,66px);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:clamp(24px,2.4vw,36px);color:#fff;box-shadow:0 8px 20px rgba(124,58,237,0.18);}
+.vs-title{font-size:clamp(20px,2.2vw,32px);font-weight:800;line-height:1.1;}
+.vs-tag{font-size:clamp(10px,1vw,14px);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;}
+.vs-list{list-style:none;display:flex;flex-direction:column;gap:clamp(9px,1vw,15px);margin-top:clamp(4px,0.6vw,10px);}
+.vs-list li{position:relative;padding-left:24px;font-size:clamp(12px,1.2vw,16px);color:var(--text-secondary);line-height:1.5;}
+.vs-list li::before{content:'✓';position:absolute;left:0;top:0;font-weight:800;color:var(--primary);}
+.vs-card.lo .vs-list li::before{color:#64748B;}
+.vs-badge{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:clamp(50px,5vw,76px);height:clamp(50px,5vw,76px);border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:900;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;font-size:clamp(14px,1.5vw,22px);box-shadow:0 12px 30px rgba(124,58,237,0.32);border:4px solid var(--bg-dark);z-index:4;letter-spacing:0.02em;}
+
+/* highlight box (workshops/challenge) */
+.hero-box{max-width:1040px;margin:0 auto;width:100%;border-radius:22px;padding:clamp(20px,2.6vw,40px);background:linear-gradient(135deg,rgba(124,58,237,0.10),rgba(236,72,153,0.10));border:1.5px solid var(--border-color);position:relative;overflow:hidden;}
+.hero-box.pink{background:linear-gradient(135deg,rgba(236,72,153,0.13),rgba(245,158,11,0.10));border-color:rgba(236,72,153,0.3);}
+.hero-mission{font-size:clamp(10px,0.95vw,13px);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--secondary-dark);margin-bottom:8px;}
+.hero-title{font-size:clamp(20px,2.6vw,38px);font-weight:800;line-height:1.15;margin-bottom:clamp(10px,1.2vw,16px);}
+.hero-desc{font-size:clamp(12px,1.3vw,17px);color:var(--text-secondary);line-height:1.6;margin-bottom:clamp(12px,1.4vw,20px);max-width:760px;}
+.hero-chips{display:flex;gap:8px;flex-wrap:wrap;}
+.hero-chip{padding:7px 15px;border-radius:30px;font-size:clamp(10px,1vw,14px);font-weight:600;background:#fff;border:1px solid var(--border-color);color:var(--text-secondary);}
+.hero-link{display:inline-flex;align-items:center;gap:8px;margin-top:clamp(12px,1.4vw,18px);padding:clamp(10px,1.1vw,15px) clamp(16px,1.8vw,26px);border-radius:30px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:700;font-size:clamp(12px,1.2vw,16px);text-decoration:none;box-shadow:0 10px 26px rgba(124,58,237,0.28);transition:all var(--transition-fast) ease;}
+.hero-link:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 16px 34px rgba(124,58,237,0.36);}
+.prize{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:8px 16px;border-radius:30px;background:rgba(251,191,36,0.18);border:1px solid rgba(251,191,36,0.4);color:#B45309;font-weight:700;font-size:clamp(11px,1.1vw,15px);}
+
+/* pill list (resources/links) */
+.link-card{display:flex;align-items:center;gap:clamp(12px,1.4vw,18px);padding:clamp(13px,1.4vw,20px);border-radius:15px;background:rgba(255,255,255,0.6);border:1px solid var(--border-color);transition:all var(--transition-fast) ease;text-decoration:none;color:inherit;cursor:pointer;}
+.link-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(124,58,237,0.16);border-color:var(--primary);}
+.link-card:hover .link-ext{color:var(--primary);transform:translate(2px,-2px);}
+.link-ext{margin-left:auto;font-size:clamp(15px,1.5vw,20px);color:var(--text-muted);flex-shrink:0;transition:all var(--transition-fast) ease;}
+.link-ic{width:clamp(40px,3.6vw,52px);height:clamp(40px,3.6vw,52px);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:clamp(18px,1.8vw,26px);flex-shrink:0;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;}
+.link-t{font-size:clamp(13px,1.3vw,17px);font-weight:700;}
+.link-s{font-size:clamp(10px,1vw,13px);color:var(--text-muted);word-break:break-all;}
+
+/* kbd */
+.kbd{display:inline-block;padding:2px 9px;border-radius:6px;background:#fff;border:1px solid var(--border-color);border-bottom-width:2px;font-family:'Inter',monospace;font-size:0.85em;font-weight:700;color:var(--primary);}
+
+/* inline hl */
+.hl{font-weight:800;}
+.hl-blue{color:var(--primary);}.hl-pink{color:var(--secondary-dark);}.hl-orange{color:var(--accent-orange);}.hl-red{color:var(--accent-red);}.hl-cyan{color:#0E7490;}
+
+/* floating meme on content slides */
+.corner-meme{position:absolute;border-radius:12px;border:4px solid #fff;box-shadow:0 12px 30px rgba(30,27,46,0.2);max-height:clamp(90px,15vh,170px);object-fit:cover;z-index:2;transform:rotate(5deg);}
+.corner-meme.br{right:clamp(18px,3vw,50px);bottom:clamp(60px,9vh,90px);}
+.corner-meme.tr{right:clamp(18px,3vw,46px);top:clamp(70px,10vh,110px);transform:rotate(-5deg);}
+
+/* nav bar */
+.nav-bar{position:fixed;bottom:clamp(14px,2vw,26px);left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:8px 16px;border-radius:18px;background:rgba(255,255,255,0.85);backdrop-filter:blur(16px);border:1px solid var(--border-color);box-shadow:0 6px 28px rgba(124,58,237,0.16);z-index:100;}
+.nav-btn{width:40px;height:40px;border-radius:11px;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition-fast) ease;}
+.nav-btn:hover{background:var(--bg-card-hover);color:var(--primary);}
+.nav-btn:active{transform:scale(0.92);}
+.nav-btn:disabled{opacity:0.3;cursor:not-allowed;}
+.nav-progress{display:flex;align-items:center;gap:4px;}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--text-muted);opacity:0.3;transition:all var(--transition-fast) ease;cursor:pointer;}
+.nav-dot.active{background:var(--primary);opacity:1;width:22px;border-radius:4px;}
+.nav-counter{font-size:13px;font-weight:700;color:var(--text-muted);font-family:'Inter',monospace;font-variant-numeric:tabular-nums;min-width:54px;text-align:center;}
+
+/* dropdown */
+.page-dropdown{position:fixed;bottom:clamp(72px,8vw,96px);left:50%;transform:translateX(-50%) translateY(10px);background:rgba(255,255,255,0.97);backdrop-filter:blur(16px);box-shadow:0 8px 34px rgba(124,58,237,0.18);border:1px solid var(--border-color);border-radius:16px;padding:8px;z-index:101;max-height:64vh;overflow-y:auto;min-width:320px;opacity:0;visibility:hidden;transition:all var(--transition-fast) ease;}
+.page-dropdown.open{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);}
+.page-dropdown-item{display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:9px;cursor:pointer;font-size:13px;color:var(--text-secondary);transition:all var(--transition-fast) ease;}
+.page-dropdown-item:hover{background:var(--bg-card-hover);color:var(--text-primary);}
+.page-dropdown-item.active{background:var(--bg-card-hover);color:var(--primary);font-weight:600;}
+.page-dropdown-item .item-num{font-weight:700;font-family:'Inter',monospace;font-size:11px;min-width:24px;text-align:center;padding:2px 6px;border-radius:6px;background:var(--bg-card);}
+
+/* fullscreen */
+.fullscreen-btn{position:fixed;top:16px;right:16px;z-index:100;width:38px;height:38px;border-radius:10px;border:1px solid var(--border-color);background:rgba(255,255,255,0.8);backdrop-filter:blur(8px);color:var(--text-muted);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--transition-fast) ease;}
+.fullscreen-btn:hover{color:var(--primary);}
+
+/* lightbox */
+.lightbox-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all 0.3s ease;cursor:zoom-out;}
+.lightbox-overlay.open{opacity:1;visibility:visible;}
+.lightbox-overlay img{max-width:92vw;max-height:90vh;object-fit:contain;border-radius:12px;}
+
+/* anims */
+@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.slide.active .anim-item{animation:fadeInUp 0.55s ease forwards;opacity:0;}
+.slide.active .anim-item:nth-child(1){animation-delay:0.08s}
+.slide.active .anim-item:nth-child(2){animation-delay:0.16s}
+.slide.active .anim-item:nth-child(3){animation-delay:0.24s}
+.slide.active .anim-item:nth-child(4){animation-delay:0.32s}
+.slide.active .anim-item:nth-child(5){animation-delay:0.40s}
+.slide.active .anim-item:nth-child(6){animation-delay:0.48s}
+.slide.active .anim-item:nth-child(7){animation-delay:0.56s}
+.slide.active .anim-item:nth-child(8){animation-delay:0.64s}
+.slide.active .anim-item:nth-child(9){animation-delay:0.72s}
+.slide.active .anim-item:nth-child(10){animation-delay:0.80s}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;}}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--primary-light);border-radius:4px;}
+
+/* ===== Showcase (big image) slides — clean light ===== */
+.slide.cinema{background:transparent;}
+.showcase{position:relative;flex:1;display:flex;flex-direction:row;align-items:center;align-content:center;justify-content:center;gap:clamp(16px,2vw,32px);width:100%;min-height:0;flex-wrap:wrap;}
+.glow-ring{display:none;}
+.showcase-img{position:relative;z-index:1;max-height:min(72vh,80%);max-width:58%;height:auto;width:auto;object-fit:contain;border-radius:16px;border:1px solid var(--border-color);box-shadow:0 24px 60px rgba(30,27,46,0.16);cursor:zoom-in;transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+.showcase-img:hover{transform:scale(1.02);}
+.showcase-pair{position:relative;z-index:1;display:flex;gap:clamp(14px,2vw,32px);align-items:center;justify-content:center;flex-wrap:wrap;}
+.showcase-pair .showcase-img{max-height:min(62vh,66%);max-width:30vw;}
+
+/* Analysis card — light */
+.glass-card{position:relative;z-index:3;max-width:min(36%,400px);background:rgba(255,255,255,0.72);backdrop-filter:blur(8px);border:1px solid var(--border-color);border-radius:20px;padding:clamp(16px,1.8vw,28px);box-shadow:0 18px 44px rgba(124,58,237,0.10);}
+.glass-card .gc-title{color:var(--text-primary);font-weight:800;font-size:clamp(14px,1.4vw,20px);margin-bottom:clamp(8px,0.9vw,14px);line-height:1.25;}
+.glass-card .gc-list{display:flex;flex-direction:column;gap:clamp(8px,0.9vw,13px);}
+.glass-card .gc-item{display:flex;gap:10px;align-items:flex-start;color:var(--text-secondary);font-size:clamp(11px,1.05vw,14px);line-height:1.5;}
+.glass-card .gc-item .em{font-size:1.25em;flex-shrink:0;}
+.glass-card .gc-item b{color:var(--text-primary);}
+
+/* XL stamp */
+.stamp-xl{position:absolute;z-index:4;top:clamp(6px,3vh,30px);left:clamp(6px,2vw,30px);background:var(--accent-red);color:#fff;font-weight:900;font-size:clamp(18px,2.4vw,40px);padding:clamp(7px,0.9vw,15px) clamp(14px,1.6vw,28px);border-radius:14px;transform:rotate(-8deg);box-shadow:0 14px 36px rgba(239,68,68,0.4);letter-spacing:0.06em;border:4px solid #fff;font-family:'Inter',sans-serif;animation:stampIn 0.6s cubic-bezier(0.34,1.8,0.5,1) both;}
+.stamp-xl.good{background:#10B981;box-shadow:0 14px 36px rgba(16,185,129,0.4);transform:rotate(7deg);}
+@keyframes stampIn{0%{transform:rotate(-8deg) scale(2.2);opacity:0}60%{opacity:1}100%{transform:rotate(-8deg) scale(1);opacity:1}}
+
+/* Pulse orb (cover) */
+.pulse-orb{position:absolute;top:50%;left:50%;width:54vw;height:54vw;max-width:720px;max-height:720px;border-radius:50%;background:radial-gradient(circle,rgba(167,139,250,0.5),rgba(244,114,182,0.16) 45%,transparent 68%);filter:blur(55px);z-index:0;pointer-events:none;animation:pulseOrb 4.5s ease-in-out infinite;}
+@keyframes pulseOrb{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.5}50%{transform:translate(-50%,-50%) scale(1.16);opacity:0.8}}
+@keyframes pulseGlow{0%,100%{transform:scale(1);opacity:0.55}50%{transform:scale(1.18);opacity:0.85}}
+.cover-content{position:relative;}
+.cover-content>*:not(.pulse-orb){position:relative;z-index:1;}
+
+/* ===== Mobile ===== */
+@media (max-width:768px){
+  .slide.cinema{box-shadow:inset 0 0 120px rgba(0,0,0,0.6);}
+  .showcase-img{max-height:48vh;max-width:92%;}
+  .showcase-pair{flex-direction:column;}
+  .showcase-pair .showcase-img{max-width:88vw;max-height:34vh;}
+  .glass-card{position:static;max-width:100%;margin-top:14px;}
+  .stamp-xl{font-size:clamp(16px,6vw,26px);top:8px;left:8px;}
+  .pulse-orb{width:90vw;height:90vw;}
+  .showcase{flex-direction:column;justify-content:flex-start;}
+  body{overflow-y:auto;overflow-x:hidden;}
+  .blob{opacity:0.25;}
+  .presentation{width:100vw;height:100vh;height:100dvh;max-height:none;max-width:none;}
+  .slide{padding:clamp(16px,4vw,28px);padding-bottom:clamp(74px,14vw,100px);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
+  .slide-content{overflow:visible;min-height:0;}
+  .slide-header{margin-bottom:12px;}
+  .slide-title{font-size:clamp(22px,6vw,32px);}
+  .slide-subtitle{font-size:clamp(13px,3.5vw,16px);max-width:100%;}
+  .cover-title{font-size:clamp(34px,11vw,56px);}
+  .cover-subtitle{font-size:clamp(13px,3.5vw,18px);max-width:100%;}
+  .cover-roles{gap:8px;}
+  .role-chip{font-size:clamp(11px,2.8vw,14px);padding:6px 14px;}
+  .divider-title{font-size:clamp(38px,13vw,68px);}
+  .divider-sub{font-size:clamp(14px,4vw,18px);}
+  .divider-meme{position:static;transform:rotate(0)!important;margin-top:14px;max-height:30vh;}
+  .end-title{font-size:clamp(32px,10vw,56px);}
+  .cards-grid.cols-2,.cards-grid.cols-3,.cards-grid.cols-4{grid-template-columns:1fr;}
+  .card{padding:14px;}
+  .flow-row{flex-direction:column;gap:6px;}
+  .flow-step{white-space:normal;text-align:center;justify-content:center;width:100%;}
+  .flow-arrow{transform:rotate(90deg);}
+  .two-col{grid-template-columns:1fr;gap:16px;}
+  .split-row{flex-direction:column;}
+  .mini-card{min-width:100%;max-width:100%;}
+  .agenda-item{padding:12px 14px;gap:10px;}
+  .agenda-num{width:36px;height:36px;font-size:15px;}
+  .agenda-text{font-size:clamp(13px,3.4vw,16px);}
+  .def-wrap{grid-template-columns:1fr;gap:16px;text-align:center;}
+  .def-big{font-size:clamp(60px,20vw,90px);}
+  .def-cards{grid-template-columns:1fr 1fr;}
+  .ba-wrap{grid-template-columns:1fr;gap:18px;}
+  .eq-row{grid-template-columns:1fr;gap:5px;}
+  .eq-eq{transform:rotate(90deg);}
+  .polaroid-row{gap:18px;}
+  .polaroid img{max-width:80vw;max-height:34vh;}
+  .corner-meme{display:none;}
+  .quote-text{font-size:clamp(17px,5vw,26px);}
+  .nav-bar{gap:6px;padding:6px 10px;bottom:10px;border-radius:12px;}
+  .nav-btn{width:34px;height:34px;font-size:14px;}
+  .nav-progress{display:none;}
+  .nav-counter{font-size:12px;min-width:42px;}
+  .page-dropdown{min-width:240px;bottom:60px;}
+  .fullscreen-btn{display:none;}
+  .hero-title{font-size:clamp(19px,5.5vw,28px);}
+}
+@media (min-width:769px) and (max-width:1024px){
+  .cards-grid.cols-4{grid-template-columns:repeat(2,1fr);}
+  .sidebar{width:clamp(200px,24vw,240px);}
+}
+@media (max-width:768px){
+  .sidebar{position:fixed;left:0;top:0;width:min(82vw,300px);box-shadow:0 0 50px rgba(30,27,46,0.3);z-index:200;}
+  .sidebar.hidden{margin-left:0;transform:translateX(-105%);}
+  .sidebar-toggle{opacity:1 !important;pointer-events:auto !important;}
+  .showcase{flex-direction:column;justify-content:flex-start;gap:14px;}
+  .showcase-img{max-width:92%;max-height:46vh;}
+  .glass-card{max-width:100%;}
+  .vs-wrap{flex-direction:column;gap:34px;}
+  .vs-badge{top:auto;left:50%;}
+}
+/* ===== User Inyerface challenge (slide 19) ===== */
+button.hero-link{border:none;cursor:pointer;font-family:inherit;}
+.uiy-timer{margin-top:clamp(14px,1.8vw,22px);display:flex;flex-direction:column;gap:clamp(12px,1.5vw,18px);align-items:center;}
+.uiy-timer[hidden]{display:none;}
+.uiy-clocks{display:flex;gap:clamp(14px,2vw,30px);flex-wrap:wrap;justify-content:center;}
+.uiy-clock{background:rgba(255,255,255,0.72);border:1px solid var(--border-color);border-radius:16px;padding:clamp(10px,1.2vw,14px) clamp(18px,2vw,26px);min-width:clamp(120px,13vw,150px);text-align:center;}
+.uiy-clock-label{font-size:clamp(10px,0.95vw,13px);font-weight:700;letter-spacing:0.04em;color:var(--text-muted);margin-bottom:5px;}
+.uiy-countdown,.uiy-stopwatch{font-size:clamp(30px,4.2vw,48px);font-weight:800;font-family:'Inter',monospace;line-height:1;letter-spacing:0.01em;}
+.uiy-countdown{color:var(--primary);}
+.uiy-stopwatch{color:var(--text-primary);}
+.uiy-countdown.danger{color:#DC2626;animation:uiyPulse 1s ease infinite;}
+@keyframes uiyPulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.uiy-done-btn{padding:13px 36px;border-radius:30px;border:none;font-size:clamp(15px,1.5vw,18px);font-weight:800;color:#fff;background:linear-gradient(135deg,#10B981,#059669);cursor:pointer;box-shadow:0 8px 22px rgba(16,185,129,0.3);transition:transform 0.15s ease;}
+.uiy-done-btn:hover{transform:translateY(-2px) scale(1.02);}
+.uiy-overlay{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;background:rgba(20,16,40,0.74);backdrop-filter:blur(6px);padding:20px;}
+.uiy-overlay.open{display:flex;}
+.uiy-card{background:#fff;border-radius:22px;padding:clamp(24px,3vw,40px);max-width:440px;width:100%;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,0.32);border:1px solid var(--border-color);}
+.uiy-card.win{background:linear-gradient(160deg,#ffffff,#FDF2F8);}
+.uiy-card-icon{font-size:clamp(40px,5vw,58px);margin-bottom:10px;line-height:1;}
+.uiy-card-title{font-size:clamp(18px,2vw,26px);font-weight:800;margin-bottom:10px;color:var(--text-primary);line-height:1.25;}
+.uiy-card-desc{font-size:clamp(13px,1.3vw,16px);color:var(--text-secondary);line-height:1.6;margin-bottom:14px;}
+.uiy-warn{font-size:clamp(12px,1.2vw,15px);font-weight:700;color:#B45309;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.38);border-radius:12px;padding:10px 14px;margin-bottom:16px;line-height:1.5;}
+.uiy-input{width:100%;padding:13px 16px;border-radius:12px;border:2px solid var(--border-color);font-size:16px;text-align:center;margin-bottom:12px;outline:none;transition:border-color 0.2s ease;box-sizing:border-box;}
+.uiy-input:focus{border-color:var(--primary);}
+.uiy-input.shake{animation:uiyShake 0.4s;}
+@keyframes uiyShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.uiy-error{font-size:14px;font-weight:700;color:#DC2626;margin-bottom:12px;}
+.uiy-card-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.uiy-btn-primary{padding:12px 28px;border-radius:30px;border:none;font-size:15px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--primary),var(--secondary));cursor:pointer;transition:transform 0.15s ease,box-shadow 0.15s ease;}
+.uiy-btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(124,58,237,0.3);}
+.uiy-btn-ghost{padding:12px 24px;border-radius:30px;border:1px solid var(--border-color);background:#fff;font-size:14px;font-weight:600;color:var(--text-secondary);cursor:pointer;transition:background 0.15s ease;}
+.uiy-btn-ghost:hover{background:var(--bg-card);}
+.uiy-final-time{font-size:clamp(24px,3.4vw,38px);font-weight:800;font-family:'Inter',monospace;color:var(--primary);margin-bottom:14px;letter-spacing:0.02em;}
+/* ===== Command setup slides (Day 2) ===== */
+.code-block{background:#1E1B2E;color:#EDE9FB;border-radius:12px;padding:clamp(12px,1.4vw,18px) clamp(14px,1.7vw,22px);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:clamp(11px,1.05vw,14.5px);line-height:1.75;text-align:left;overflow-x:auto;border:1px solid rgba(255,255,255,0.09);box-shadow:0 8px 24px rgba(30,27,46,0.16);}
+.code-block .c-cmt{color:#8E88AD;}
+.code-block .c-prompt{color:#34D399;font-weight:700;}
+.code-block .c-cmd{color:#C4B5FD;font-weight:700;}
+.steps{display:flex;flex-direction:column;gap:clamp(12px,1.5vw,20px);max-width:840px;margin:0 auto;width:100%;text-align:left;}
+.step{display:flex;gap:clamp(12px,1.4vw,18px);align-items:flex-start;}
+.step-num{flex-shrink:0;width:clamp(30px,3vw,38px);height:clamp(30px,3vw,38px);border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:clamp(13px,1.3vw,17px);margin-top:2px;}
+.step-body{flex:1;min-width:0;}
+.step-title{font-weight:700;font-size:clamp(13px,1.35vw,18px);margin-bottom:3px;}
+.step-sub{font-size:clamp(11px,1.05vw,14px);color:var(--text-secondary);margin-bottom:9px;line-height:1.55;}
+.tip-box{background:rgba(251,191,36,0.14);border:1px solid rgba(251,191,36,0.42);border-radius:10px;padding:9px 14px;font-size:clamp(11px,1.05vw,14px);color:#92560B;text-align:left;line-height:1.55;}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <button class="sb-collapse" id="sbCollapse" title="ซ่อนเมนู">&#x00AB;</button>
+    <div class="sb-logo"><span class="sq"></span> DEVNEST SCHOOL</div>
+    <div class="sb-title">Design × AI</div>
+    <div class="sb-sub">UX/UI &amp; Figma · 2-Day Workshop</div>
+  </div>
+  <nav class="sb-nav" id="sbNav"></nav>
+</aside>
+<button class="sidebar-toggle" id="sbToggle" title="ซ่อน/แสดงเมนู">&#x2630;</button>
+
+<main class="stage">
+<div class="progress-top" id="progressTop"></div>
+<div class="presentation" id="presentation">
+
+  <!-- 0 COVER -->
+  <div class="slide active" data-slide="0">
+    <div class="slide-content cover-content">
+      <div class="pulse-orb"></div>
+      <div class="cover-logo anim-item"><span class="sq"></span> DEVNEST SCHOOL</div>
+      <div class="cover-kicker anim-item">Vibe UX/UI Workshop · 2026</div>
+      <div class="cover-title anim-item">Design × AI</div>
+      <div class="cover-subtitle anim-item">เรียนรู้ UX/UI + ใช้ AI ช่วยออกแบบ จนเปลี่ยนไอเดียเป็น <b>Interactive HTML</b> ส่งให้เดฟได้จริง</div>
+      <div class="cover-roles">
+        <div class="role-chip anim-item">⏱️ 2 วันเต็ม</div>
+        <div class="role-chip anim-item">🛠️ Hands-on จริง</div>
+        <div class="role-chip anim-item">🤖 AI-Powered</div>
+        <div class="role-chip anim-item">💻 สำหรับสาย Dev</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1 AGENDA -->
+  <div class="slide" data-slide="1">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Course Overview</div><div class="slide-number">02</div></div>
+    <div class="slide-title">2 วันนี้เราจะไปไหนกัน</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(14px,1.8vw,26px)">จากพื้นฐาน → ใช้ AI → ส่งมอบงานจริง</div>
+    <div class="slide-content">
+      <div class="agenda-list">
+        <div class="agenda-item anim-item" style="align-items:flex-start">
+          <div class="agenda-num">1</div>
+          <div>
+            <div class="agenda-text">Day 1 — ดีไซน์เป็น เห็นภาพ ใช้ Figma ได้</div>
+            <div class="agenda-sub">ปูพื้นฐาน UX/UI → ฝึก "ตาดีไซน์" → ลงมือใช้ Figma &amp; FigJam จริง</div>
+            <div class="hero-chips" style="margin-top:10px">
+              <span class="hero-chip">UX vs UI &amp; บทบาทในทีม</span>
+              <span class="hero-chip">ตาดีไซน์ + วิเคราะห์ Bad UX</span>
+              <span class="hero-chip">User Inyerface Challenge</span>
+              <span class="hero-chip">MoSCoW จัดลำดับฟีเจอร์</span>
+              <span class="hero-chip">Figma &amp; FigJam จากศูนย์</span>
+              <span class="hero-chip">Wireframe Lo-fi → Hi-fi</span>
+            </div>
+          </div>
+        </div>
+        <div class="agenda-item anim-item" style="align-items:flex-start">
+          <div class="agenda-num">2</div>
+          <div>
+            <div class="agenda-text">Day 2 — AI → Interactive HTML → ส่งเดฟ</div>
+            <div class="agenda-sub">เปลี่ยนดีไซน์เป็นของจริงที่กดได้ แล้วส่งมอบให้เดฟใช้ต่อ</div>
+            <div class="hero-chips" style="margin-top:10px">
+              <span class="hero-chip">AI Landscape &amp; Pipeline</span>
+              <span class="hero-chip">Figma Make · Google Stitch · Claude</span>
+              <span class="hero-chip">อ่าน/วิจารณ์งาน AI ออก</span>
+              <span class="hero-chip">Prompt ให้ได้ HTML ที่ดี</span>
+              <span class="hero-chip">ส่งมอบให้เดฟ (Handoff)</span>
+              <span class="hero-chip">Capstone Project</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(12px,1.6vw,20px);font-size:clamp(11px,1.1vw,15px);color:var(--text-secondary)" class="anim-item">⏱️ 2 วันเต็ม · 🛠️ ลงมือทำจริงทุกช่วง · 👥 มี Workshop กลุ่ม + Challenge ตลอดคอร์ส</div>
+    </div>
+  </div>
+
+  <!-- 2 LEARNING OUTCOMES -->
+  <div class="slide" data-slide="2">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Goals</div><div class="slide-number">03</div></div>
+    <div class="slide-title">จบคอร์สนี้ น้องจะทำอะไรได้</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-2">
+        <div class="card anim-item"><span class="card-icon">👁️</span><div class="card-title">มี "ตาดีไซน์"</div><div class="card-desc">มองออกว่างานไหนสวย/ใช้ง่าย/ห่วย และบอกได้ว่าเพราะอะไร</div></div>
+        <div class="card anim-item"><span class="card-icon">🎨</span><div class="card-title">ใช้ Figma & FigJam ได้</div><div class="card-desc">รู้จัก interface, ทำ wireframe และ brainstorm เป็น</div></div>
+        <div class="card anim-item"><span class="card-icon">🤖</span><div class="card-title">ใช้ AI ช่วยออกแบบ</div><div class="card-desc">Figma Make, Stitch, Claude — generate แล้วสั่งแก้ให้ดีขึ้น</div></div>
+        <div class="card anim-item"><span class="card-icon">🚀</span><div class="card-title">ส่งงานเป็น HTML</div><div class="card-desc">เปลี่ยนดีไซน์เป็น interactive HTML mockup ส่งให้เดฟใช้จริง</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 WHY DEV + AI -->
+  <div class="slide" data-slide="3">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Mindset</div><div class="slide-number">04</div></div>
+    <div class="slide-title">ยุคนี้ "เดฟ" ออกแบบเองได้แล้ว</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(14px,1.8vw,26px)">AI ทำงานพิกเซลให้เร็วขึ้นเรื่อยๆ — สิ่งที่มีค่าขึ้นคือ <b>"การตัดสินใจว่าอะไรดี"</b></div>
+    <div class="slide-content">
+      <img class="corner-meme br" src="img/img_other/image%20copy%206.png" alt="roll safe meme" style="max-height:clamp(120px,21vh,210px);" onclick="openLightbox(this.src)">
+      <div class="cards-grid cols-2" style="max-width:980px">
+        <div class="card anim-item" style="border-color:rgba(148,163,184,0.45)">
+          <span class="card-icon">🐢</span>
+          <div class="card-title">เมื่อก่อน</div>
+          <div class="card-desc">• เดฟต้องรอดีไซเนอร์ส่งไฟล์<br>• ลงมือปั้นพิกเซลทุกอย่างเอง ช้า<br>• ทำ UI สวยๆ ต้องเก่งเครื่องมือมาก</div>
+        </div>
+        <div class="card anim-item" style="border-color:rgba(124,58,237,0.4)">
+          <span class="card-icon">⚡</span>
+          <div class="card-title">ยุค AI</div>
+          <div class="card-desc">• พิมพ์ prompt → ได้ UI ใน 10 วิ<br>• เดฟทำ mockup ส่งทีมเองได้<br>• ทักษะใหม่ = <span class="hl hl-blue">กำกับ AI + ตัดสินงานเป็น</span></div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(12px,1.6vw,22px);font-size:clamp(11px,1.1vw,15px);color:var(--text-secondary)" class="anim-item">💡 AI ทำพิกเซลให้เร็วขึ้น — คุณค่าใหม่ของเดฟคือ <b>"ตาดีไซน์" + ตัดสินใจว่าอะไรดี</b></div>
+    </div>
+  </div>
+
+  <!-- 4 SETUP FIGMA (keep) -->
+  <div class="slide" data-slide="4">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Setup Guide</div><div class="slide-number">05</div></div>
+    <div class="slide-title">วิธีติดตั้ง Figma</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(14px,1.8vw,24px)">ติดตั้งให้พร้อมก่อนเริ่มลงมือ</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-3">
+        <div class="card anim-item"><span class="card-icon">🪟</span><div class="card-title">Windows / macOS</div><div class="card-desc">เข้า <b>figma.com/downloads</b> → โหลด Desktop App → ติดตั้งและ Login</div><span class="card-tag tag-blue">Full Features</span></div>
+        <div class="card anim-item"><span class="card-icon">🌐</span><div class="card-title">Web Browser</div><div class="card-desc">เข้า <b>figma.com</b> → Sign up / Login → ใช้งานได้ทันที ไม่ต้องติดตั้ง</div><span class="card-tag tag-green">No Install</span></div>
+        <div class="card anim-item"><span class="card-icon">📱</span><div class="card-title">Mobile App</div><div class="card-desc">โหลดจาก App Store / Play Store — เน้นดูงาน (Mirror) & คอมเมนต์</div><span class="card-tag tag-orange">Preview เท่านั้น</span></div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(12px,1.6vw,22px);font-size:clamp(11px,1.1vw,15px);color:var(--text-muted)" class="anim-item">💡 แนะนำ <b>Desktop App</b> + RAM 8GB ขึ้นไป เพื่อทำงานออกแบบหลัก</div>
+    </div>
+  </div>
+
+  <!-- 5 LINKS (keep) -->
+  <div class="slide" data-slide="5">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Resources</div><div class="slide-number">06</div></div>
+    <div class="slide-title">ลิงก์ประกอบการเรียน</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(14px,1.8vw,24px)">เปิดเตรียมไว้ในแท็บ จะได้ทำตามทัน</div>
+    <div class="slide-content">
+      <div style="display:flex;flex-direction:column;gap:clamp(12px,1.4vw,18px);max-width:820px;width:100%;margin:0 auto">
+        <a class="link-card anim-item" href="https://www.figma.com/board/wuCbBhsms4gowGz0xRIWcP/Brainstorm---Devnest?node-id=0-1" target="_blank" rel="noopener">
+          <div class="link-ic">🧠</div><div><div class="link-t">FigJam — Brainstorm</div><div class="link-s">สำหรับ brainstorm + MoSCoW</div></div><span class="link-ext">↗</span>
+        </a>
+        <a class="link-card anim-item" href="https://www.figma.com/design/fAuz4fukcG9NNrAFFJ8zk0/Figma-Begin---DevNest?node-id=5-2&t=2OetLt17QNctv0EQ-1" target="_blank" rel="noopener">
+          <div class="link-ic">🎨</div><div><div class="link-t">Workshop Figma</div><div class="link-s">ไฟล์งานสำหรับลงมือทำใน Figma</div></div><span class="link-ext">↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 DIVIDER UX vs UI -->
+  <div class="slide cinema" data-slide="6">
+    <div class="slide-content divider-content">
+      <img class="divider-meme r1" src="img/img_other/image%20copy%203.png" alt="dicaprio ux ui meme" style="max-height:clamp(180px,32vh,360px);">
+      <div class="divider-eyebrow anim-item">Part 1 · Fundamentals</div>
+      <div class="divider-title anim-item">UX vs UI</div>
+      <div class="divider-sub anim-item">"…there is a difference?" — ใช่ มันต่างกันจริงๆ มาดูกัน</div>
+    </div>
+  </div>
+
+  <!-- 7 UX คืออะไร (keep) -->
+  <div class="slide" data-slide="7">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Definition</div><div class="slide-number">08</div></div>
+    <div class="slide-content">
+      <div class="def-wrap">
+        <div class="def-left anim-item">
+          <div class="def-tag">User Experience</div>
+          <div class="def-big">UX</div>
+          <div class="def-en">การออกแบบ "ประสบการณ์" ผู้ใช้</div>
+        </div>
+        <div class="anim-item">
+          <div class="def-quote">"ประสบการณ์โดยรวมของผู้ใช้<br>เมื่อมีการ<span class="em">โต้ตอบ</span>กับผลิตภัณฑ์หรือบริการ"</div>
+          <div class="def-cards">
+            <div class="def-mini"><span class="di">🎯</span><div><div class="dt">ความต้องการ</div><div class="ds">Needs</div></div></div>
+            <div class="def-mini"><span class="di">🔀</span><div><div class="dt">Flow การใช้งาน</div><div class="ds">User Journey</div></div></div>
+            <div class="def-mini"><span class="di">👌</span><div><div class="dt">ความง่าย</div><div class="ds">Usability</div></div></div>
+            <div class="def-mini"><span class="di">❤️</span><div><div class="dt">ความพึงพอใจ</div><div class="ds">Satisfaction</div></div></div>
+          </div>
+          <div class="def-goal">ใช้ง่าย · มีประโยชน์ · ตอบโจทย์</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 UI คืออะไร (keep) -->
+  <div class="slide" data-slide="8">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Definition</div><div class="slide-number">09</div></div>
+    <div class="slide-content">
+      <div class="def-wrap">
+        <div class="def-left anim-item">
+          <div class="def-tag">User Interface</div>
+          <div class="def-big">UI</div>
+          <div class="def-en">การออกแบบ "ส่วนติดต่อ" ผู้ใช้</div>
+        </div>
+        <div class="anim-item">
+          <div class="def-quote">"ส่วนของผลิตภัณฑ์ที่ผู้ใช้<span class="em">มองเห็น</span><br>และสามารถ<span class="em">โต้ตอบ</span>ได้จริงบนหน้าจอ"</div>
+          <div class="def-cards">
+            <div class="def-mini"><span class="di">📐</span><div><div class="dt">เลย์เอาต์</div><div class="ds">Layout</div></div></div>
+            <div class="def-mini"><span class="di">🎨</span><div><div class="dt">สี & ฟอนต์</div><div class="ds">Color & Type</div></div></div>
+            <div class="def-mini"><span class="di">🔘</span><div><div class="dt">องค์ประกอบ</div><div class="ds">Buttons & Icons</div></div></div>
+            <div class="def-mini"><span class="di">✨</span><div><div class="dt">การตอบสนอง</div><div class="ds">Interaction</div></div></div>
+          </div>
+          <div class="def-goal">สวยงาม · ชัดเจน · สื่อสารดี</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 UX vs UI compare -->
+  <div class="slide" data-slide="9">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Compare</div><div class="slide-number">10</div></div>
+    <div class="slide-title">แล้วต่างกันยังไง?</div>
+    <div class="slide-content">
+      <img src="img/img_other/image%20copy%205.png" alt="desire path meme" onclick="openLightbox(this.src)" style="display:block;margin:0 auto clamp(14px,1.8vw,22px);max-height:clamp(150px,27vh,300px);max-width:min(580px,92%);height:auto;border-radius:14px;border:4px solid #fff;box-shadow:0 16px 40px rgba(30,27,46,0.2);cursor:zoom-in;">
+      <div class="split-row" style="max-width:980px;margin:0 auto;width:100%">
+        <div class="mini-card anim-item">
+          <div class="mini-card-title">🧠 UX Design</div>
+          <ul>
+            <li>โฟกัสที่ "ประสบการณ์" — รู้สึก, ใช้ง่าย</li>
+            <li>ดูแล Flow ตั้งแต่ก่อน–ระหว่าง–หลังใช้</li>
+            <li>เน้น <b>โครงสร้าง</b> (Structure / IA)</li>
+          </ul>
+        </div>
+        <div class="mini-card anim-item">
+          <div class="mini-card-title">🎨 UI Design</div>
+          <ul>
+            <li>โฟกัสที่ "หน้าตา" — สวย, จัดวาง</li>
+            <li>องค์ประกอบที่โต้ตอบได้ (ปุ่ม/ไอคอน)</li>
+            <li>เน้น <b>การนำเสนอ</b> (Visual)</li>
+          </ul>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(12px,1.6vw,22px);font-size:clamp(12px,1.2vw,16px);color:var(--text-secondary)" class="anim-item">🛣️ <b>UX</b> = ทางที่คนเดินจริง · <b>UI</b> = ทางที่เราปูสวยๆ — ดีที่สุดคือตรงกัน</div>
+    </div>
+  </div>
+
+  <!-- 10 ROLES IN TEAM -->
+  <div class="slide cinema" data-slide="10">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Teamwork</div><div class="slide-number">11</div></div>
+    <div class="slide-content showcase">
+      <div class="glow-ring"></div>
+      <img class="showcase-img anim-item" src="img/img_other/image%20copy%202.png" alt="team meme" onclick="openLightbox(this.src)">
+      <div class="glass-card anim-item">
+        <div class="gc-title">👥 ใครทำอะไรในทีม</div>
+        <div class="gc-list">
+          <div class="gc-item"><span class="em">🔍</span><span>UX วางโครงสร้าง → 🎨 UI ทำให้สวย</span></div>
+          <div class="gc-item"><span class="em">💻</span><span>Dev สร้างของจริง → 🍼 User คือปลายทาง</span></div>
+          <div class="gc-item"><span class="em">✨</span><span>ยุค AI: คนเดียวสวมหลายหมวกได้</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROLES & RESPONSIBILITIES (detail) -->
+  <div class="slide" data-slide="11">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Roles &amp; Responsibilities</div><div class="slide-number">12</div></div>
+    <div class="slide-title">บทบาท UX และ UI ในโปรเจกต์</div>
+    <div class="slide-content">
+      <div class="two-col" style="max-width:1080px;gap:clamp(16px,2.2vw,34px)">
+        <div style="display:flex;flex-direction:column;gap:clamp(12px,1.4vw,18px)">
+          <div class="card anim-item" style="border-left:4px solid var(--primary)">
+            <div class="card-title" style="font-size:clamp(15px,1.5vw,20px)">🧩 UX: ผู้วางรากฐาน</div>
+            <div class="card-desc">รับผิดชอบการค้นหาปัญหา และวางโครงสร้างการใช้งาน</div>
+            <div class="hero-chips" style="margin-top:10px">
+              <span class="hero-chip">User Research</span>
+              <span class="hero-chip">User Persona</span>
+              <span class="hero-chip">User Journey</span>
+              <span class="hero-chip">Information Architecture</span>
+              <span class="hero-chip">Wireframing</span>
+              <span class="hero-chip">Usability Testing</span>
+            </div>
+          </div>
+          <div class="card anim-item" style="border-left:4px solid var(--secondary)">
+            <div class="card-title" style="font-size:clamp(15px,1.5vw,20px)">🎨 UI: ผู้สร้างสรรค์</div>
+            <div class="card-desc">รับผิดชอบการออกแบบหน้าจอให้สวยงาม และสื่อสารได้ชัดเจน</div>
+            <div class="hero-chips" style="margin-top:10px">
+              <span class="hero-chip">Visual Hierarchy</span>
+              <span class="hero-chip">Color &amp; Typography</span>
+              <span class="hero-chip">Interactive Elements</span>
+              <span class="hero-chip">Design System</span>
+              <span class="hero-chip">Prototyping</span>
+              <span class="hero-chip">Accessibility (a11y)</span>
+            </div>
+          </div>
+        </div>
+        <div class="anim-item" style="display:flex;flex-direction:column;justify-content:center;gap:8px">
+          <div class="card" style="display:flex;align-items:center;gap:14px"><span style="font-size:1.7em">🗂️</span><div><div class="card-title" style="margin:0">1. Wireframe / Structure</div><div class="card-desc">UX วางโครงร่าง &amp; flow การใช้งาน</div></div></div>
+          <div style="text-align:center;color:var(--text-muted);font-size:20px;line-height:1">↓</div>
+          <div class="card" style="display:flex;align-items:center;gap:14px"><span style="font-size:1.7em">🎨</span><div><div class="card-title" style="margin:0">2. Visual Design</div><div class="card-desc">UI ลงสี ฟอนต์ และองค์ประกอบ</div></div></div>
+          <div style="text-align:center;color:var(--text-muted);font-size:20px;line-height:1">↓</div>
+          <div class="card" style="display:flex;align-items:center;gap:14px"><span style="font-size:1.7em">💻</span><div><div class="card-title" style="margin:0">3. Hand-off to Dev</div><div class="card-desc">ส่งต่อให้เดฟสร้างเป็นของจริง</div></div></div>
+          <div style="text-align:center;margin-top:8px;font-size:clamp(11px,1.05vw,14px);color:var(--text-secondary)">ℹ️ UX วางโครงสร้างก่อน → ส่งต่อให้ UI ลงรายละเอียด</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(12px,1.6vw,20px);font-size:clamp(11px,1.1vw,15px);color:var(--text-secondary)" class="anim-item">🤝 <b>Teamwork:</b> ทำงานวนลูป (Iterate) ร่วมกันตาม Feedback</div>
+    </div>
+  </div>
+
+  <!-- 11 QUOTE -->
+  <div class="slide" data-slide="12">
+    <div class="slide-content">
+      <div class="quote-block">
+        <div class="quote-text anim-item">Good UX is invisible —<br>but <span class="em">bad UX is unforgettable.</span></div>
+        <div class="quote-author anim-item">UX ที่ดีจะไม่มีใครสังเกต · แต่ UX ที่แย่จะจำไปตลอด</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 DIVIDER BAD UX -->
+  <div class="slide cinema" data-slide="13">
+    <div class="slide-content divider-content">
+      <img class="divider-meme l1" src="img/img_other/image%20copy%207.png" alt="disaster girl meme">
+      <div class="divider-eyebrow anim-item">Train Your Eye 👁️</div>
+      <div class="divider-title anim-item">Bad UX<br>อยู่รอบตัวเรา</div>
+      <div class="divider-sub anim-item">มาดูตัวอย่างจริง แล้วช่วยกันวิเคราะห์ว่า "พังตรงไหน"</div>
+    </div>
+  </div>
+
+  <!-- 13 BAD UX stairs -->
+  <div class="slide cinema" data-slide="14">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Bad UX · 01</div><div class="slide-number">15</div></div>
+    <div class="slide-content showcase">
+      <div class="glow-ring"></div>
+      <span class="stamp-xl">FAIL</span>
+      <img class="showcase-img anim-item" src="img/bad-ux/image.png" alt="steep ramp" onclick="openLightbox(this.src)">
+      <div class="glass-card anim-item">
+        <div class="gc-title">♿ ทางลาดสำหรับใคร?</div>
+        <div class="gc-list">
+          <div class="gc-item"><span class="em">🎯</span><span>ติดป้ายว่าเข้าถึงได้ แต่ชันจนรถเข็นขึ้นไม่ได้จริง</span></div>
+          <div class="gc-item"><span class="em">💡</span><span>ฟีเจอร์ที่ "มีแต่ใช้ไม่ได้" = ไม่ต่างจากไม่มี</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14 BAD UX crosswalk -->
+  <div class="slide cinema" data-slide="15">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Bad UX · 02</div><div class="slide-number">16</div></div>
+    <div class="slide-content showcase">
+      <div class="glow-ring"></div>
+      <span class="stamp-xl">FAIL</span>
+      <img class="showcase-img anim-item" src="img/bad-ux/image%20copy.png" alt="crosswalk fail" onclick="openLightbox(this.src)">
+      <div class="glass-card anim-item">
+        <div class="gc-title">🚧 ทางม้าลายสู่...กำแพง</div>
+        <div class="gc-list">
+          <div class="gc-item"><span class="em">🔗</span><span>แต่ละส่วนถูก แต่ต่อกันไม่ได้ = flow ขาดตอน</span></div>
+          <div class="gc-item"><span class="em">💡</span><span>ต้องคิดทั้ง journey ไม่ใช่ทีละหน้าจอ</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15 BAD UX mug -->
+  <div class="slide cinema" data-slide="16">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Bad UX · 03</div><div class="slide-number">17</div></div>
+    <div class="slide-content showcase">
+      <div class="glow-ring"></div>
+      <span class="stamp-xl">FAIL</span>
+      <div class="showcase-pair">
+        <img class="showcase-img anim-item" src="img/bad-ux/image%20copy%202.png" alt="cat mug" onclick="openLightbox(this.src)">
+        <img class="showcase-img anim-item" src="img/bad-ux/image%20copy%203.png" alt="drinking mug" onclick="openLightbox(this.src)">
+      </div>
+      <div class="glass-card anim-item">
+        <div class="gc-title">🍵 แก้วน่ารัก...แต่ดื่มยังไง?</div>
+        <div class="gc-list">
+          <div class="gc-item"><span class="em">🎨</span><span><b>สวย ≠ ใช้ดี</b> — ดีไซน์เก๋แต่ลืมหน้าที่หลัก</span></div>
+          <div class="gc-item"><span class="em">💡</span><span>กับดักคลาสสิกของ UI ที่ไม่มี UX</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16 BAD vs GOOD ketchup -->
+  <div class="slide cinema" data-slide="17">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Bad vs Good</div><div class="slide-number">18</div></div>
+    <div class="slide-content showcase">
+      <div class="glow-ring"></div>
+      <img class="showcase-img anim-item" src="img/bad-ux/image%20copy%204.png" alt="ketchup bad vs good ux" onclick="openLightbox(this.src)">
+      <div class="glass-card anim-item">
+        <div class="gc-title">🍅 เปลี่ยนนิดเดียว ชีวิตดีขึ้น</div>
+        <div class="gc-list">
+          <div class="gc-item"><span class="em">😤</span><span>ฝาอยู่บน → ต้องเขย่า เคาะ ลุ้น</span></div>
+          <div class="gc-item"><span class="em">😎</span><span>ฝาอยู่ล่าง → คว่ำขวดไหลทันที</span></div>
+          <div class="gc-item"><span class="em">💡</span><span>UX ดีมัก "ปรับเล็กๆ" ที่แก้ปัญหาจริง</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKSHOP: Bad UX รอบตัว (FigJam) -->
+  <div class="slide" data-slide="18">
+    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Workshop · FigJam</div><div class="slide-number">19</div></div>
+    <div class="slide-content">
+      <div class="hero-box pink anim-item">
+        <div class="hero-mission">🔍 Group Brainstorm</div>
+        <div class="hero-title">UX/UI แย่ ๆ อยู่รอบตัวเรา มากกว่าที่คิด</div>
+        <div class="hero-desc">ช่วยกันนึกถึงของใช้ / แอป / เว็บ / ป้าย ที่เคยเจอแล้ว "ใช้ยาก" หรือชวนหงุดหงิด → แปะลง FigJam board แล้วบอกหน่อยว่าพังตรงไหน และถ้าจะแก้ จะแก้ยังไง</div>
+        <div class="hero-chips">
+          <span class="hero-chip">👀 ฝึกสังเกตของรอบตัว</span>
+          <span class="hero-chip">🧠 brainstorm บน FigJam</span>
+          <span class="hero-chip">💬 บอกได้ว่าพังเพราะอะไร</span>
+        </div>
+        <a class="hero-link" href="https://www.figma.com/board/wuCbBhsms4gowGz0xRIWcP/Brainstorm---Devnest?node-id=0-1" target="_blank">เปิด FigJam Board →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHALLENGE: User Inyerface (after Bad UX examples) -->
+  <div class="slide" data-slide="19">
+    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Challenge 🎮</div><div class="slide-number">20</div></div>
+    <div class="slide-content">
+      <div class="hero-box pink anim-item">
+        <div class="hero-mission">🔥 UI ที่แย่ที่สุดในโลก</div>
+        <div class="hero-title">User Inyerface — เกมท้าประสาท</div>
+        <div class="hero-desc">เว็บที่จงใจออกแบบ UI ให้ใช้ยากที่สุด! ลองเล่นแล้วน้องจะ "รู้สึก" ได้เลยว่า Bad UI ทรมานแค่ไหน — และเข้าใจว่าทำไม UX/UI ดีถึงสำคัญ</div>
+        <button class="hero-link" id="uiyStartBtn" type="button" oncontextmenu="return false">🎮 เริ่มเล่น</button>
+        <div><span class="prize">🏆 ใครเล่นจบภายใน 5 นาที มีของรางวัล!</span></div>
+        <div class="uiy-timer" id="uiyTimer" hidden>
+          <div class="uiy-clocks">
+            <div class="uiy-clock"><div class="uiy-clock-label">⏳ เหลือเวลา</div><div class="uiy-countdown" id="uiyCountdown">5:00</div></div>
+            <div class="uiy-clock"><div class="uiy-clock-label">⏱️ เวลาที่ใช้ไป</div><div class="uiy-stopwatch" id="uiyStopwatch">0:00</div></div>
+          </div>
+          <button class="uiy-done-btn" id="uiyDoneBtn" type="button">✅ ทำเสร็จแล้ว!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ตาดีไซน์ principles (after User Inyerface) -->
+  <div class="slide" data-slide="20">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Design Eye</div><div class="slide-number">21</div></div>
+    <div class="slide-title">หลัก "ตาดีไซน์" ที่ต้องรู้</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">รู้ 6 ข้อนี้ มองงานออกทันทีว่าทำไมสวย/ไม่สวย</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-3">
+        <div class="card anim-item"><span class="card-icon">📊</span><div class="card-title">Hierarchy</div><div class="card-desc">เรียงตามความสำคัญ — ตาควรรู้ว่ามองอะไรก่อน</div></div>
+        <div class="card anim-item"><span class="card-icon">🌗</span><div class="card-title">Contrast</div><div class="card-desc">ใช้ความต่าง (ขนาด/สี) สร้างจุดเด่นและอ่านง่าย</div></div>
+        <div class="card anim-item"><span class="card-icon">📏</span><div class="card-title">Spacing</div><div class="card-desc">ที่ว่างคือพระเอก — เว้นระยะให้หายใจ (8pt grid)</div></div>
+        <div class="card anim-item"><span class="card-icon">📐</span><div class="card-title">Alignment</div><div class="card-desc">จัดให้ตรงแนว ดูเป็นระเบียบทันที</div></div>
+        <div class="card anim-item"><span class="card-icon">🔁</span><div class="card-title">Consistency</div><div class="card-desc">ใช้สี/ระยะ/สไตล์ให้สม่ำเสมอทั้งงาน</div></div>
+        <div class="card anim-item"><span class="card-icon">🔤</span><div class="card-title">Typography</div><div class="card-desc">เลือกฟอนต์/ขนาด/ระยะบรรทัดให้อ่านสบาย</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 17 MoSCoW -->
+  <div class="slide" data-slide="21">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Prioritization</div><div class="slide-number">22</div></div>
+    <div class="slide-title">จัดลำดับฟีเจอร์ด้วย MoSCoW</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(10px,1.4vw,18px)">ของมีจำกัด เวลามีจำกัด — MoSCoW ช่วยให้ทั้งทีมเห็นตรงกันว่า "อะไรทำก่อน อะไรทำทีหลัง" แทนที่จะเถียงกันว่าฟีเจอร์ไหนสำคัญกว่า</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-2">
+        <div class="card anim-item" style="border-color:rgba(16,185,129,0.3)"><span class="card-icon">✅</span><div class="card-title">Must Have — ต้องมี</div><div class="card-desc">หัวใจของระบบ ขาดไม่ได้เด็ดขาด ถ้าไม่มีคือ launch ไม่ได้ เช่น <b>Login, ตะกร้า/สั่งซื้อ, ชำระเงิน</b><br>🔎 ลองถาม: "ถ้าตัดออก โปรเจกต์ยังใช้งานได้ไหม?" — ถ้าไม่ได้ = Must</div></div>
+        <div class="card anim-item" style="border-color:rgba(124,58,237,0.3)"><span class="card-icon">⭐</span><div class="card-title">Should Have — ควรมี</div><div class="card-desc">สำคัญมากแต่ยังไม่ถึงตาย เลื่อนไปเฟสหน้าได้โดยระบบไม่พัง เช่น <b>ค้นหา, ตัวกรอง, แจ้งเตือน</b><br>ทำให้ประสบการณ์ดีขึ้นชัดเจน แต่ไม่ใช่สิ่งที่ทำให้ระบบ "มีชีวิต"</div></div>
+        <div class="card anim-item" style="border-color:rgba(245,158,11,0.3)"><span class="card-icon">✨</span><div class="card-title">Could Have — มีก็ดี</div><div class="card-desc">ของแถมที่เพิ่มความว้าว ไม่มีก็ไม่เป็นไร ทำเมื่อมีเวลา/งบเหลือ เช่น <b>Dark Mode, ธีมสี, อนิเมชัน</b><br>เป็นกลุ่มแรกที่ "ตัดทิ้ง" ได้ถ้าเริ่มทำไม่ทัน</div></div>
+        <div class="card anim-item" style="border-color:rgba(239,68,68,0.3)"><span class="card-icon">🚫</span><div class="card-title">Won't Have — ยังไม่ทำ</div><div class="card-desc">ตกลงร่วมกันว่า "รอบนี้ยังไม่ทำ" ไม่ใช่ไม่ดี แต่ขอเก็บไว้ก่อน เช่น <b>หลายภาษา, ระบบ AI แนะนำ</b><br>เขียนให้ชัดเพื่อกันทีมหลุดโฟกัส (scope creep)</div></div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(10px,1.4vw,18px);font-size:clamp(11px,1.1vw,15px);color:var(--text-secondary)" class="anim-item">💡 <b>วิธีใช้จริง:</b> ทำ Must ให้เสร็จก่อนเสมอ → ตั้งเวลา (time-box) แล้วค่อยไล่ Should → Could • ถ้าเวลาไม่พอ ตัดจากล่างขึ้นบน (Won't → Could → Should) <b>อย่าแตะ Must</b></div>
+    </div>
+  </div>
+
+  <!-- 18 WORKSHOP A FigJam -->
+  <div class="slide" data-slide="22">
+    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Workshop A · FigJam</div><div class="slide-number">23</div></div>
+    <div class="slide-content">
+      <div class="hero-box pink anim-item">
+        <div class="hero-mission">🧠 Group Brainstorm</div>
+        <div class="hero-title">คิด Product เว็บไซต์ของกลุ่ม + จัด MoSCoW</div>
+        <div class="hero-desc">แบ่งกลุ่ม → ช่วยกันคิดเว็บไซต์/แอปที่อยากทำ → ลิสต์ฟีเจอร์ทั้งหมดลง FigJam → จัดลำดับด้วย MoSCoW ว่าอันไหน Must / Should / Could / Won't</div>
+        <div class="hero-chips">
+          <span class="hero-chip">👥 ทำเป็นกลุ่ม</span>
+          <span class="hero-chip">🧠 ฝึก brainstorm บน FigJam</span>
+          <span class="hero-chip">📊 ฝึกตัดสินใจ</span>
+        </div>
+        <a class="hero-link" href="https://www.figma.com/board/wuCbBhsms4gowGz0xRIWcP/Brainstorm---Devnest?node-id=0-1" target="_blank">เปิด FigJam Board →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIVIDER FIGMA -->
+  <div class="slide cinema" data-slide="23">
+    <div class="slide-content divider-content">
+      <img class="divider-meme r1" src="img/img_other/image%20copy%206.png" alt="roll safe">
+      <div class="divider-eyebrow anim-item">Hands-on 🛠️</div>
+      <div class="divider-title anim-item">Figma<br>จากศูนย์</div>
+      <div class="divider-sub anim-item">ข่าวดีสำหรับสายเดฟ: สิ่งที่น้องรู้อยู่แล้ว ใช้กับ Figma ได้เลย</div>
+    </div>
+  </div>
+
+  <!-- 21 FIGMA INTERFACE -->
+  <div class="slide" data-slide="24">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Figma Basics</div><div class="slide-number">25</div></div>
+    <div class="slide-title">ทัวร์หน้าตา Figma</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-3">
+        <div class="card anim-item"><span class="card-icon">🧰</span><div class="card-title">Toolbar</div><div class="card-desc">Move, Frame, Shape, Pen, Text <span class="kbd">V</span><span class="kbd">F</span><span class="kbd">T</span></div></div>
+        <div class="card anim-item"><span class="card-icon">📚</span><div class="card-title">Left Sidebar</div><div class="card-desc">จัดการ Layers, Pages, Assets</div></div>
+        <div class="card anim-item"><span class="card-icon">🎛️</span><div class="card-title">Properties Panel</div><div class="card-desc">ปรับสี ขนาด เอฟเฟกต์ ทางขวา</div></div>
+        <div class="card anim-item"><span class="card-icon">🖼️</span><div class="card-title">Frame & Canvas</div><div class="card-desc">Frame = Artboard ที่ใส่ UI ของเรา <span class="kbd">F</span></div></div>
+        <div class="card anim-item"><span class="card-icon">🧩</span><div class="card-title">Assets & Libraries</div><div class="card-desc">คลังเก็บ Components ใช้ซ้ำได้</div></div>
+        <div class="card anim-item"><span class="card-icon">⚡</span><div class="card-title">Quick Actions</div><div class="card-desc">หาเมนูไม่เจอ? กด <span class="kbd">⌘</span>+<span class="kbd">/</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 22 DEV MENTAL MODEL -->
+  <div class="slide" data-slide="25">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>For Devs 💜</div><div class="slide-number">26</div></div>
+    <div class="slide-title">Figma = สิ่งที่น้องรู้อยู่แล้ว</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">map ศัพท์ Figma กับโลกโค้ด — เรียนเร็วขึ้นเป็นเท่าตัว</div>
+    <div class="slide-content">
+      <div class="eq-list">
+        <div class="eq-row anim-item"><div class="eq-side eq-fig"><span class="ei">📦</span>Auto Layout (Hug/Fill/Gap)</div><div class="eq-eq">=</div><div class="eq-side eq-code"><span class="ei">🧱</span>Flexbox · gap</div></div>
+        <div class="eq-row anim-item"><div class="eq-side eq-fig"><span class="ei">🧩</span>Component</div><div class="eq-eq">=</div><div class="eq-side eq-code"><span class="ei">⚛️</span>React Component</div></div>
+        <div class="eq-row anim-item"><div class="eq-side eq-fig"><span class="ei">🎚️</span>Variants / Properties</div><div class="eq-eq">=</div><div class="eq-side eq-code"><span class="ei">🔧</span>props</div></div>
+        <div class="eq-row anim-item"><div class="eq-side eq-fig"><span class="ei">🎨</span>Styles / Variables</div><div class="eq-eq">=</div><div class="eq-side eq-code"><span class="ei">🪙</span>Design Tokens · CSS vars</div></div>
+        <div class="eq-row anim-item"><div class="eq-side eq-fig"><span class="ei">📌</span>Constraints</div><div class="eq-eq">=</div><div class="eq-side eq-code"><span class="ei">📱</span>responsive rules</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 23 Wireframe -->
+  <div class="slide" data-slide="26">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Wireframe</div><div class="slide-number">27</div></div>
+    <div class="slide-title">Lo-fi vs Hi-fi</div>
+    <div class="slide-subtitle">"พิมพ์เขียว" ของหน้าจอ — วางโครงก่อนลงรายละเอียด</div>
+    <div class="slide-content">
+      <div class="vs-wrap">
+        <div class="vs-card lo anim-item">
+          <div class="vs-icon" style="background:linear-gradient(135deg,#94A3B8,#64748B)">✏️</div>
+          <div><div class="vs-title">Low Fidelity</div><div class="vs-tag" style="color:#64748B">Rough · ขาว-ดำ</div></div>
+          <ul class="vs-list">
+            <li>รวดเร็ว เรียบง่าย เน้นโครงร่าง</li>
+            <li>โฟกัสโครงสร้าง &amp; Flow การใช้งาน</li>
+            <li>เหมาะช่วงเริ่มต้น / brainstorm</li>
+            <li>แก้ไขง่าย ไม่เสียดายของ</li>
+          </ul>
+        </div>
+        <div class="vs-badge anim-item">VS</div>
+        <div class="vs-card hi anim-item">
+          <div class="vs-icon" style="background:linear-gradient(135deg,var(--primary),var(--secondary))">🎨</div>
+          <div><div class="vs-title">High Fidelity</div><div class="vs-tag" style="color:var(--primary)">Polished · สมจริง</div></div>
+          <ul class="vs-list">
+            <li>สวย สมจริง มีสี/ฟอนต์/รูปจริง</li>
+            <li>ระบุขนาด ระยะ Interaction ชัดเจน</li>
+            <li>เหมาะส่งเดฟ / ทำ Prototype</li>
+            <li>ใกล้เคียงของจริงมากที่สุด</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 24 WORKSHOP 1 -->
+  <div class="slide" data-slide="27">
+    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Workshop 1 · Figma</div><div class="slide-number">28</div></div>
+    <div class="slide-content">
+      <div class="hero-box anim-item">
+        <div class="hero-mission">🛠️ Mission</div>
+        <div class="hero-title">สร้าง Wireframe หน้าแรกของระบบกลุ่ม</div>
+        <div class="hero-desc">เอา product ที่กลุ่มคิดใน FigJam มาวางเป็น wireframe ใน Figma — ใช้ AI ช่วยร่าง flow และ content ก่อนได้ แล้วจัด layout ด้วย Frame + Shape + Text</div>
+        <div class="hero-chips">
+          <span class="hero-chip">📱 Mobile + 💻 Desktop</span>
+          <span class="hero-chip">⬜ Basic Shapes + Text</span>
+          <span class="hero-chip">📊 เน้น Hierarchy & Flow</span>
+          <span class="hero-chip">🤖 ใช้ AI ช่วยคิด content</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 1 RECAP -->
+  <div class="slide" data-slide="28">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Recap · Day 1</div><div class="slide-number">29</div></div>
+    <div class="slide-title">สรุปวันแรก</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-2">
+        <div class="card anim-item"><span class="card-icon">👁️</span><div class="card-title">ตาดีไซน์ + Bad UX</div><div class="card-desc">มองงานออก วิเคราะห์ได้ว่าพังตรงไหน</div></div>
+        <div class="card anim-item"><span class="card-icon">🧠</span><div class="card-title">UX/UI & MoSCoW</div><div class="card-desc">เข้าใจบทบาท + จัดลำดับฟีเจอร์เป็น</div></div>
+        <div class="card anim-item"><span class="card-icon">🎨</span><div class="card-title">Figma & FigJam</div><div class="card-desc">ใช้เครื่องมือพื้นฐาน + ทำ wireframe</div></div>
+        <div class="card anim-item"><span class="card-icon">🚀</span><div class="card-title">พรุ่งนี้: AI → HTML</div><div class="card-desc">เปลี่ยนดีไซน์เป็นของจริงส่งเดฟ!</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 27 DIVIDER DAY 2 -->
+  <div class="slide cinema" data-slide="29">
+    <div class="slide-content divider-content">
+      <div class="divider-eyebrow anim-item">Day 2 · The Main Event 🎬</div>
+      <div class="divider-title anim-item">AI → HTML<br>→ ส่งเดฟ</div>
+      <div class="divider-sub anim-item">เปลี่ยนไอเดียในหัว เป็น Interactive HTML ที่กดได้จริง</div>
+    </div>
+  </div>
+
+  <!-- 28 AI LANDSCAPE -->
+  <div class="slide" data-slide="30">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>The Landscape</div><div class="slide-number">31</div></div>
+    <div class="slide-title">AI เข้ามาช่วยทุกขั้นแล้ว</div>
+    <div class="slide-content">
+      <div class="flow-container">
+        <div class="flow-row anim-item">
+          <div class="flow-step"><span class="icon">💡</span>ไอเดีย</div><span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="icon">🧠</span>Research / Content</div><span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="icon">🎨</span>Generate UI</div><span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="icon">💻</span>HTML / Code</div><span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="icon">🤝</span>ส่งเดฟ</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(16px,2vw,30px);font-size:clamp(12px,1.3vw,17px);color:var(--text-secondary);max-width:780px;margin-left:auto;margin-right:auto" class="anim-item">หน้าที่ของเราเปลี่ยนจาก "คนปั้น" → <span class="hl hl-pink">"ผู้กำกับ"</span> ที่สั่งงานและตัดสินว่าอันไหนใช้ได้</div>
+    </div>
+  </div>
+
+  <!-- 29 AI TOOLS LINEUP -->
+  <div class="slide" data-slide="31">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Toolbox</div><div class="slide-number">32</div></div>
+    <div class="slide-title">เครื่องมือ AI ที่จะได้เล่น</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-2">
+        <div class="card anim-item"><span class="card-icon">🎨</span><div class="card-title">Figma Make</div><div class="card-desc">prompt / เฟรม → prototype กดได้จริงพร้อมโค้ด ต่อยอดจากงาน Figma</div><span class="card-tag tag-blue">Figma ในตัว</span></div>
+        <div class="card anim-item"><span class="card-icon">🧵</span><div class="card-title">Google Stitch</div><div class="card-desc">พิมพ์ข้อความ/รูป → ได้ UI + โค้ด frontend วางกลับเข้า Figma ได้</div><span class="card-tag tag-green">ฟรี</span></div>
+        <div class="card anim-item"><span class="card-icon">✨</span><div class="card-title">Claude (Artifacts)</div><div class="card-desc">prompt → interactive HTML ในหน้าเดียว — ตรงเป้า "ส่งเดฟ" สุด</div><span class="card-tag tag-pink">พระเอก</span></div>
+        <div class="card anim-item"><span class="card-icon">⚡</span><div class="card-title">v0 / Lovable</div><div class="card-desc">prompt → เว็บ/แอปที่รันได้ (React) สำหรับคนอยากไปไกลกว่า mockup</div><span class="card-tag tag-orange">เสริม</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 30 PIPELINE -->
+  <div class="slide" data-slide="32">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Workflow</div><div class="slide-number">33</div></div>
+    <div class="slide-title">Pipeline ของเรา</div>
+    <div class="slide-content">
+      <div class="flow-container">
+        <div class="flow-row anim-item">
+          <div class="flow-step"><span class="icon">💭</span>คิดโจทย์ + flow</div><span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="icon">🤖</span>AI generate</div><span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="icon">👁️</span>วิจารณ์ + สั่งแก้</div>
+        </div>
+        <div class="flow-row anim-item">
+          <div class="flow-step highlight"><span class="icon">🪄</span>refine</div><span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="icon">💻</span>Interactive HTML</div><span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="icon">🤝</span>ส่งเดฟ</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(14px,1.8vw,26px);font-size:clamp(12px,1.2vw,16px);color:var(--text-muted)" class="anim-item">หัวใจอยู่ที่ขั้น <b>"วิจารณ์ + สั่งแก้"</b> — ใช้ตาดีไซน์จาก Day 1 ตรงนี้แหละ</div>
+    </div>
+  </div>
+
+  <!-- 31 STITCH hands-on -->
+  <div class="slide" data-slide="33">
+    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Hands-on · Stitch</div><div class="slide-number">34</div></div>
+    <div class="slide-content">
+      <div class="hero-box anim-item">
+        <div class="hero-mission">🧵 ลองเล่นตัวแรก</div>
+        <div class="hero-title">Google Stitch — พิมพ์ → ได้ UI</div>
+        <div class="hero-desc">ลองพิมพ์ prompt อธิบายหน้าจอที่อยากได้ (เช่น "หน้า landing ของแอปจองร้านอาหาร") แล้วดูว่า Stitch generate ออกมายังไง — ลองปรับ prompt ดูความต่าง</div>
+        <div class="hero-chips">
+          <span class="hero-chip">✍️ ฝึกเขียน prompt</span>
+          <span class="hero-chip">🔄 ลองหลายเวอร์ชัน</span>
+          <span class="hero-chip">📋 export ไป Figma/โค้ด</span>
+        </div>
+        <a class="hero-link" href="https://stitch.withgoogle.com/" target="_blank">เปิด Google Stitch →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 32 FIGMA MAKE hands-on -->
+  <div class="slide" data-slide="34">
+    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Hands-on · Figma Make</div><div class="slide-number">35</div></div>
+    <div class="slide-content">
+      <div class="hero-box anim-item">
+        <div class="hero-mission">🎨 generate → prototype</div>
+        <div class="hero-title">Figma Make — จาก prompt สู่ของกดได้</div>
+        <div class="hero-desc">ใช้ Figma Make สร้าง prototype ที่คลิกได้จริง แล้วฝึกสำคัญที่สุด: <b>"อ่านงาน AI ออก"</b> — งานที่ออกมาดีตรงไหน พังตรงไหน ควรสั่งแก้อะไร</div>
+        <div class="hero-chips">
+          <span class="hero-chip">🖱️ Prototype คลิกได้</span>
+          <span class="hero-chip">👁️ ใช้ตาดีไซน์ตรวจ</span>
+          <span class="hero-chip">💬 สั่งแก้เป็นภาษาคน</span>
+        </div>
+        <a class="hero-link" href="https://www.figma.com/make/" target="_blank">เปิด Figma Make →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HANDS-ON CLAUDE -> HTML -->
+  <div class="slide" data-slide="35">
+    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Hands-on · Claude</div><div class="slide-number">36</div></div>
+    <div class="slide-content">
+      <div class="hero-box anim-item">
+        <div class="hero-mission">✳️ สั่งเป็นภาษาคน → ได้ HTML ทั้งไฟล์</div>
+        <div class="hero-title">Claude — สร้าง Interactive HTML</div>
+        <div class="hero-desc">บอก Claude ว่าอยากได้หน้าอะไร + แนบรูป/ดีไซน์ reference แล้วขอเป็น <b>ไฟล์ HTML เดียวจบ</b> (รวม CSS/JS ในไฟล์เดียว) เปิดดูได้ทันทีไม่ต้องติดตั้งอะไร จากนั้นสั่งแก้ทีละจุดจนเป๊ะ</div>
+        <div class="hero-chips">
+          <span class="hero-chip">📎 แนบรูป/บรีฟให้ครบ</span>
+          <span class="hero-chip">📄 ขอ "ไฟล์เดียวจบ"</span>
+          <span class="hero-chip">🪜 สั่งแก้ทีละสเต็ป</span>
+          <span class="hero-chip">👁️ ใช้ตาดีไซน์ตรวจ</span>
+        </div>
+        <a class="hero-link" href="https://claude.ai/" target="_blank">เปิด Claude →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 33 CRITIQUE LOOP -->
+  <div class="slide" data-slide="36">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Critical Skill</div><div class="slide-number">37</div></div>
+    <div class="slide-title">"อ่านงาน AI ออก"</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">AI generate เร็ว แต่คนที่เก่งคือคนที่ <b>วิจารณ์เป็น</b></div>
+    <div class="slide-content">
+      <img class="corner-meme br" src="img/img_other/image%20copy%208.png" alt="pointing meme">
+      <div class="cards-grid cols-3" style="max-width:1000px">
+        <div class="card anim-item"><span class="card-icon">1️⃣</span><div class="card-title">Generate</div><div class="card-desc">ให้ AI ร่างมาก่อน อย่าเพิ่งคาดหวังเพอร์เฟกต์</div></div>
+        <div class="card anim-item"><span class="card-icon">2️⃣</span><div class="card-title">Critique</div><div class="card-desc">เช็กด้วยตาดีไซน์: hierarchy? spacing? อ่านง่าย? flow ครบ?</div></div>
+        <div class="card anim-item"><span class="card-icon">3️⃣</span><div class="card-title">Refine</div><div class="card-desc">สั่งแก้เจาะจง เช่น "เพิ่มระยะห่าง", "ปุ่มหลักเด่นกว่านี้"</div></div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(12px,1.6vw,22px);font-size:clamp(12px,1.2vw,16px);color:var(--text-secondary)" class="anim-item">🔁 วนซ้ำจนกว่าจะดี — นี่คือทักษะที่ AI แทนไม่ได้</div>
+    </div>
+  </div>
+
+  <!-- 34 PROMPT TECHNIQUES -->
+  <div class="slide" data-slide="37">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Prompting</div><div class="slide-number">38</div></div>
+    <div class="slide-title">Prompt ให้ได้ HTML ที่ดี</div>
+    <div class="slide-content">
+      <img class="corner-meme tr" src="img/img_other/image%20copy%204.png" alt="nice meme">
+      <div class="two-col" style="max-width:1000px">
+        <div class="col-section anim-item">
+          <div class="section-label">ใส่ให้ครบ ✅</div>
+          <ul class="bullet-list">
+            <li><span class="bullet"></span>บอก<b>หน้าจอ/หน้าที่</b>ชัด (เช่น dashboard)</li>
+            <li><span class="bullet"></span>ระบุ<b>องค์ประกอบ</b>ที่ต้องมี</li>
+            <li><span class="bullet"></span>บอก<b>โทน/สไตล์</b> (modern, minimal)</li>
+            <li><span class="bullet"></span>ขอ <b>responsive + interactive</b></li>
+          </ul>
+        </div>
+        <div class="col-section anim-item">
+          <div class="section-label">เทคนิคเสริม ⚡</div>
+          <ul class="bullet-list">
+            <li><span class="bullet"></span>ให้ตัวอย่าง/รูป reference</li>
+            <li><span class="bullet"></span>สั่งแก้ทีละจุด ไม่รื้อทั้งหมด</li>
+            <li><span class="bullet"></span>ขอให้ใช้ design token (สีซ้ำ)</li>
+            <li><span class="bullet"></span>บอกว่า "ส่งให้เดฟ" → ขอโค้ดสะอาด</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLE: PROMPT -> OUTPUT -->
+  <div class="slide" data-slide="38">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Example</div><div class="slide-number">39</div></div>
+    <div class="slide-title">ตัวอย่างจริง: Prompt → Output</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,20px)">พิมพ์บอก Claude แบบนี้ → ได้ไฟล์ HTML ที่เปิดดูได้เลยแบบนี้</div>
+    <div class="slide-content">
+      <div class="two-col" style="max-width:1060px;gap:clamp(16px,2.2vw,34px);align-items:stretch">
+        <div class="anim-item" style="display:flex;flex-direction:column">
+          <div class="section-label">✍️ สิ่งที่เราพิมพ์ (Prompt)</div>
+          <div style="background:rgba(255,255,255,0.7);border:1px solid var(--border-color);border-radius:14px;padding:clamp(14px,1.6vw,22px);flex:1;display:flex;flex-direction:column;gap:clamp(11px,1.4vw,16px)">
+            <div style="font-size:clamp(12px,1.2vw,15.5px);line-height:1.75;color:var(--text-primary)">
+              สร้าง <b>เว็บไซต์ร้านกาแฟ</b> เป็น <span class="hl hl-blue">ไฟล์ HTML เดียวจบ</span> (รวม CSS + JS):<br><br>
+              • Hero: ชื่อร้าน + ปุ่ม "สั่งเลย"<br>
+              • เมนูแนะนำ 3 การ์ด (ชื่อ + ราคา)<br>
+              • responsive + ปุ่ม hover มี transition
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;color:var(--text-muted);font-size:clamp(10px,1vw,12.5px);font-weight:700"><span style="flex:1;height:1px;background:var(--border-color)"></span>🔁 ไม่ถูกใจ? สั่งแก้ต่อเป็นภาษาคน<span style="flex:1;height:1px;background:var(--border-color)"></span></div>
+            <div style="display:flex;flex-direction:column;gap:9px;font-size:clamp(11px,1.1vw,14.5px);line-height:1.5">
+              <div style="background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(236,72,153,0.1));border:1px solid var(--border-color);border-radius:12px 12px 12px 4px;padding:9px 14px">💬 "ทำให้สีสันสดใส มีคาแรกเตอร์น่ารักๆ หน่อย"</div>
+              <div style="background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(236,72,153,0.1));border:1px solid var(--border-color);border-radius:12px 12px 12px 4px;padding:9px 14px">💬 "เพิ่มแถบเมนูด้านบน + ปุ่มตะกร้า 🛒"</div>
+              <div style="background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(236,72,153,0.1));border:1px solid var(--border-color);border-radius:12px 12px 12px 4px;padding:9px 14px">💬 "ใส่โซน Best Sellers โชว์เมนูพร้อมป้าย 'ขายดี'"</div>
+            </div>
+            <button class="uiy-btn-primary" id="promptModalBtn" type="button" style="margin-top:auto;align-self:flex-start">📋 ดูตัวอย่าง Prompt เต็มๆ</button>
+          </div>
+        </div>
+        <div class="anim-item" style="display:flex;flex-direction:column">
+          <div class="section-label">✳️ Output จาก Claude</div>
+          <div onclick="window.open('examples/coffee-landing.html','_blank','noopener')" title="คลิกเพื่อเปิดหน้าเว็บจริงในแท็บใหม่" style="border-radius:14px;border:1px solid var(--border-color);overflow:hidden;box-shadow:0 14px 36px rgba(30,27,46,0.16);background:#fff;flex:1;display:flex;flex-direction:column;cursor:pointer;transition:transform 0.2s ease,box-shadow 0.2s ease" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 20px 46px rgba(30,27,46,0.24)'" onmouseout="this.style.transform='';this.style.boxShadow='0 14px 36px rgba(30,27,46,0.16)'">
+            <div style="display:flex;gap:6px;align-items:center;padding:9px 13px;background:#F1EEF9;border-bottom:1px solid var(--border-color)">
+              <span style="width:10px;height:10px;border-radius:50%;background:#FF5F57"></span>
+              <span style="width:10px;height:10px;border-radius:50%;background:#FEBC2E"></span>
+              <span style="width:10px;height:10px;border-radius:50%;background:#28C840"></span>
+              <span style="margin-left:8px;font-size:11px;color:var(--text-muted)">coffee-landing.html</span>
+              <span style="margin-left:auto;font-size:11px;font-weight:700;color:var(--primary)">↗ คลิกเปิดจริง</span>
+            </div>
+            <div style="position:relative;flex:1;min-height:clamp(260px,40vh,420px);overflow:hidden;background:#fff">
+              <iframe src="examples/coffee-landing.html" title="coffee-landing.html preview" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" style="position:absolute;top:0;left:0;width:200%;height:200%;border:0;transform:scale(0.5);transform-origin:top left;pointer-events:none"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(10px,1.4vw,18px);font-size:clamp(11px,1.1vw,15px);color:var(--text-secondary)" class="anim-item">👉 ได้ไฟล์ <b>.html</b> เปิดดู/กดได้ทันที — ไม่ถูกใจตรงไหน <b>สั่งแก้ต่อเป็นภาษาคน</b>ได้เลย (เช่น "ทำปุ่มให้เด่นกว่านี้")</div>
+    </div>
+  </div>
+
+  <!-- CLAUDE CODE: SKILLS & COMMANDS -->
+  <div class="slide" data-slide="39">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Level Up</div><div class="slide-number">40</div></div>
+    <div class="slide-title">Claude Code: Skills &amp; Commands</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">prompt ดีๆ ที่ใช้บ่อย → เก็บเป็น "คำสั่งลัด" ใช้ซ้ำได้ ทั้งของตัวเองและทั้งทีม</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-2" style="max-width:1000px">
+        <div class="card anim-item" style="border-color:rgba(6,182,212,0.3)">
+          <span class="card-icon">⌨️</span>
+          <div class="card-title">Slash Command — เรียกด้วย /ชื่อ</div>
+          <div class="card-desc">เก็บ prompt ที่ใช้ประจำเป็นไฟล์ แล้วพิมพ์ <b>/ชื่อ</b> เรียกใช้ เช่น <b>/make-landing</b> — สั้นๆ แต่ได้งานแบบเดิมทุกครั้ง ไม่ต้องพิมพ์ prompt ยาวซ้ำ</div>
+        </div>
+        <div class="card anim-item" style="border-color:rgba(124,58,237,0.3)">
+          <span class="card-icon">🧩</span>
+          <div class="card-title">Skill — ความรู้ติดตัว Claude</div>
+          <div class="card-desc">แพ็กคำสั่ง + ตัวอย่าง + ขั้นตอน ไว้ใน <b>SKILL.md</b> แล้ว Claude หยิบมาใช้<b>เองอัตโนมัติ</b>เมื่อตรงกับงาน เช่น "สร้าง component ตามสไตล์ทีม"</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(12px,1.6vw,20px);font-size:clamp(11px,1.1vw,15px);color:var(--text-secondary)" class="anim-item">💡 เก็บไว้ที่ <b>.claude/skills/&lt;ชื่อ&gt;/SKILL.md</b> — ตั้งค่าครั้งเดียว ใช้ซ้ำได้ทุกโปรเจกต์ &amp; แชร์ทีมผ่าน git</div>
+    </div>
+  </div>
+
+  <!-- CREATE COMMAND VIA CLAUDE -->
+  <div class="slide" data-slide="40">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Pro Tip</div><div class="slide-number">41</div></div>
+    <div class="slide-title">ขี้เกียจเขียนเอง? ให้ Claude สร้าง Command ให้</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">ไม่ต้องจำ format — บอกเป็นภาษาคนว่าอยากได้คำสั่งอะไร เดี๋ยว Claude เขียนไฟล์ให้เอง</div>
+    <div class="slide-content">
+      <div style="max-width:860px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:clamp(14px,1.8vw,22px)">
+        <div class="code-block anim-item">
+          <span class="c-prompt">claude&gt;</span> <span class="c-cmd">ช่วยสร้าง command /slide</span> ที่เอาไว้สร้างสไลด์จากหัวข้อที่ให้ หน่อย<br>
+          <br>
+          <span class="c-cmt"># Claude จะเขียนไฟล์ .claude/commands/slide.md ให้อัตโนมัติ</span><br>
+          <span class="c-cmt"># เสร็จแล้วพิมพ์ /slide เรียกใช้ได้เลย</span>
+        </div>
+        <div class="cards-grid cols-3" style="max-width:860px">
+          <div class="card anim-item"><span class="card-icon">🗣️</span><div class="card-title">1. บอกเป็นภาษาคน</div><div class="card-desc">"อยากได้ command ที่ทำ ___ ให้หน่อย" — ไม่ต้องรู้ syntax</div></div>
+          <div class="card anim-item"><span class="card-icon">📝</span><div class="card-title">2. Claude เขียนไฟล์ให้</div><div class="card-desc">สร้างไฟล์ .md ในโฟลเดอร์ commands ให้พร้อมใช้</div></div>
+          <div class="card anim-item"><span class="card-icon">🔧</span><div class="card-title">3. ลองใช้ + สั่งปรับ</div><div class="card-desc">พิมพ์ /ชื่อ ใช้งาน ถ้าไม่ถูกใจ สั่งแก้ต่อได้เลย</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTALL COMMAND MANUALLY -->
+  <div class="slide" data-slide="41">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Setup</div><div class="slide-number">42</div></div>
+    <div class="slide-title">วิธีติดตั้ง Command เอง (.md)</div>
+    <div class="slide-content">
+      <div class="steps">
+        <div class="step anim-item">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">ดาวน์โหลดไฟล์ .md</div>
+            <div class="step-sub">จาก GitHub repo หรือ zip ที่แจกท้าย workshop</div>
+          </div>
+        </div>
+        <div class="step anim-item">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">วางในโฟลเดอร์ commands</div>
+            <div class="step-sub"><b>.claude</b> เป็น hidden folder — Finder ไม่แสดงปกติ</div>
+            <div class="code-block">
+              <span class="c-cmt"># สร้างโฟลเดอร์ (ถ้ายังไม่มี)</span><br>
+              <span class="c-prompt">$</span> mkdir -p ~/.claude/commands<br>
+              <br>
+              <span class="c-cmt"># คัดลอกไฟล์ .md เข้าไป</span><br>
+              <span class="c-prompt">$</span> cp *.md ~/.claude/commands/
+            </div>
+            <div class="tip-box" style="margin-top:10px">💡 <b>หาโฟลเดอร์ใน Finder:</b> กด <b>Cmd + Shift + G</b> → พิมพ์ <b>~/.claude/commands</b> → Enter</div>
+          </div>
+        </div>
+        <div class="step anim-item">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">เรียกใช้ใน Claude Code</div>
+            <div class="code-block">
+              <span class="c-prompt">claude&gt;</span> <span class="c-cmd">/slide</span> สร้าง slide เรื่อง Sprint Review<br>
+              <span class="c-prompt">claude&gt;</span> <span class="c-cmd">/diagram</span> สร้าง flow จาก PROJ-123
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(10px,1.4vw,18px);font-size:clamp(10px,1vw,13px);color:var(--text-muted)" class="anim-item">ℹ️ เวอร์ชันใหม่ของ Claude Code วางใน <b>.claude/skills/&lt;ชื่อ&gt;/SKILL.md</b> ได้เหมือนกัน</div>
+    </div>
+  </div>
+
+  <!-- 35 HANDOFF -->
+  <div class="slide" data-slide="42">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Handoff</div><div class="slide-number">43</div></div>
+    <div class="slide-title">ส่งมอบให้เดฟยังไงดี</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-3">
+        <div class="card anim-item"><span class="card-icon">📄</span><div class="card-title">ไฟล์ HTML</div><div class="card-desc">interactive mockup ที่เปิดดู/กดเล่นได้จริงในเบราว์เซอร์</div></div>
+        <div class="card anim-item"><span class="card-icon">🗺️</span><div class="card-title">อธิบายโครงสร้าง</div><div class="card-desc">หน้าไหนทำอะไร, flow เชื่อมกันยังไง</div></div>
+        <div class="card anim-item"><span class="card-icon">🎯</span><div class="card-title">จุดที่ต้องระวัง</div><div class="card-desc">state ต่างๆ, responsive, ปุ่มไหนทำอะไร</div></div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(14px,1.8vw,26px);font-size:clamp(12px,1.3vw,17px);color:var(--text-secondary);max-width:800px;margin-left:auto;margin-right:auto" class="anim-item">💜 mockup ที่กดได้จริง สื่อสารกับเดฟดีกว่าภาพนิ่ง 10 เท่า — <b>เดฟเห็นปุ๊บเข้าใจปั๊บ</b></div>
+    </div>
+  </div>
+
+  <!-- 36 CAPSTONE -->
+  <div class="slide" data-slide="43">
+    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Capstone · Final</div><div class="slide-number">44</div></div>
+    <div class="slide-content">
+      <div class="hero-box pink anim-item">
+        <div class="hero-mission">🏁 โปรเจกต์จบคอร์ส</div>
+        <div class="hero-title">ทำ Interactive HTML Mockup ของระบบตัวเอง</div>
+        <div class="hero-desc">เอา product ที่กลุ่มคิดไว้ มาทำให้ครบ loop: idea → ใช้ AI generate → วิจารณ์ + refine → ได้ interactive HTML ที่พร้อมส่งเดฟจริง แล้วนำเสนอ!</div>
+        <div class="hero-chips">
+          <span class="hero-chip">💡 idea ของกลุ่ม</span>
+          <span class="hero-chip">🤖 AI generate</span>
+          <span class="hero-chip">🪄 refine ด้วยตาดีไซน์</span>
+          <span class="hero-chip">💻 ส่งเป็น HTML</span>
+          <span class="hero-chip">🎤 present</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 37 RESOURCES -->
+  <div class="slide" data-slide="44">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Keep Going</div><div class="slide-number">45</div></div>
+    <div class="slide-title">เรียนต่อได้ที่ไหน</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-2">
+        <div class="card anim-item"><span class="card-icon">📘</span><div class="card-title">Figma Learn</div><div class="card-desc">help.figma.com — คอร์ส official ฟรี ครบทุกฟีเจอร์</div></div>
+        <div class="card anim-item"><span class="card-icon">🤖</span><div class="card-title">ลองเล่น AI ทุกตัว</div><div class="card-desc">Figma Make · Stitch · Claude · v0 — ฝึก prompt บ่อยๆ</div></div>
+        <div class="card anim-item"><span class="card-icon">👁️</span><div class="card-title">ฝึกตาดีไซน์</div><div class="card-desc">ดูงานดีๆ ทุกวัน (Mobbin, Dribbble) แล้วถามว่า "ทำไมมันดี"</div></div>
+        <div class="card anim-item"><span class="card-icon">🛠️</span><div class="card-title">ลงมือทำโปรเจกต์จริง</div><div class="card-desc">วิธีเก่งเร็วสุดคือทำของจริงส่งทีม</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 38 END -->
+  <div class="slide" data-slide="45">
+    <div class="slide-content end-content">
+      <div class="end-title anim-item">Now Go Build! 🚀</div>
+      <div class="slide-subtitle anim-item" style="max-width:560px;text-align:center">น้องมีทั้งตาดีไซน์ Figma และ AI ครบมือแล้ว<br>ไปเปลี่ยนไอเดียเป็นของจริงกันเลย 💜</div>
+      <div class="cover-logo anim-item" style="margin-top:14px"><span class="sq"></span> DEVNEST SCHOOL</div>
+    </div>
+  </div>
+
+</div>
+</main>
+</div>
+
+<div class="lightbox-overlay" id="lightbox" onclick="this.classList.remove('open')"><img id="lightboxImg" src="" alt=""></div>
+
+<!-- User Inyerface challenge: password modal -->
+<div class="uiy-overlay" id="uiyPwModal">
+  <div class="uiy-card">
+    <div class="uiy-card-icon">🔒</div>
+    <div class="uiy-card-title">ใส่รหัสผ่านเพื่อเริ่มเล่น</div>
+    <div class="uiy-warn">⚠️ กรุณารอรหัสจากผู้สอน — ห้ามเริ่มเล่นเองก่อนถึงเวลานะคะ</div>
+    <input type="password" id="uiyPwInput" class="uiy-input" placeholder="ใส่รหัสผ่าน..." autocomplete="off" autocapitalize="off" spellcheck="false">
+    <div class="uiy-error" id="uiyPwError" hidden>❌ รหัสผ่านไม่ถูกต้อง ลองใหม่อีกครั้ง</div>
+    <div class="uiy-card-actions">
+      <button class="uiy-btn-ghost" id="uiyPwCancel" type="button">ยกเลิก</button>
+      <button class="uiy-btn-primary" id="uiyPwSubmit" type="button">เริ่มเล่น →</button>
+    </div>
+  </div>
+</div>
+
+<!-- User Inyerface challenge: time-up modal -->
+<div class="uiy-overlay" id="uiyTimeupModal">
+  <div class="uiy-card">
+    <div class="uiy-card-icon">⏰</div>
+    <div class="uiy-card-title">หมดเวลา 5 นาทีแล้ว!</div>
+    <div class="uiy-card-desc">ยังไม่เสร็จไม่เป็นไร เล่นต่อได้เลย — ระบบจะจับเวลาต่อให้ว่าใช้ไปทั้งหมดเท่าไหร่ 💪</div>
+    <button class="uiy-btn-primary" id="uiyContinueBtn" type="button">ทำต่อ →</button>
+  </div>
+</div>
+
+<!-- User Inyerface challenge: done / win modal -->
+<div class="uiy-overlay" id="uiyDoneModal">
+  <div class="uiy-card win">
+    <div class="uiy-card-icon">🎉</div>
+    <div class="uiy-card-title">ยินดีด้วย! ในที่สุดก็ทำเสร็จ 5555</div>
+    <div class="uiy-final-time" id="uiyFinalTime">⏱️ ใช้เวลาไป 0:00</div>
+    <div class="uiy-card-desc" id="uiyNotify">📣 แจ้งผู้สอนให้เดินมาดูได้เลย!</div>
+    <div class="uiy-warn" id="uiyDoneWarn">⚠️ ห้ามออกจากหน้านี้จนกว่าจะแจ้งผู้สอน<br>ถ้ากดปิด = ต้องเริ่มใหม่ทั้งหมดตั้งแต่ใส่รหัสผ่าน</div>
+    <button class="uiy-btn-ghost" id="uiyDoneClose" type="button">ปิด (เริ่มใหม่ทั้งหมด)</button>
+  </div>
+</div>
+
+<!-- Example prompt modal (slide 39) -->
+<div class="uiy-overlay" id="promptModal">
+  <div class="uiy-card" style="max-width:760px;text-align:left">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px">
+      <div style="font-size:clamp(16px,1.9vw,23px);font-weight:800;color:var(--text-primary)">📋 ตัวอย่าง Prompt เต็มๆ</div>
+      <button class="uiy-btn-ghost" id="promptModalClose" type="button" style="padding:7px 14px">✕ ปิด</button>
+    </div>
+    <div style="font-size:clamp(12px,1.2vw,14px);color:var(--text-muted);margin-bottom:12px">ก๊อปไปวางใน Claude ได้เลย แล้วปรับชื่อร้าน / สี / เมนู ตามใจ</div>
+    <div id="promptText" style="background:#1E1B2E;color:#EDE9FB;border-radius:12px;padding:clamp(14px,1.6vw,20px);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:clamp(11.5px,1.05vw,13.5px);line-height:1.75;text-align:left;max-height:54vh;overflow-y:auto;white-space:pre-wrap">ช่วยสร้าง "เว็บไซต์ร้านกาแฟ + Co-working Space" ให้หน่อย
+เป็นไฟล์ HTML เดียวจบ (รวม CSS และ JavaScript ในไฟล์เดียว)
+เปิดในเบราว์เซอร์ได้ทันที ไม่ต้องติดตั้งหรือใช้ไลบรารีภายนอก
+
+🎯 เป้าหมาย
+หน้าเว็บโปรโมตร้าน "SUMDAY Cafe &amp; Workspace" — ร้านกาแฟที่นั่งทำงานได้
+ให้ดูสนุก สดใส น่าเข้าร้าน และดูโปรเฟสชันนอลไปพร้อมกัน
+
+🎨 สไตล์ภาพ (สำคัญมาก)
+- โทนสีสดใส playful: เหลืองสด + น้ำเงิน + ส้ม ตัดกับครีม/ขาว
+- สไตล์ retro / groovy มีคาแรกเตอร์การ์ตูนน่ารัก (ดอกไม้ยิ้มได้, ดาว, แก้วกาแฟมีหน้าตา)
+- ฟอนต์หัวข้อหนา ใหญ่ มีบุคลิก, มุมโค้งมน, เงานุ่ม
+- สะอาด อ่านง่าย แต่มีชีวิตชีวา ไม่รก
+
+🧱 โครงสร้างหน้า (เรียงจากบนลงล่าง)
+1) Navbar (sticky): โลโก้ซ้าย + เมนู (หน้าแรก / เมนู / เกี่ยวกับเรา) + ปุ่ม "🛒 ตะกร้า" ขวา
+2) Hero: พื้นหลังสีสด + คาแรกเตอร์, หัวข้อใหญ่ "CAFE &amp; WORKSPACE",
+   สโลแกนสั้นๆ, ปุ่ม 2 อัน → "ดูเมนูแนะนำ" (ปุ่มเด่น) และ "เมนูทั้งหมด →"
+3) แถบข้อความวิ่ง (marquee) คั่น เช่น  FRESH COFFEE ★ GOOD VIBES ★ ORGANIC 100% ★ …
+4) Best Sellers: หัวข้อ "เมนูแนะนำ" + การ์ดเมนู 4 อัน
+   (รูป/อิโมจิ + ชื่อเมนู + ราคา + ปุ่มเพิ่มลงตะกร้า) มีป้าย "ขายดี" ที่มุมการ์ด
+5) โซน Workspace: บอกจุดเด่น — โต๊ะทำงาน, Wi-Fi แรง, ปลั๊กครบ, บรรยากาศเงียบสงบ
+6) แบนเนอร์โปรโมชัน / ชวนสมัครสมาชิก
+7) Footer: เวลาเปิด-ปิด, ที่อยู่, เบอร์โทร, ช่องทางโซเชียล
+
+⚙️ ฟังก์ชัน &amp; เทคนิค
+- Responsive ทุกขนาดจอ; บนมือถือเมนูยุบเป็น hamburger
+- ปุ่มและการ์ดมี hover effect + transition ลื่นๆ
+- ปุ่ม "เพิ่มลงตะกร้า" กดแล้วตัวเลขบนไอคอนตะกร้า +1 (เก็บค่าด้วย JavaScript)
+- คลิกเมนูบน navbar เลื่อนแบบ smooth scroll ไปยัง section นั้น
+- แถบข้อความวิ่งทำด้วย CSS animation
+- ใช้ semantic HTML, ใส่ alt ให้รูป, คุม contrast ให้อ่านง่าย (accessibility)
+
+📝 โทนคำ
+ข้อความบนเว็บเป็นภาษาไทย โทนสนุก เป็นกันเอง
+
+ทำมาเป็นไฟล์เดียวให้เปิดดูได้เลยนะ เดี๋ยวถ้าอยากปรับตรงไหนจะบอกเพิ่ม</div>
+    <div style="display:flex;justify-content:flex-end;margin-top:14px">
+      <button class="uiy-btn-primary" id="promptCopyBtn" type="button">📋 คัดลอก Prompt</button>
+    </div>
+  </div>
+</div>
+
+<button class="fullscreen-btn" id="fullscreenBtn" title="Fullscreen (F)">&#x26F6;</button>
+<div class="page-dropdown" id="pageDropdown"></div>
+<div class="nav-bar" id="navBar">
+  <button class="nav-btn" id="homeBtn" title="Home (H)" style="font-size:18px;">&#x2302;</button>
+  <button class="nav-btn" id="prevBtn" title="Previous">&#x2039;</button>
+  <div class="nav-progress" id="navProgress"></div>
+  <button class="nav-btn" id="nextBtn" title="Next">&#x203A;</button>
+  <div class="nav-counter" id="navCounter">1 / 46</div>
+  <button class="nav-btn" id="menuBtn" title="Slide Menu">&#x2630;</button>
+</div>
+
+<script>
+function openLightbox(src){const lb=document.getElementById('lightbox');document.getElementById('lightboxImg').src=src;lb.classList.add('open');}
+(function(){
+  const slides=document.querySelectorAll('.slide');
+  const totalSlides=slides.length;
+  let currentSlide=0,animTimer=null,dropdownOpen=false;
+  const slideTitles=[
+    'หน้าปก','ภาพรวม 2 วัน','Learning Outcomes','Mindset: Dev ยุค AI','ติดตั้ง Figma','ลิงก์ประกอบการเรียน',
+    '— UX vs UI —','UX คืออะไร','UI คืออะไร','UX vs UI ต่างกันยังไง','บทบาทในทีม','บทบาท UX & UI (รายละเอียด)','Quote: Good UX',
+    '— Bad UX รอบตัว —','Bad UX: ทางลาด','Bad UX: ทางม้าลาย','Bad UX: แก้วแมว','Bad vs Good: ซอส',
+    'Workshop: Bad UX รอบตัว','Challenge: User Inyerface','หลักตาดีไซน์','MoSCoW Method',
+    'Workshop A: FigJam','— Figma จากศูนย์ —','ทัวร์ Figma','Figma = โค้ดที่คุณรู้','Wireframe Lo-fi/Hi-fi',
+    'Workshop 1: Wireframe','สรุป Day 1',
+    '— Day 2: AI → HTML —','AI Landscape','เครื่องมือ AI','Pipeline','Hands-on: Stitch','Hands-on: Figma Make',
+    'Hands-on: Claude → HTML','อ่านงาน AI ออก','Prompt ให้ดี','ตัวอย่าง: Prompt → Output','Claude: Skills & Commands','สร้าง Command (ให้ Claude ทำ)','ติดตั้ง Command (.md)','ส่งมอบให้เดฟ','Capstone','เรียนต่อ','Now Go Build!'
+  ];
+  const navProgress=document.getElementById('navProgress');
+  if(totalSlides<=15){for(let i=0;i<totalSlides;i++){const d=document.createElement('div');d.className='nav-dot'+(i===0?' active':'');d.addEventListener('click',()=>goToSlide(i));navProgress.appendChild(d);}}
+  const dropdown=document.getElementById('pageDropdown');
+  slideTitles.forEach((title,i)=>{const item=document.createElement('div');item.className='page-dropdown-item'+(i===0?' active':'');item.innerHTML='<span class="item-num">'+String(i+1).padStart(2,'0')+'</span> '+title;item.addEventListener('click',(e)=>{e.stopPropagation();toggleDropdown(false);requestAnimationFrame(()=>goToSlide(i));});dropdown.appendChild(item);});
+  // Build grouped sidebar
+  const sbGroups=[
+    {label:'บทนำ',items:[0,1,2,3,4,5]},
+    {label:'UX vs UI',items:[6,7,8,9,10,11]},
+    {label:'Bad UX & ตาดีไซน์',items:[12,13,14,15,16,17,18,19,20]},
+    {label:'จัดลำดับฟีเจอร์ (MoSCoW)',items:[21,22]},
+    {label:'Figma พื้นฐาน',items:[23,24,25,26,27,28]},
+    {label:'Day 2 · AI → HTML',items:[29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45]}
+  ];
+  const sbNav=document.getElementById('sbNav');
+  const sidebar=document.getElementById('sidebar');
+  const cleanT=t=>t.replace(/^—\s*/,'').replace(/\s*—$/,'');
+  const sbIcons=['🏠','🗺️','🎯','🧠','⬇️','🔗','⚔️','🧭','🎨','🔀','👥','🧩','💬','👁️','♿','🚧','🍵','🍅','🔍','🎮','📐','📊','🧠','🧰','🗂️','💻','✏️','🛠️','✅','🚀','🌐','🤖','🔁','🧵','🪄','✳️','👀','✍️','🖥️','⚙️','🗣️','📥','🤝','🏁','📚','🎉'];
+  sbGroups.forEach(g=>{
+    const gl=document.createElement('div');gl.className='sb-group-label';gl.textContent=g.label;sbNav.appendChild(gl);
+    g.items.forEach(i=>{
+      const it=document.createElement('div');it.className='sb-item'+(i===0?' active':'');it.dataset.idx=i;
+      it.innerHTML='<span class="ix">'+String(i+1).padStart(2,'0')+'</span><span class="ic">'+(sbIcons[i]||'•')+'</span><span>'+cleanT(slideTitles[i])+'</span>';
+      it.addEventListener('click',()=>{goToSlide(i);if(window.innerWidth<=768)sidebar.classList.add('hidden');});
+      sbNav.appendChild(it);
+    });
+  });
+  document.getElementById('sbToggle').addEventListener('click',()=>sidebar.classList.remove('hidden'));
+  document.getElementById('sbCollapse').addEventListener('click',()=>sidebar.classList.add('hidden'));
+  if(window.innerWidth<=768)sidebar.classList.add('hidden');
+
+  function goToSlide(index){
+    if(index===currentSlide||index<0||index>=totalSlides)return;
+    if(animTimer){clearTimeout(animTimer);slides.forEach(s=>{s.classList.remove('active','prev');s.style.transform='';});}
+    const prev=slides[currentSlide],next=slides[index];
+    const fwd=index>currentSlide;
+    prev.classList.remove('active');
+    if(fwd)prev.classList.add('prev');
+    next.style.transition='none';next.style.transform=fwd?'translateX(60px)':'translateX(-60px)';next.style.opacity='0';
+    next.offsetHeight;
+    next.style.transition=next.style.transform=next.style.opacity='';
+    next.classList.add('active');
+    currentSlide=index;updateUI();
+    animTimer=setTimeout(()=>{prev.classList.remove('prev');prev.style.transform='';animTimer=null;},500);
+  }
+  function updateUI(){
+    document.getElementById('navCounter').textContent=(currentSlide+1)+' / '+totalSlides;
+    document.getElementById('progressTop').style.width=((currentSlide+1)/totalSlides*100)+'%';
+    navProgress.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===currentSlide));
+    document.getElementById('prevBtn').disabled=currentSlide===0;
+    document.getElementById('nextBtn').disabled=currentSlide===totalSlides-1;
+    document.getElementById('homeBtn').disabled=currentSlide===0;
+    dropdown.querySelectorAll('.page-dropdown-item').forEach((item,i)=>item.classList.toggle('active',i===currentSlide));
+    sbNav.querySelectorAll('.sb-item').forEach(it=>{const on=(+it.dataset.idx===currentSlide);it.classList.toggle('active',on);if(on)it.scrollIntoView({block:'nearest'});});
+  }
+  function toggleDropdown(state){dropdownOpen=state!==undefined?state:!dropdownOpen;dropdown.classList.toggle('open',dropdownOpen);}
+  document.getElementById('homeBtn').addEventListener('click',()=>goToSlide(0));
+  document.getElementById('prevBtn').addEventListener('click',()=>goToSlide(currentSlide-1));
+  document.getElementById('nextBtn').addEventListener('click',()=>goToSlide(currentSlide+1));
+  document.getElementById('menuBtn').addEventListener('click',(e)=>{e.stopPropagation();toggleDropdown();});
+  document.getElementById('fullscreenBtn').addEventListener('click',()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();});
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();goToSlide(currentSlide+1);}
+    else if(e.key==='ArrowLeft'){e.preventDefault();goToSlide(currentSlide-1);}
+    else if(e.key==='Home'||e.key==='h'||e.key==='H'){e.preventDefault();goToSlide(0);}
+    else if(e.key==='End'){e.preventDefault();goToSlide(totalSlides-1);}
+    else if(e.key==='f'||e.key==='F'){document.getElementById('fullscreenBtn').click();}
+    else if(e.key==='Escape'){toggleDropdown(false);document.getElementById('lightbox').classList.remove('open');}
+  });
+  let touchStartX=0;
+  document.addEventListener('touchstart',(e)=>{touchStartX=e.touches[0].clientX;});
+  document.addEventListener('touchend',(e)=>{const diff=touchStartX-e.changedTouches[0].clientX;if(Math.abs(diff)>50)diff>0?goToSlide(currentSlide+1):goToSlide(currentSlide-1);});
+  document.addEventListener('click',(e)=>{if(dropdownOpen&&!dropdown.contains(e.target)&&e.target.id!=='menuBtn')toggleDropdown(false);});
+  updateUI();
+})();
+</script>
+
+<!-- User Inyerface challenge logic (slide 19) -->
+<script>
+(function(){
+  const LINK='https://userinyerface.com/';
+  const PASSWORD='devnest';
+  const COUNTDOWN=5*60; // seconds
+  // ===== ตั้งค่าเสียงตอนหมดเวลา =====
+  // อยากใช้ "ไฟล์เสียงจริง" ให้ใส่ path ไฟล์ตรงนี้ เช่น 'img/sounds/timeup.mp3' (เว้นว่าง = ใช้เสียงพูดสังเคราะห์)
+  const TIMEUP_SOUND='';
+  const TIMEUP_TEXT='อยู่ไม่ไหว อยู่ไม่ไหว เฮ้ย อยู่ไม่ไหว อ้าว';
+  const $=id=>document.getElementById(id);
+  const startBtn=$('uiyStartBtn');
+  if(!startBtn) return;
+  const pwModal=$('uiyPwModal'),pwInput=$('uiyPwInput'),pwError=$('uiyPwError'),pwSubmit=$('uiyPwSubmit'),pwCancel=$('uiyPwCancel');
+  const timerPanel=$('uiyTimer'),cdEl=$('uiyCountdown'),swEl=$('uiyStopwatch'),doneBtn=$('uiyDoneBtn');
+  const timeupModal=$('uiyTimeupModal'),continueBtn=$('uiyContinueBtn');
+  const doneModal=$('uiyDoneModal'),finalTimeEl=$('uiyFinalTime'),doneClose=$('uiyDoneClose');
+  const notifyEl=$('uiyNotify'),doneWarnEl=$('uiyDoneWarn');
+  let swSec=0,cdSec=COUNTDOWN,swTimer=null,cdTimer=null,audioCtx=null;
+
+  const fmt=s=>{const m=Math.floor(s/60);return m+':'+String(s%60).padStart(2,'0');};
+  function ensureAudio(){if(!audioCtx){try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}
+  function beep(freq,start,dur,type,gain){const ctx=ensureAudio();if(!ctx)return;const o=ctx.createOscillator(),g=ctx.createGain();o.type=type||'sine';o.frequency.value=freq;o.connect(g);g.connect(ctx.destination);const t=ctx.currentTime+start;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(gain||0.3,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.start(t);o.stop(t+dur+0.03);}
+  function speak(text){try{if(!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='th-TH';u.rate=1;speechSynthesis.speak(u);}catch(e){}}
+  function playFile(src){try{const a=new Audio(src);a.volume=1;a.play().catch(()=>{});}catch(e){}}
+  function playTimeup(){
+    if(TIMEUP_SOUND){playFile(TIMEUP_SOUND);return;}
+    beep(880,0,0.16,'square',0.22);beep(660,0.2,0.16,'square',0.22);
+    speak(TIMEUP_TEXT);
+  }
+  function playWin(){beep(523,0,0.15,'triangle',0.3);beep(659,0.15,0.15,'triangle',0.3);beep(784,0.3,0.15,'triangle',0.3);beep(1047,0.46,0.5,'triangle',0.32);speak('ยินดีด้วย ทำสำเร็จแล้ว');}
+
+  function clearTimers(){if(swTimer){clearInterval(swTimer);swTimer=null;}if(cdTimer){clearInterval(cdTimer);cdTimer=null;}}
+  function startTimers(){
+    swSec=0;cdSec=COUNTDOWN;
+    cdEl.textContent=fmt(cdSec);cdEl.classList.remove('danger');
+    swEl.textContent=fmt(swSec);
+    timerPanel.hidden=false;startBtn.hidden=true;
+    swTimer=setInterval(()=>{swSec++;swEl.textContent=fmt(swSec);},1000);
+    cdTimer=setInterval(()=>{
+      cdSec--;
+      if(cdSec<=0){cdSec=0;cdEl.textContent='0:00';cdEl.classList.add('danger');clearInterval(cdTimer);cdTimer=null;playTimeup();timeupModal.classList.add('open');return;}
+      if(cdSec<=10)cdEl.classList.add('danger');
+      cdEl.textContent=fmt(cdSec);
+    },1000);
+  }
+  function finish(){const withinTime=cdSec>0;clearTimers();timeupModal.classList.remove('open');finalTimeEl.textContent='⏱️ ใช้เวลาไป '+fmt(swSec);notifyEl.hidden=!withinTime;doneWarnEl.hidden=!withinTime;doneModal.classList.add('open');playWin();}
+  function resetAll(){clearTimers();swSec=0;cdSec=COUNTDOWN;timerPanel.hidden=true;startBtn.hidden=false;cdEl.classList.remove('danger');cdEl.textContent='5:00';swEl.textContent='0:00';pwInput.value='';pwError.hidden=true;doneModal.classList.remove('open');timeupModal.classList.remove('open');pwModal.classList.remove('open');try{speechSynthesis.cancel();}catch(e){}}
+
+  function submitPw(){
+    const val=(pwInput.value||'').trim().toLowerCase();
+    if(val===PASSWORD){
+      pwModal.classList.remove('open');
+      ensureAudio();
+      const w=window.open(LINK,'_blank');if(w){try{w.opener=null;}catch(e){}}
+      startTimers();
+    }else{
+      pwError.hidden=false;pwInput.value='';pwInput.focus();
+      pwInput.classList.remove('shake');void pwInput.offsetWidth;pwInput.classList.add('shake');
+    }
+  }
+
+  startBtn.addEventListener('click',()=>{pwError.hidden=true;pwInput.value='';pwModal.classList.add('open');ensureAudio();setTimeout(()=>pwInput.focus(),60);});
+  startBtn.addEventListener('contextmenu',e=>e.preventDefault());
+  pwSubmit.addEventListener('click',submitPw);
+  pwInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitPw();}});
+  pwCancel.addEventListener('click',()=>pwModal.classList.remove('open'));
+  doneBtn.addEventListener('click',finish);
+  continueBtn.addEventListener('click',()=>{timeupModal.classList.remove('open');try{speechSynthesis.cancel();}catch(e){}});
+  doneClose.addEventListener('click',resetAll);
+})();
+</script>
+
+<!-- Example prompt modal logic (slide 39) -->
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const btn=$('promptModalBtn'),modal=$('promptModal'),closeBtn=$('promptModalClose'),copyBtn=$('promptCopyBtn'),txt=$('promptText');
+  if(!btn||!modal) return;
+  const open=()=>modal.classList.add('open');
+  const close=()=>modal.classList.remove('open');
+  btn.addEventListener('click',open);
+  closeBtn.addEventListener('click',close);
+  modal.addEventListener('click',e=>{if(e.target===modal)close();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+  copyBtn.addEventListener('click',()=>{
+    const t=(txt.innerText||'').trim();
+    const done=()=>{const o=copyBtn.textContent;copyBtn.textContent='✅ คัดลอกแล้ว!';setTimeout(()=>{copyBtn.textContent=o;},1700);};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done).catch(()=>{});}
+    else{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(ta);}
+  });
+})();
+</script>
+</body>
+</html>
