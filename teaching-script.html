@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📖 สคริปต์ผู้สอน — Design × AI Workshop · DevNest</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+:root{
+  --primary:#7C3AED; --primary-dark:#5B21B6; --primary-light:#A78BFA;
+  --secondary:#EC4899; --secondary-dark:#DB2777; --secondary-light:#F472B6;
+  --accent-orange:#F59E0B; --accent-red:#EF4444; --accent-cyan:#06B6D4;
+  --bg-dark:#F7F3FF; --bg-card:rgba(124,58,237,0.05); --bg-card-hover:rgba(124,58,237,0.10);
+  --text-primary:#1E1B2E; --text-secondary:#4B445E; --text-muted:#8B84A0;
+  --grid-color:rgba(124,58,237,0.06); --border-color:rgba(124,58,237,0.13);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dark);color:var(--text-primary);overflow:hidden;width:100vw;height:100vh;-webkit-font-smoothing:antialiased;}
+
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(var(--grid-color) 1px,transparent 1px),linear-gradient(90deg,var(--grid-color) 1px,transparent 1px);background-size:40px 40px;z-index:0;pointer-events:none;}
+.blob{position:fixed;border-radius:50%;filter:blur(70px);opacity:0.30;z-index:0;pointer-events:none;}
+.blob.b1{width:42vw;height:42vw;left:-12vw;top:-14vw;background:radial-gradient(circle,#A78BFA,transparent 70%);}
+.blob.b2{width:38vw;height:38vw;right:-12vw;bottom:-14vw;background:radial-gradient(circle,#F472B6,transparent 70%);}
+
+.progress-top{position:fixed;top:0;left:0;height:4px;z-index:120;background:linear-gradient(90deg,var(--primary),var(--secondary));box-shadow:0 0 12px rgba(124,58,237,0.5);transition:width .4s ease;width:0;}
+
+/* ===== Layout + Sidebar (เหมือน index.html) ===== */
+.app{display:flex;width:100vw;height:100vh;position:relative;z-index:1;}
+.sidebar{width:clamp(232px,18vw,300px);flex-shrink:0;height:100vh;overflow-y:auto;background:rgba(255,255,255,0.78);backdrop-filter:blur(12px);border-right:1px solid var(--border-color);padding:clamp(16px,1.5vw,24px) clamp(12px,1vw,16px);transition:margin-left 0.32s cubic-bezier(0.4,0,0.2,1);z-index:60;}
+.sidebar.hidden{margin-left:calc(-1 * clamp(232px,18vw,300px));}
+.sb-head{position:relative;padding:0 8px clamp(12px,1.2vw,18px);border-bottom:1px solid var(--border-color);margin-bottom:clamp(8px,1vw,14px);}
+.sb-collapse{position:absolute;top:-2px;right:4px;width:26px;height:26px;border-radius:8px;border:1px solid var(--border-color);background:#fff;color:var(--text-muted);font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.sb-collapse:hover{color:var(--primary);border-color:var(--primary);}
+.sb-logo{display:flex;align-items:center;gap:7px;font-size:clamp(10px,0.85vw,12px);font-weight:800;letter-spacing:0.04em;color:var(--primary);}
+.sb-logo .sq{width:12px;height:12px;border-radius:4px;background:linear-gradient(135deg,var(--primary),var(--secondary));}
+.sb-title{font-size:clamp(15px,1.25vw,19px);font-weight:800;margin-top:8px;line-height:1.2;background:linear-gradient(135deg,var(--text-primary),var(--primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sb-sub{font-size:clamp(9px,0.78vw,11px);color:var(--text-muted);margin-top:3px;font-weight:600;}
+.sb-nav{display:flex;flex-direction:column;gap:1px;}
+.sb-group-label{font-size:clamp(8px,0.68vw,10px);font-weight:800;letter-spacing:0.13em;text-transform:uppercase;color:var(--text-muted);margin:clamp(10px,1vw,15px) 0 4px;padding-left:10px;}
+.sb-item{display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:clamp(10.5px,0.9vw,13px);color:var(--text-secondary);line-height:1.3;transition:background 0.15s,color 0.15s;}
+.sb-item:hover{background:var(--bg-card-hover);color:var(--text-primary);}
+.sb-item.active{background:linear-gradient(135deg,rgba(124,58,237,0.13),rgba(236,72,153,0.10));color:var(--primary);font-weight:700;}
+.sb-item .ix{font-size:9.5px;font-family:'Inter',monospace;color:var(--text-muted);min-width:16px;text-align:right;flex-shrink:0;}
+.sb-item.active .ix{color:var(--primary);}
+.sb-item .ic{font-size:1.05em;flex-shrink:0;}
+.sidebar-toggle{position:fixed;top:14px;left:14px;z-index:70;width:36px;height:36px;border-radius:9px;border:1px solid var(--border-color);background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);color:var(--primary);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;opacity:0;pointer-events:none;}
+.sidebar.hidden ~ .sidebar-toggle{opacity:1;pointer-events:auto;}
+.sidebar-toggle:hover{background:#fff;box-shadow:0 4px 14px rgba(124,58,237,0.18);}
+.stage{flex:1;min-width:0;height:100vh;position:relative;overflow:hidden;}
+
+/* ===== Main split: script + preview ===== */
+.workspace{display:flex;height:100vh;gap:0;}
+.script-pane{flex:1;min-width:0;height:100vh;overflow-y:auto;padding:clamp(22px,3vw,48px) clamp(20px,3vw,52px) 110px;}
+.preview-pane{width:clamp(320px,34vw,560px);flex-shrink:0;height:100vh;border-left:1px solid var(--border-color);background:rgba(255,255,255,0.55);backdrop-filter:blur(8px);display:flex;flex-direction:column;padding:clamp(14px,1.4vw,20px);}
+.preview-pane.hidden{display:none;}
+.pv-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-shrink:0;}
+.pv-title{font-size:clamp(11px,1vw,13px);font-weight:800;color:var(--secondary-dark);text-transform:uppercase;letter-spacing:0.05em;}
+.pv-open{margin-left:auto;font-size:clamp(10px,0.95vw,12.5px);font-weight:700;color:var(--primary);text-decoration:none;padding:5px 11px;border-radius:20px;border:1px solid var(--border-color);background:#fff;white-space:nowrap;}
+.pv-open:hover{box-shadow:0 4px 12px rgba(124,58,237,0.18);}
+.pv-frame-wrap{flex:1;border-radius:14px;overflow:hidden;border:1px solid var(--border-color);box-shadow:0 14px 34px rgba(30,27,46,0.14);background:#fff;position:relative;min-height:0;}
+.pv-frame-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+.pv-note{margin-top:10px;font-size:clamp(10px,0.95vw,12px);color:var(--text-muted);text-align:center;flex-shrink:0;}
+
+/* ===== Script content ===== */
+.sc-head{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-bottom:clamp(8px,1vw,14px);}
+.sc-badge{font-size:clamp(10px,0.95vw,13px);font-weight:700;padding:5px 14px;border-radius:20px;border:1px solid var(--border-color);background:var(--bg-card);color:var(--primary);}
+.sc-badge.d2{color:#0E7490;background:rgba(6,182,212,0.1);border-color:rgba(6,182,212,0.3);}
+.sc-badge.work{color:var(--secondary-dark);background:rgba(236,72,153,0.1);border-color:rgba(236,72,153,0.3);}
+.sc-pageno{font-family:'Inter',monospace;font-weight:700;color:var(--text-muted);font-size:clamp(11px,1vw,14px);}
+.sc-time{margin-left:auto;font-size:clamp(11px,1.05vw,14px);font-weight:700;color:var(--accent-orange);background:rgba(245,158,11,0.1);padding:5px 13px;border-radius:20px;border:1px solid rgba(245,158,11,0.28);white-space:nowrap;}
+.sc-title{font-size:clamp(22px,3vw,42px);font-weight:800;line-height:1.16;margin-bottom:clamp(5px,.7vw,10px);letter-spacing:-0.01em;background:linear-gradient(135deg,var(--text-primary),var(--primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sc-goal{font-size:clamp(13px,1.35vw,18px);color:var(--text-secondary);font-weight:600;margin-bottom:clamp(16px,2vw,26px);}
+.sc-goal b{color:var(--text-primary);}
+
+.blocks{display:flex;flex-direction:column;gap:clamp(11px,1.3vw,17px);max-width:920px;}
+.blk{border-radius:16px;padding:clamp(13px,1.5vw,20px) clamp(15px,1.7vw,24px);border:1px solid var(--border-color);background:rgba(255,255,255,0.62);}
+.blk-lbl{display:inline-flex;align-items:center;gap:8px;font-size:clamp(11px,1vw,13px);font-weight:800;letter-spacing:0.02em;margin-bottom:9px;}
+.blk-lbl .ic{font-size:1.3em;}
+.blk p{font-size:clamp(14px,1.4vw,18px);line-height:1.78;color:var(--text-secondary);margin:0 0 7px;}
+.blk p:last-child{margin-bottom:0;}
+.blk b{color:var(--text-primary);font-weight:800;}
+.blk .stage{color:#0E7490;font-style:italic;font-weight:600;}
+.blk .ans{color:#0E9F6E;font-weight:700;}
+.blk .q{color:var(--secondary-dark);font-weight:700;}
+.blk code{background:rgba(124,58,237,0.1);color:var(--primary-dark);padding:1px 7px;border-radius:6px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:0.86em;font-weight:700;}
+.blk ul{margin:5px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px;}
+.blk ul li{font-size:clamp(13px,1.35vw,17px);line-height:1.7;padding-left:20px;position:relative;color:var(--text-secondary);}
+.blk ul li::before{content:'›';position:absolute;left:3px;color:var(--primary);font-weight:800;}
+
+.blk.hook{background:linear-gradient(135deg,rgba(124,58,237,0.07),rgba(167,139,250,0.05));border-color:rgba(124,58,237,0.22);}
+.blk.hook .blk-lbl{color:var(--primary);}
+.blk.say .blk-lbl{color:var(--text-primary);}
+.blk.ask{background:rgba(245,158,11,0.07);border-color:rgba(245,158,11,0.22);}
+.blk.ask .blk-lbl{color:#B45309;}
+.blk.bridge{background:rgba(6,182,212,0.07);border-color:rgba(6,182,212,0.22);}
+.blk.bridge .blk-lbl{color:#0E7490;}
+.blk.tip{background:rgba(236,72,153,0.07);border-color:rgba(236,72,153,0.22);}
+.blk.tip .blk-lbl{color:var(--secondary-dark);}
+
+/* divider / cover script page */
+.sc-divider{display:flex;flex-direction:column;justify-content:center;height:100%;}
+.sc-divider .big{font-size:clamp(30px,4.6vw,62px);font-weight:900;line-height:1.05;background:linear-gradient(120deg,var(--primary),var(--secondary),var(--accent-orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:18px;}
+
+/* ===== Nav bar (เหมือน index.html) ===== */
+.nav-bar{position:fixed;bottom:clamp(14px,2vw,26px);left:calc(50% + clamp(160px,17vw,280px) / 2 - clamp(160px,17vw,280px));display:flex;align-items:center;gap:10px;padding:8px 16px;border-radius:18px;background:rgba(255,255,255,0.9);backdrop-filter:blur(16px);border:1px solid var(--border-color);box-shadow:0 6px 28px rgba(124,58,237,0.16);z-index:100;}
+.nav-btn{width:40px;height:40px;border-radius:11px;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.nav-btn:hover{background:var(--bg-card-hover);color:var(--primary);}
+.nav-btn:active{transform:scale(0.92);}
+.nav-btn:disabled{opacity:0.3;cursor:not-allowed;}
+.nav-counter{font-size:13px;font-weight:700;color:var(--text-muted);font-family:'Inter',monospace;min-width:60px;text-align:center;}
+.nav-toggle-pv{font-size:14px;}
+
+::-webkit-scrollbar{width:7px;height:7px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--primary-light);border-radius:4px;}
+
+@media (max-width:1100px){
+  .preview-pane{width:clamp(280px,38vw,420px);}
+}
+@media (max-width:860px){
+  .workspace{flex-direction:column;}
+  .preview-pane{width:100%;height:auto;border-left:none;border-top:1px solid var(--border-color);order:-1;}
+  .pv-frame-wrap{height:34vh;}
+  .script-pane{height:auto;}
+  body{overflow-y:auto;}
+  .sidebar{position:fixed;left:0;top:0;width:min(82vw,300px);box-shadow:0 0 50px rgba(30,27,46,0.3);z-index:200;}
+  .sidebar.hidden{margin-left:0;transform:translateX(-105%);}
+  .sidebar-toggle{opacity:1 !important;pointer-events:auto !important;}
+  .nav-bar{left:50%;transform:translateX(-50%);}
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+<div class="progress-top" id="progressTop"></div>
+
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <button class="sb-collapse" id="sbCollapse" title="ซ่อนเมนู">&#x00AB;</button>
+    <div class="sb-logo"><span class="sq"></span> DEVNEST SCHOOL</div>
+    <div class="sb-title">Design × AI</div>
+    <div class="sb-sub">📖 สคริปต์ผู้สอน · Teacher Script</div>
+  </div>
+  <nav class="sb-nav" id="sbNav"></nav>
+</aside>
+<button class="sidebar-toggle" id="sbToggle" title="แสดงเมนู">&#x2630;</button>
+
+<main class="stage">
+  <div class="workspace">
+    <div class="script-pane" id="scriptPane"></div>
+    <aside class="preview-pane" id="previewPane">
+      <div class="pv-head">
+        <span class="pv-title">👁️ สไลด์ที่นักเรียนเห็น</span>
+        <a class="pv-open" id="pvOpen" href="index.html" target="_blank" rel="noopener">เปิดเต็มจอ ↗</a>
+      </div>
+      <div class="pv-frame-wrap"><iframe id="pvFrame" src="index.html#1" title="student slide preview"></iframe></div>
+      <div class="pv-note" id="pvNote">หน้านี้ตรงกับสไลด์นักเรียนหน้า 1</div>
+    </aside>
+  </div>
+</main>
+</div>
+
+<div class="nav-bar" id="navBar">
+  <button class="nav-btn" id="prevBtn" title="ก่อนหน้า (←)">&#x2039;</button>
+  <div class="nav-counter" id="navCounter">1 / 49</div>
+  <button class="nav-btn" id="nextBtn" title="ถัดไป (→)">&#x203A;</button>
+  <button class="nav-btn nav-toggle-pv" id="togglePv" title="ซ่อน/แสดงพรีวิว">👁️</button>
+</div>
+
+<script>
+(function(){
+  // ===== data (ตรงกับ index.html) =====
+  const slideTitles=[
+    'หน้าปก','ภาพรวม 2 วัน','Learning Outcomes','Mindset: Dev ยุค AI','ติดตั้ง Figma','ลิงก์ประกอบการเรียน',
+    '— UX vs UI —','UX คืออะไร','UI คืออะไร','UX vs UI ต่างกันยังไง','บทบาทในทีม','บทบาท UX & UI (รายละเอียด)','Quote: Good UX',
+    '— Bad UX รอบตัว —','Bad UX: ทางลาด','Bad UX: ทางม้าลาย','Bad UX: แก้วแมว','Bad vs Good: ซอส',
+    'Workshop: Bad UX รอบตัว','Challenge: User Inyerface','หลักตาดีไซน์',
+    'User Persona คืออะไร','องค์ประกอบของ Persona','ตัวอย่าง: ลูกค้า SUMDAY',
+    'MoSCoW Method',
+    'Workshop A: FigJam','— Figma จากศูนย์ —','ทัวร์ Figma','Figma = โค้ดที่คุณรู้','Wireframe Lo-fi/Hi-fi',
+    'Workshop 1: Wireframe','สรุป Day 1',
+    '— Day 2: AI → HTML —','AI Landscape','เครื่องมือ AI','Pipeline','Hands-on: Stitch','Hands-on: Figma Make',
+    'Hands-on: Claude → HTML','อ่านงาน AI ออก','Prompt ให้ดี','ตัวอย่าง: Prompt → Output','Claude: Skills & Commands','สร้าง Command (ให้ Claude ทำ)','ติดตั้ง Command (.md)','ส่งมอบให้เดฟ','Capstone','เรียนต่อ','Now Go Build!'
+  ];
+  const sbGroups=[
+    {label:'บทนำ',items:[0,1,2,3,4,5]},
+    {label:'UX vs UI',items:[6,7,8,9,10,11,12]},
+    {label:'Bad UX & ตาดีไซน์',items:[13,14,15,16,17,18,19,20]},
+    {label:'รู้จักผู้ใช้ (User Persona)',items:[21,22,23]},
+    {label:'จัดลำดับฟีเจอร์ (MoSCoW)',items:[24,25]},
+    {label:'Figma พื้นฐาน',items:[26,27,28,29,30,31]},
+    {label:'Day 2 · AI → HTML',items:[32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48]}
+  ];
+  const sbIcons=['🏠','🗺️','🎯','🧠','⬇️','🔗','⚔️','🧭','🎨','🔀','👥','🧩','💬','👁️','♿','🚧','🍵','🍅','🔍','🎮','📐','🧑‍💼','🧬','☕','📊','🧠','🧰','🗂️','💻','✏️','🛠️','✅','🚀','🌐','🤖','🔁','🧵','🪄','✳️','👀','✍️','🖥️','⚙️','🗗️','📥','🤝','🏁','📚','🎉'];
+
+  // ===== สคริปต์พูดของแต่ละหน้า (index ตรงกับสไลด์นักเรียน) =====
+  const B={
+    badge:(t,c)=>'<span class="sc-badge'+(c?' '+c:'')+'">'+t+'</span>',
+  };
+  function head(badge,no,time){return '<div class="sc-head">'+badge+'<span class="sc-pageno">หน้า '+no+'</span><span class="sc-time">⏱️ '+time+'</span></div>';}
+  function title(t){return '<div class="sc-title">'+t+'</div>';}
+  function goal(t){return '<div class="sc-goal">🎯 '+t+'</div>';}
+  function hook(h){return '<div class="blk hook"><div class="blk-lbl"><span class="ic">🎬</span>เปิดยังไง</div>'+h+'</div>';}
+  function say(h,lbl){return '<div class="blk say"><div class="blk-lbl"><span class="ic">🗣️</span>'+(lbl||'พูดอะไร')+'</div>'+h+'</div>';}
+  function ask(h,lbl){return '<div class="blk ask"><div class="blk-lbl"><span class="ic">🙋</span>'+(lbl||'ถามห้อง')+'</div>'+h+'</div>';}
+  function bridge(h){return '<div class="blk bridge"><div class="blk-lbl"><span class="ic">🔗</span>สะพานต่อ</div>'+h+'</div>';}
+  function tip(h,lbl){return '<div class="blk tip"><div class="blk-lbl"><span class="ic">💡</span>'+(lbl||'ทริค')+'</div>'+h+'</div>';}
+  function wrap(parts){return '<div class="blocks">'+parts.join('')+'</div>';}
+
+  const D1=B.badge('Day 1'), D2=B.badge('Day 2','d2'), WK=B.badge('Workshop','work');
+
+  const scripts=[];
+
+  // 0 ปก
+  scripts[0]=head(D1,1,'2 นาที')+title('ปก "Design × AI"')+goal('เปิดบรรยากาศ + วัดระดับห้อง')+wrap([
+    hook('<p><span class="stage">(ยืนนิ่ง ปล่อยให้ปกขึ้นสัก 2 วิ แล้วเริ่มด้วยคำถาม ไม่ใช่ทักทายธรรมดา)</span></p>'),
+    ask('<p class="q">"ขอมือหน่อยค่ะ — ใครเคยพิมพ์สั่ง AI ให้ทำเว็บหรือรูปให้ แล้วได้ของหน้าตา… เอ่อ ประหลาดกลับมาบ้าง?"</p><p><span class="ans">→ (มีคนยกมือ+หัวเราะ) รับลูก:</span> "เห็นไหมคะ AI ทำของได้เร็วมาก แต่ \'ของที่ใช้ได้จริง\' เป็นอีกเรื่อง"</p>','ถามห้องเลย'),
+    say('<p>"2 วันนี้เราจะไม่ได้นั่งฟังทฤษฎีเฉย ๆ ทุกช่วงได้ลงมือทำ สิ่งที่อยากให้กลับบ้านคือ — เปลี่ยน <b>ไอเดียในหัว</b> ให้เป็น <b>เว็บที่กดได้จริง</b> ส่งเดฟใช้ต่อได้เลย และคอร์สนี้ทำมาเพื่อ <b>สายเดฟ</b> โดยเฉพาะ"</p>'),
+    ask('<p class="q">"ใครเคยแตะ Figma มาบ้าง? … ใครเป็นสายเขียนโค้ดเป็นหลัก?"</p><p><span class="ans">→ จำสัดส่วนไว้ปรับความลึกตอนสอน Figma</span></p>','ปิดด้วยวัดระดับห้อง')
+  ]);
+
+  // 1 Agenda
+  scripts[1]=head(D1,2,'2 นาที')+title('2 วันนี้เราจะไปไหนกัน')+goal('ให้เห็นแผนที่ ไม่หลง')+wrap([
+    say('<p>"ก่อนออกเดินทาง ขอกาง GPS ให้ดูก่อน — <b>Day 1</b> ปูพื้น ฝึก \'ตาดีไซน์\' แล้วลงมือใช้ Figma · <b>Day 2</b> ของจริง เอา AI เปลี่ยนดีไซน์เป็นเว็บกดได้แล้วส่งเดฟ"</p><p><span class="stage">(ชี้ chip Workshop/Challenge)</span> "ทุกช่วงมีลงมือทำ ไม่มีช่วงไหนนั่งฟังเกิน 15 นาที ง่วงเมื่อไหร่บอกได้"</p>'),
+    bridge('<p>"อย่ากังวลว่าจะจำไม่หมด — วันนี้เก็บทีละก้าว เดี๋ยวมันต่อกันเองตอนจบ"</p>')
+  ]);
+
+  // 2 Outcomes
+  scripts[2]=head(D1,3,'2 นาที')+title('จบคอร์สนี้ น้องจะทำอะไรได้')+goal('ตั้งความคาดหวัง + ชู "ตา" เป็นพระเอก')+wrap([
+    say('<p>"ของติดมือกลับบ้าน 4 อย่าง <span class="stage">(ไล่เร็ว ๆ)</span> — ตาดีไซน์, ใช้ Figma เป็น, ใช้ AI ช่วยออกแบบ, ส่งงานเป็น HTML"</p><p><span class="stage">(ชี้การ์ดตาดีไซน์)</span> "ขอเน้นข้อแรก — อีก 3 ข้อ AI ช่วยได้เกือบหมด แต่ <b>\'ตาที่บอกว่าอันไหนดี\'</b> AI ลอกเราไม่ได้ ถ้าสั่ง AI มา 5 แบบ ใครเลือกว่าอันไหนส่งลูกค้าได้? เรา ไม่ใช่ AI"</p>')
+  ]);
+
+  // 3 Mindset
+  scripts[3]=head(D1,4,'3 นาที')+title('ยุคนี้ "เดฟ" ออกแบบเองได้แล้ว')+goal('ปลดล็อกว่าทำไมเดฟต้องเรียนดีไซน์')+wrap([
+    hook('<p><span class="stage">(meme Roll Safe มุมขวาล่าง)</span> "ถ้า AI ทำ UI ให้ ก็ไม่ต้องจ้างดีไซเนอร์… จริงเหรอ?"</p>'),
+    say('<p>"เล่าให้ฟัง — เมื่อ 2-3 ปีก่อนเอง เดฟอยากได้หน้าเว็บสวย ต้องรอดีไซเนอร์ส่งไฟล์ เปิด Zeplin วัดทีละพิกเซล กว่าจะได้หน้านึงเป็นวัน ทุกวันนี้? พิมพ์ prompt 10 วิได้ UI แล้ว"</p>'),
+    ask('<p class="q">"งั้นแปลว่าดีไซเนอร์ตกงาน เดฟไม่ต้องเรียนดีไซน์แล้วใช่ไหม?"</p><p><span class="ans">→ (รอห้องตอบ)</span> "ตรงข้ามเลยค่ะ"</p>','ถามดัก'),
+    say('<p>"ลองนึกภาพ — AI เหมือน <b>น้องฝึกงานที่วาดเร็วเทพมาก</b> สั่งอะไรก็ได้ แต่ยังไม่มีรสนิยม บางทีทำมาสวยแต่ใช้ไม่ได้ แล้วใครเป็น \'หัวหน้า\' ที่บอกว่า \'ปุ่มนี้เล็กไป\'? เรา — งานเดฟไม่ได้หาย แต่ <b>เลื่อนขึ้น</b> จากคนปั้นเป็นคนกำกับและตัดสิน ซึ่งจ่ายแพงกว่าเยอะ"</p>','พูดต่อ'),
+    bridge('<p>"และทักษะ \'ตัดสินว่าอะไรดี\' เริ่มจากการมีตา — เดี๋ยวไปสร้างตากันเลย"</p>')
+  ]);
+
+  // 4 Setup Figma
+  scripts[4]=head(D1,5,'3-5 นาที')+title('วิธีติดตั้ง Figma')+goal('ทุกคนพร้อมเครื่องมือ')+wrap([
+    say('<p>"เปิด Figma ค้างไว้ทุกคนนะคะ แนะนำโหลด <b>Desktop App</b> ลื่นสุด ใครยังไม่อยากติดตั้งใช้ผ่านเว็บ figma.com ได้ เหมือนกันเกือบหมด"</p>'),
+    tip('<p><span class="stage">(อย่ายืนพูด — เดินดูรอบห้อง)</span> "ใครเข้าไม่ได้ยกมือ" — อย่าปล่อยให้มีคนตามไม่ทันตั้งแต่เครื่องมือ เดี๋ยวหลุดยาว</p>')
+  ]);
+
+  // 5 Resources
+  scripts[5]=head(D1,6,'1-2 นาที')+title('ลิงก์ประกอบการเรียน')+goal('เปิดแท็บเตรียมไว้')+wrap([
+    say('<p>"เปิด 2 ลิงก์นี้ค้างเป็นแท็บไว้เลย — FigJam ไว้ brainstorm กับไฟล์ Figma ไว้ทำ Workshop เดี๋ยวเด้งไปเด้งมาทั้งวัน"</p>'),
+    tip('<p>ถ้าแจก QR/ลิงก์สั้นได้ ฉายตรงนี้ เร็วกว่าให้พิมพ์ URL ยาว ๆ</p>')
+  ]);
+
+  // 6 Divider UX vs UI
+  scripts[6]=head(D1,7,'1-2 นาที')+'<div class="sc-divider"><div class="sc-head">'+D1+'<span class="sc-pageno">ช่วงเปลี่ยนหัวข้อ</span></div><div class="big">UX vs UI</div>'+wrap([
+    hook('<p><span class="stage">(meme ดิคาปริโอ "…there is a difference?")</span> "ประโยคนี้คือสิ่งที่คนพูดกันบ่อยมาก — UX UI เรียกติดปาก แต่พอถามว่าต่างยังไง… เงียบ"</p>'),
+    ask('<p class="q">"ใครพอบอกได้ว่า UX กับ UI ต่างกันตรงไหน?"</p><p><span class="ans">→ เก็บ 2-3 คำตอบ ไม่ตัดสินถูกผิด</span> "จำคำตอบตัวเองไว้นะ เดี๋ยวมาเทียบว่าใกล้ไหม"</p>','ให้ห้องนิยามก่อนเฉลย')
+  ])+'</div>';
+
+  // 7 UX
+  scripts[7]=head(D1,8,'3-4 นาที')+title('UX คืออะไร')+goal('ทำให้ UX จับต้องได้ด้วย "เรื่องประตู"')+wrap([
+    hook('<p><span class="stage">(ยังไม่กดเฉลยคำนิยาม เริ่มด้วยเรื่องเล่าก่อน)</span></p>'),
+    ask('<p class="q">"ทุกคนเคยเจอประตูที่เห็นมือจับแล้วเรา \'ดึง\' แต่จริง ๆ มันต้อง \'ผลัก\' ไหมคะ?"</p><p><span class="ans">→ (เกือบทุกคนเคย)</span> "ความเหวอแว้บนึงนั้น แล้วเรารู้สึกโง่ทั้งที่…"</p>'),
+    say('<p>"…ทั้งที่ความผิดไม่ได้อยู่ที่เราเลย มันอยู่ที่คนออกแบบประตู — ประตูสวยดี แต่ <b>มันสื่อสารผิด</b> มือจับแบบดึง แต่ฟังก์ชันคือผลัก <span class="stage">(เคสนี้ดังจนมีชื่อว่า \'Norman door\')</span></p><p><span class="stage">(ค่อยกดเปิดคำนิยาม)</span> "นี่แหละคือ <b>UX</b> — ไม่ใช่เรื่องสวยไม่สวย แต่คือ <b>\'ตอนใช้แล้วรู้สึกยังไง\'</b> เทียบง่าย ๆ ลิฟต์ที่กดปุ๊บรู้เลยว่าจะไปชั้นไหน VS ตู้กดน้ำปุ่มมั่วจนต้องเพ่ง ทำหน้าที่เหมือนกันแต่ประสบการณ์คนละโลก เป้าหมาย UX มีคำเดียว — <b>ทำให้คนใช้ได้โดยไม่ต้องคิด</b>"</p>'),
+    bridge('<p>"UX ดูแลความรู้สึก แล้วใครดูแลหน้าตาที่เราเห็น? — นั่นคือ UI"</p>')
+  ]);
+
+  // 8 UI
+  scripts[8]=head(D1,9,'3 นาที')+title('UI คืออะไร')+goal('แยก UI ออกจาก UX ให้ชัด')+wrap([
+    say('<p>"ถ้า UX คือ <b>ประสบการณ์</b> UI ก็คือ <b>ทุกอย่างที่ตาเห็นและนิ้วกดได้</b> — layout, สี, ฟอนต์, ปุ่ม, ไอคอน, อนิเมชันตอนกด"</p><p>"เปรียบกับร่างกายคน — <b>UX = โครงกระดูก</b> มองไม่เห็นแต่กำหนดว่ายืนเดินได้ดีไหม · <b>UI = ผิวหนังกับเสื้อผ้า</b> คนแต่งตัวสวยแต่กระดูกพัง… ก็เดินไม่ได้ ต้องมีทั้งคู่"</p>'),
+    ask('<p class="q">"รีโมททีวีที่บ้าน — ปุ่ม 40 ปุ่มเท่ากันหมด สีเดียวกันหมด นั่นคือ UI ที่…"</p><p><span class="ans">→ (รอห้องเติม)</span> "แย่ ใช่ค่ะ เพราะไม่มี hierarchy เดี๋ยวเราเรียนคำนี้กัน" — สรุป UI = สวยงาม ชัดเจน สื่อสารดี</p>','โยงของจริง')
+  ]);
+
+  // 9 Compare
+  scripts[9]=head(D1,10,'3 นาที')+title('แล้วต่างกันยังไง?')+goal('ตอกย้ำด้วยภาพ desire path')+wrap([
+    hook('<p><span class="stage">(เปิดรูป desire path — ทางที่คนเหยียบหญ้าเป็นทางลัด)</span> "ดูรูปนี้นะคะ…"</p>'),
+    say('<p>"เห็นทางปูสวย ๆ ไหม? แล้วเห็นรอยที่คนเดินเหยียบหญ้าตัดมุมไหม — เรื่องจริง บางมหาลัยฉลาดมาก เขา <b>ไม่ปูทางก่อน</b> ปล่อยให้คนเดินสัก 1 เทอม รอดูว่าคนเดินตรงไหนจริง แล้วค่อยปูตรงนั้น นั่นแหละ — <b>UX คือทางที่คนเดินจริง, UI คือทางที่เราปูให้สวย</b> ที่เก่งคือสองอันตรงกัน"</p>'),
+    ask('<p class="q">"จำคำตอบที่นิยามไว้เมื่อกี้ได้ไหม ใกล้ไหมคะ?"</p>','ปิด loop คำถามหน้า 7')
+  ]);
+
+  // 10 Roles team
+  scripts[10]=head(D1,11,'2 นาที')+title('ใครทำอะไรในทีม')+goal('เห็นภาพทีม + ปูว่าคนเดียวทำหลายหมวกได้')+wrap([
+    say('<p>"ในทีมจริงเหมือนทำร้านอาหารเลย — <b>UX = คนคิดเมนูและจัดคิวครัว</b> · <b>UI = คนจัดจานให้สวยน่ากิน</b> · <b>Dev = คนทำอาหารจริง</b> · <b>User = ลูกค้า</b> ปลายทาง"</p><p><span class="stage">(ชี้บรรทัด ยุค AI)</span> "แต่ร้านเล็ก ๆ เจ้าของทำเองหมดทุกหมวกได้ไหม? ได้ — ยุค AI ก็เหมือนกัน คนเดียวสวมหลายหมวกได้ ซึ่งคือสิ่งที่น้องกำลังจะเป็น"</p>')
+  ]);
+
+  // 11 Roles detail
+  scripts[11]=head(D1,12,'3 นาที')+title('บทบาท UX และ UI ในโปรเจกต์')+goal('ลงลึกว่าแต่ละบทบาททำอะไร + เป็นลูป')+wrap([
+    say('<p>"UX จับงานต้นน้ำ: หาปัญหา, ทำ persona, วาง flow, wireframe · UI จับปลายน้ำ: visual, สี, ฟอนต์, design system"</p><p><span class="stage">(ชี้คำว่า Iterate)</span> "แต่อย่าเข้าใจผิดว่าเป็นเส้นตรงส่งไม้ผลัดจบ — มันคือ <b>ลูป</b> UI ทำไปเจอปัญหา ย้อนมาบอก UX ว่า flow ตรงนี้ติด แก้ไปแก้มา <b>ไม่มีใครเป๊ะรอบเดียว</b>"</p>'),
+    tip('<p>ไม่ต้องอ่าน chip ทุกอัน เลือกพูดอันที่เดฟคุ้น (Wireframe, Design System, a11y) สัก 2-3 อัน</p>')
+  ]);
+
+  // 12 Quote
+  scripts[12]=head(D1,13,'1-2 นาที')+title('Good UX is invisible')+goal('ฝากประโยคติดหู')+wrap([
+    hook('<p><span class="stage">(พูดช้าลง เว้นจังหวะ ปล่อยให้ประโยคบนจอค้าง)</span></p>'),
+    say('<p>"<i>Good UX is invisible, but bad UX is unforgettable</i> — ลองคิดถึงแอร์ในห้องนี้สิ ตอนมันเย็นกำลังดี… มีใครชมแอร์ไหม? ไม่มีเลย แต่พอมันเสีย ร้อนขึ้นมา — ทุกคนด่าทันที <b>UX ที่ดีก็แบบนั้น — ดีจนไม่มีใครสังเกต แต่พอแย่ จำไปตลอดชาติ</b>"</p>'),
+    bridge('<p>"ทีนี้… ไปดูตัวอย่างที่ \'จำไปตลอด\' กันบ้าง 😈"</p>')
+  ]);
+
+  // 13 Divider Bad UX
+  scripts[13]=head(D1,14,'1 นาที')+'<div class="sc-divider"><div class="sc-head">'+D1+'<span class="sc-pageno">ช่วงเปลี่ยนหัวข้อ</span></div><div class="big">Bad UX อยู่รอบตัวเรา</div>'+wrap([
+    say('<p><span class="stage">(meme disaster girl)</span> "วิธีสร้างตาดีไซน์ที่เร็วที่สุด ไม่ใช่ดูของสวย — แต่ดูของ <b>พัง</b> แล้วหาให้เจอว่าพังเพราะอะไร"</p><p>"ช่วงนี้กติกาคือ — รูปขึ้นมา <b>อย่าเพิ่งให้เราเฉลย</b> ให้ห้องช่วยกันมองก่อนทุกครั้ง"</p>')
+  ])+'</div>';
+
+  // 14 ramp
+  scripts[14]=head(D1,15,'2-3 นาที')+title('Bad UX: ทางลาดสำหรับใคร?')+goal('ฝึกมอง + บทเรียน "มีแต่ใช้ไม่ได้ = ไม่มี"')+wrap([
+    hook('<p><span class="stage">(เปิดรูป เงียบ 3 วิ)</span></p>'),
+    ask('<p class="q">"ดูรูปนี้… มองออกไหมคะว่าพังตรงไหน?"</p><p><span class="ans">→ (รอ 2-3 คำตอบ เด็กมักเห็นว่ามันชัน)</span></p>'),
+    say('<p>"ใช่ค่ะ ติดป้ายว่า \'ทางลาดสำหรับรถเข็น\' ตั้งใจดีนะ แต่ชันจนรถเข็นขึ้นจริงไม่ได้เลย บทเรียน — <b>ฟีเจอร์ที่มีแต่ใช้ไม่ได้ ไม่ต่างจากไม่มี</b> ในเว็บก็เจอ เช่น มีช่องค้นหาแต่ค้นอะไรก็ไม่เจอ"</p>','เฉลย')
+  ]);
+
+  // 15 crosswalk
+  scripts[15]=head(D1,16,'2-3 นาที')+title('Bad UX: ทางม้าลายสู่…กำแพง')+goal('บทเรียน "ต้องคิดทั้ง journey"')+wrap([
+    ask('<p><span class="stage">(เปิดรูป)</span> <span class="q">"อันนี้ล่ะ ตลกตรงไหน?"</span></p><p><span class="ans">→ (เด็กเห็นว่าทางม้าลายพาไปชนกำแพง/เสา)</span></p>'),
+    say('<p>"แต่ละชิ้นถูกหมดเลยนะ — ทางม้าลายก็ถูก ทาสีก็สวย แต่ต่อกันไม่ได้ จบที่กำแพง นี่คือสิ่งที่เกิดเวลาออกแบบ \'ทีละหน้าจอ\' โดยไม่ดูภาพรวม บทเรียน — <b>ต้องคิดทั้ง journey ไม่ใช่ทีละหน้า</b>"</p>','เฉลย')
+  ]);
+
+  // 16 mug
+  scripts[16]=head(D1,17,'2-3 นาที')+title('Bad UX: แก้วน่ารัก…แต่ดื่มยังไง?')+goal('บทเรียนคีย์ของคอร์ส "สวย ≠ ใช้ดี"')+wrap([
+    hook('<p><span class="stage">(เปิดรูปแก้ว เงียบ ให้ห้องสังเกตเอง)</span></p>'),
+    ask('<p class="q">"เห็นปัญหาของแก้วใบนี้ไหมคะ? … คำถามสำคัญ — คนออกแบบแก้วนี้ เก่งหรือไม่เก่ง?"</p><p><span class="ans">→ (รอห้องเถียงกัน สนุกตรงนี้)</span></p>','ถามดักให้เถียง'),
+    say('<p>"คำตอบคือ… เขาเก่ง <b>UI</b> มากเลย น่ารักจะตาย ถ่ายรูปลงไอจีปัง — แต่ลืม <b>UX</b> ลืมว่าหน้าที่หลักของแก้วคือ <i>เอาไว้ดื่ม</i> นี่คือกับดักที่เจอบ่อยสุด โดยเฉพาะยุค AI เพราะ <b>AI สร้างของสวยได้เร็วมาก</b> จำประโยคนี้ไว้ จะใช้ทั้งคอร์ส — <b>\'สวย ไม่เท่ากับ ใช้ดี\'</b>"</p>','เฉลย')
+  ]);
+
+  // 17 ketchup
+  scripts[17]=head(D1,18,'2-3 นาที')+title('Bad vs Good: ขวดซอสมะเขือเทศ')+goal('UX ดี = ปรับเล็ก ๆ ที่แก้ปัญหาจริง')+wrap([
+    ask('<p class="q">"ขวดซอสฝาอยู่บน ทุกคนเคยเขย่าจนเมื่อยแล้วมันพรวดออกมาทีเดียวเยอะไหมคะ?"</p><p><span class="ans">→ (ทุกคนเคย)</span></p>'),
+    say('<p>"Heinz เจอปัญหานี้จริง แล้วแก้ยังไงรู้ไหม? ไม่ได้ออกแบบขวดใหม่ ไม่เปลี่ยนสูตร — แค่ <b>เอาฝาไปไว้ข้างล่าง</b> คว่ำขวดไว้ ซอสไหลมารอที่ปากขวด บีบปุ๊บออกเลย ยอดขายขึ้นเลย บทเรียน — <b>UX ที่ดีมักไม่ใช่การรื้อใหญ่ แต่เป็นการปรับเล็ก ๆ ที่ตรงจุด</b>"</p>'),
+    bridge('<p>"ทีนี้พอเรามองออกแล้ว มาฝึกหาของพังรอบตัวเรากันเอง"</p>')
+  ]);
+
+  // 18 workshop bad ux
+  scripts[18]=head(WK,19,'10-15 นาที')+title('Workshop: UX/UI แย่ ๆ รอบตัวเรา')+goal('เวิร์กช็อปแรก ฝึกสังเกต')+wrap([
+    say('<p>"แบ่งกลุ่ม ช่วยกันนึกถึงของใช้ แอป เว็บ ป้าย ที่เคยเจอแล้วหงุดหงิด แปะลง FigJam แล้วเขียน 2 อย่าง — <b>พังตรงไหน</b> กับ <b>ถ้าแก้ จะแก้ยังไง</b> ให้ 10 นาที"</p>','โจทย์'),
+    tip('<ul><li>"แอปธนาคารที่ใช้อยู่มีอะไรกวนใจไหม?"</li><li>"รีโมทแอร์ที่บ้าน?" / "เครื่องซักผ้าหยอดเหรียญ?"</li><li>"ประตูห้างที่ดัน-ดึงมั่ว?" / "เว็บราชการ?"</li></ul><p style="margin-top:8px">เก็บ 2-3 อันเด่นมาให้เจ้าของเล่าหน้าห้อง อย่าเฉลยแทนเขา</p>','ตัวกระตุ้นถ้ากลุ่มเงียบ'),
+    bridge('<p>"เห็นไหมพอมีตา จะเริ่มเห็นของพังเต็มไปหมด — ทีนี้มาเล่นของที่พังแบบ <i>จงใจ</i> กัน 😈"</p>')
+  ]);
+
+  // 19 user inyerface
+  scripts[19]=head(WK,20,'10-15 นาที')+title('Challenge: User Inyerface — เกมท้าประสาท')+goal('ให้รู้สึกถึง Bad UI ด้วยตัวเอง')+wrap([
+    say('<p>"เกมนี้ชื่อ User Inyerface — เว็บที่จงใจออกแบบให้ใช้ยากที่สุดในโลก ลองเล่นแล้วน้องจะ <i>รู้สึก</i> เองว่า Bad UI ทรมานแค่ไหน — นี่คือสิ่งที่ user เจอทุกวันถ้าเราออกแบบไม่ดี"</p>','เกริ่น'),
+    tip('<p><span class="stage">(ตั้งรหัสไว้ก่อนสอน — รหัสในไฟล์คือ devnest)</span> "อย่าเพิ่งเริ่มเองนะคะ! รอให้พร้อมพร้อมกันทั้งห้องก่อน เดี๋ยวบอกรหัส" · 🏆 "ใครเล่นจบใน 5 นาที มีรางวัล!"</p>','⚠️ สำคัญมาก — มีรหัสผ่าน'),
+    ask('<p class="q">"อะไรที่ทำให้หัวร้อนที่สุด?"</p><p><span class="ans">→ เก็บคำตอบไว้ มันจะตรงกับหลักตาดีไซน์หน้าถัดไปพอดี (ปุ่มหายาก = hierarchy, สีกลืน = contrast)</span></p>','หลังเกม')
+  ]);
+
+  // 20 design eye
+  scripts[20]=head(D1,21,'5-6 นาที')+title('หลัก "ตาดีไซน์" 6 ข้อ')+goal('ใส่ "ชื่อ" ให้ความรู้สึกที่เพิ่งเจอ')+wrap([
+    say('<p>"เมื่อกี้น้อง <i>รู้สึก</i> แล้วว่าอะไรทำให้ใช้ยาก ทีนี้มาใส่ชื่อให้มัน เพราะพอเรียกถูกชื่อ เราจะสั่งแก้มันได้ — ขอผูกกับเกมที่เพิ่งเล่นเลย:"</p><ul><li><b>Hierarchy</b> — เรียงตามความสำคัญ <span class="stage">(จำปุ่ม \'next\' ที่หาไม่เจอในเกมได้ไหม?)</span></li><li><b>Contrast</b> — ความต่างสร้างจุดเด่น <span class="stage">(ตัวหนังสือเทาบนพื้นเทา)</span></li><li><b>Spacing</b> — ที่ว่างคือพระเอก ของอัดแน่นจนหายใจไม่ออก = ใช้ยาก</li><li><b>Alignment</b> — จัดตรงแนว ตาคนชอบความเป็นระเบียบ</li><li><b>Consistency</b> — ปุ่มแบบเดียวกันควรหน้าตาเหมือนกันทั้งเว็บ</li><li><b>Typography</b> — ฟอนต์/ขนาด/ระยะบรรทัดที่อ่านสบายตา</li></ul>'),
+    bridge('<p>"6 ข้อนี้คือ \'แว่น\' ที่น้องจะใส่มองงาน AI ใน Day 2 — generate มาปุ๊บ ส่องด้วย 6 ข้อนี้ได้เลยว่าตรงไหนต้องแก้"</p>')
+  ]);
+
+  // 21 persona
+  scripts[21]=head(D1,22,'3 นาที')+title('User Persona คืออะไร')+goal('ออกแบบให้ "ใคร" ไม่ใช่ "ทุกคน"')+wrap([
+    ask('<p class="q">"ลองนึกถึงร้านอาหารที่เมนูมีทั้งซูชิ ส้มตำ พิซซ่า สเต๊ก ผัดไทย… ครบทุกชาติ — น้องคิดว่าอร่อยไหมคะ?"</p><p><span class="ans">→ (ส่วนใหญ่ส่ายหน้า)</span></p>','เปิดด้วยคำถาม'),
+    say('<p>"ใช่ค่ะ พอทำให้ทุกคน สุดท้ายไม่เด็ดสักอย่าง ดีไซน์ก็เหมือนกัน — ออกแบบให้ \'ทุกคน\' จะกลายเป็นของที่ไม่โดนใจใคร <b>Persona</b> คือการเลือกว่าทำให้ \'ใคร\' เป็นหลัก สร้างจาก <b>ข้อมูลจริง</b> ไม่ใช่นั่งเทียน ประโยชน์ — เวลาทีมเถียงกัน เราถามว่า \'<b>แล้วผู้ใช้ของเราล่ะ ต้องการไหม</b>\' จบเลย"</p>')
+  ]);
+
+  // 22 anatomy
+  scripts[22]=head(D1,23,'3 นาที')+title('Persona มีอะไรบ้าง')+goal('องค์ประกอบ + เตือนเรื่อง research')+wrap([
+    say('<p>"มักมี — ชื่อ+รูป, อายุ/อาชีพ, <b>Goals</b> อยากทำอะไรสำเร็จ, <b>Pain Points</b> อะไรขัดใจจนเลิกใช้, <b>Behavior</b> ใช้ตอนไหนอุปกรณ์อะไร, และ Quote หนึ่งประโยคจากปากเขา ไม่ต้องครบทุกช่อง สำคัญสุดคือ Goals กับ Pain Points"</p>'),
+    tip('<p>"ถ้าเดา persona เอาเองโดยไม่เคยคุยกับผู้ใช้จริง มันคือแค่ \'proto-persona\' = สมมติฐานชั่วคราว ยังเชื่อ 100% ไม่ได้ ต้องเอาไปเช็กกับคนจริงก่อน"</p>','⚠️ เตือนตรง ๆ')
+  ]);
+
+  // 23 sumday
+  scripts[23]=head(D1,24,'4-5 นาที')+title('ตัวอย่างจริง: ลูกค้า SUMDAY ☕')+goal('โชว์ persona → กลายเป็นฟีเจอร์จริง')+wrap([
+    say('<p>"พอแล้วทฤษฎี มาดูของจริง — นี่คือ \'พี่ฝ้าย\' ลูกค้าร้านกาแฟ SUMDAY <span class="stage">(ขาประจำตัวจริงนะคะ)</span> 33 ปี พนักงานออฟฟิศ ขาดกาแฟไม่ได้ แต่ขี้เกียจต่อคิว"</p><p>"ดูเวทมนตร์ — เอา <b>pain point แต่ละข้อ</b> มาแปลงเป็น <b>ฟีเจอร์</b> ตรง ๆ:"</p><ul><li>ขี้เกียจสมัครสมาชิก → \'<b>สั่งได้เลยไม่ต้องสมัคร</b>\'</li><li>ไม่อยากต่อคิว → <b>สั่งล่วงหน้า + รับเองที่ร้าน</b></li><li>ไม่พกเงินสด → จ่าย <b>PromptPay QR</b></li><li>เปิดจากมือถือ → ทำ <b>mobile-first</b> ปุ่มสั่งอยู่ล่างจอ</li></ul><p>"เห็นไหม persona ไม่ใช่เอกสารทิ้งขว้าง — <b>มันบอกตรง ๆ ว่าต้องสร้างฟีเจอร์อะไร</b>"</p>'),
+    bridge('<p>"ทีนี้พอมีฟีเจอร์เยอะ ๆ ปัญหาต่อไปคือ… ทำอันไหนก่อนดี?"</p>')
+  ]);
+
+  // 24 moscow
+  scripts[24]=head(D1,25,'4-5 นาที')+title('จัดลำดับฟีเจอร์ด้วย MoSCoW')+goal('เครื่องมือตัดสินใจว่าอะไรทำก่อน')+wrap([
+    ask('<p class="q">"สมมติน้องย้ายบ้าน มีกระเป๋าใบเดียว ของทั้งห้องใส่ไม่หมดแน่ — น้องเลือกของยังไงคะ?"</p><p><span class="ans">→ (\'เอาของจำเป็นก่อน\')</span> "นั่นแหละ MoSCoW"</p>','เปิดด้วยคำถาม'),
+    say('<ul><li><b>Must</b> = ขาดไม่ได้ ไม่มีคือเปิดร้านไม่ได้ (login, สั่งซื้อ, จ่ายเงิน)</li><li><b>Should</b> = สำคัญมากแต่เลื่อนได้ (ค้นหา, แจ้งเตือน)</li><li><b>Could</b> = มีก็ดี (dark mode, อนิเมชัน)</li><li><b>Won\'t</b> = รอบนี้ยังไม่ทำ เขียนให้ชัดกันทีมหลุดโฟกัส</li></ul>','4 กอง'),
+    ask('<p class="q">"เช็ก Must — \'ถ้าตัดออก ระบบยังใช้งานได้ไหม\' ถ้าไม่ได้ = Must · SUMDAY \'ปุ่มจ่ายเงิน\' เป็นอะไร?"</p><p><span class="ans">(Must) · \'ธีมสีชมพู\'? (Could)</span></p>','เทคนิคแยก Must'),
+    tip('<p>"เวลาไม่พอ ตัดจากล่างขึ้นบน Won\'t→Could→Should แต่ <b>ห้ามแตะ Must เด็ดขาด</b>"</p>','กฎเหล็ก')
+  ]);
+
+  // 25 workshop A
+  scripts[25]=head(WK,26,'15-20 นาที')+title('Workshop A: คิด Product + จัด MoSCoW')+goal('กำหนด product ที่จะใช้ยาวทั้งคอร์ส')+wrap([
+    say('<p>"แบ่งกลุ่ม ช่วยกันคิดเว็บหรือแอปที่กลุ่มอยากทำ ลิสต์ฟีเจอร์ลง FigJam แล้วจัด MoSCoW"</p>','โจทย์'),
+    tip('<p>"product ที่คิดวันนี้ จะอยู่กับน้องไปจนจบคอร์สเลยนะคะ — บ่ายเอาไปทำ wireframe พรุ่งนี้เอาไป generate เป็นเว็บจริงใน Capstone เพราะงั้น <b>เลือกเรื่องที่กลุ่มสนใจจริง ๆ</b>"</p>','⚠️ ย้ำให้หนัก'),
+    tip('<p>เดินคุมเวลา — กลุ่มที่ลิสต์ฟีเจอร์ 30 อัน เตือนให้รีบจัด MoSCoW ตัดเหลือ Must 3-5 อันพอ</p>','คุมห้อง')
+  ]);
+
+  // 26 Divider Figma
+  scripts[26]=head(D1,27,'1 นาที')+'<div class="sc-divider"><div class="sc-head">'+D1+'<span class="sc-pageno">ช่วงเปลี่ยนหัวข้อ</span></div><div class="big">Figma จากศูนย์</div>'+wrap([
+    say('<p><span class="stage">(meme Roll Safe)</span> "ทีนี้มาจับ Figma จริง — รู้ว่าหลายคนเห็นเครื่องมือดีไซน์แล้วขยาด แต่ข่าวดี สำหรับสายเดฟ Figma ง่ายกว่าที่คิดเยอะ เพราะมันคือสิ่งที่น้องรู้อยู่แล้ว แค่ชื่อต่าง เดี๋ยวจะให้ดูว่าทำไม"</p>')
+  ])+'</div>';
+
+  // 27 figma interface
+  scripts[27]=head(D1,28,'5-7 นาที')+title('ทัวร์หน้าตา Figma')+goal('พาดูส่วนต่าง ๆ')+wrap([
+    tip('<p><b>อย่าสอนจากสไลด์ — เปิด Figma จริงแล้วชี้สด ๆ ให้น้องกดตามไปด้วย</b></p>','สำคัญ'),
+    say('<p><span class="stage">(เปิด Figma)</span> "Toolbar อยู่บน Move กด V, Frame กด F, Text กด T ตัวสำคัญสุดคือ <b>Frame</b> — กด F แล้วลากดู นี่คือ artboard ที่เราวาง UI ลงไป เปรียบเหมือน <code>&lt;div&gt;</code> ตัวใหญ่ · Layers อยู่ซ้าย <span class="stage">(เหมือน DOM tree)</span> Properties อยู่ขวา"</p>'),
+    tip('<p>"หาเมนูไม่เจอ? กด <b>Cmd + /</b> พิมพ์ชื่อสิ่งที่อยากทำได้เลย เหมือน command palette ใน VS Code เป๊ะ"</p>','ทริคที่น้องจะรัก')
+  ]);
+
+  // 28 dev mental
+  scripts[28]=head(D1,29,'4 นาที')+title('Figma = สิ่งที่น้องรู้อยู่แล้ว 💜')+goal('สไลด์เด็ด — แมป Figma กับโค้ด')+wrap([
+    say('<p>"สไลด์ที่อยากให้สายเดฟปักหมุด — แมปศัพท์ Figma กับสิ่งที่น้องเขียนทุกวัน <span class="stage">(ไล่ทีละคู่ รอ \'อ๋อ\')</span>:"</p><ul><li><b>Auto Layout = Flexbox</b> มี gap, hug (=fit-content), fill (=flex-grow)</li><li><b>Component = React Component</b></li><li><b>Variants / Properties = props</b> (ปุ่ม primary/secondary = prop <code>variant</code>)</li><li><b>Styles / Variables = Design Tokens / CSS variables</b></li><li><b>Constraints = responsive rules</b></li></ul><p>"น้องไม่ได้เรียนของใหม่ทั้งหมด แค่เรียน <b>ชื่อใหม่ของสิ่งที่ทำเป็นอยู่แล้ว</b>"</p>')
+  ]);
+
+  // 29 wireframe
+  scripts[29]=head(D1,30,'3 นาที')+title('Wireframe: Lo-fi vs Hi-fi')+goal('วางโครงก่อนลงรายละเอียด')+wrap([
+    say('<p>"Wireframe คือ \'พิมพ์เขียว\' ของหน้าจอ เหมือนสถาปนิก — ก่อนสร้างบ้านจริง เขาร่างดินสอก่อน · <b>Lo-fi</b> = ขาวดำหยาบ เร็ว เน้นโครง+flow <b>แก้ง่าย ไม่เสียดาย</b> · <b>Hi-fi</b> = สวยสมจริง มีสีฟอนต์จริง เหมาะตอนใกล้ส่งเดฟ"</p>'),
+    ask('<p class="q">"ถ้าน้องลงสีสวยเป๊ะ 3 ชั่วโมง แล้วหัวหน้าบอก \'ย้ายปุ่มนี้ไปอีกฝั่ง\' น้องจะ…"</p><p><span class="ans">(เจ็บใจ)</span> "เริ่มหยาบก่อน เปลี่ยนใจได้ถูก ๆ — <b>อย่าเพิ่งจมกับสีตั้งแต่แรก</b>"</p>','ทำไมเริ่ม Lo-fi')
+  ]);
+
+  // 30 workshop 1
+  scripts[30]=head(WK,31,'20-25 นาที')+title('Workshop 1: สร้าง Wireframe หน้าแรก')+goal('ทำ wireframe ของ product กลุ่ม')+wrap([
+    say('<p>"เอา product ที่กลุ่มคิดใน FigJam มาวางเป็น wireframe ใน Figma — ทำหน้าแรกพอ ใช้แค่ Frame + Shape + Text ยังไม่ต้องสวย เน้น <b>Hierarchy</b> กับ <b>Flow</b>"</p>','โจทย์'),
+    tip('<p>"ใครคิด content ไม่ออก ลองให้ AI ช่วยร่าง flow และข้อความก่อนได้ — นี่คือ teaser ของพรุ่งนี้"</p>','ทริคเชื่อม AI'),
+    tip('<p>เดินช่วยเรื่อง Auto Layout · คุมเวลาดี ๆ อันนี้กินเวลาสุดของวัน · ทำ Mobile ก่อน ถ้าทันค่อย Desktop</p>','คุมห้อง')
+  ]);
+
+  // 31 recap
+  scripts[31]=head(D1,32,'2-3 นาที')+title('สรุปวันแรก')+goal('ปิดวัน เชื่อมพรุ่งนี้')+wrap([
+    say('<p>"สรุปวันแรก — วันนี้น้องได้ <b>ตา</b> ที่มองงานออก ได้ <b>ภาษา</b> เรียกปัญหาถูกชื่อ ทำ <b>persona + MoSCoW</b> และจับ <b>Figma</b> ทำ wireframe เป็นแล้ว พรุ่งนี้คือไฮไลต์ — เอาทุกอย่างคูณกับ AI เปลี่ยนเป็นเว็บที่กดได้จริง \'ตา\' ที่สร้างวันนี้คืออาวุธที่จะใช้กำกับ AI พรุ่งนี้ — พักผ่อนเยอะ ๆ"</p>')
+  ]);
+
+  // 32 Divider Day 2
+  scripts[32]=head(D2,33,'1-2 นาที')+'<div class="sc-divider"><div class="sc-head">'+D2+'<span class="sc-pageno">เปิด Day 2</span></div><div class="big">AI → HTML → ส่งเดฟ</div>'+wrap([
+    ask('<p class="q">"เริ่มก่อน — มีใครพอบอกได้ว่าเมื่อวานเราคุยเรื่องอะไรกันบ้าง?"</p><p><span class="ans">→ เก็บ 2-3 คำตอบ ช่วยคนมาไม่ครบ recap</span></p>','เปิดวันด้วยการดึงความจำ'),
+    say('<p>"วันนี้คือ The Main Event — เมื่อวานวางโครงเป็นแล้ว วันนี้จะเสกมันให้มีชีวิต กลายเป็น HTML ที่กดได้จริง ด้วย AI เริ่มเลย!"</p>')
+  ])+'</div>';
+
+  // 33 AI landscape
+  scripts[33]=head(D2,34,'3 นาที')+title('AI เข้ามาช่วยทุกขั้นแล้ว')+goal('เห็นภาพรวม + ย้ำบทบาท "ผู้กำกับ"')+wrap([
+    say('<p><span class="stage">(ชี้ flow)</span> "ดูเส้นทางนี้ — ไอเดีย → research → generate UI → HTML → ส่งเดฟ ทุกขั้น AI แทรกมาช่วยหมดแล้ว"</p>'),
+    ask('<p class="q">"ถ้า AI ทำได้ทุกขั้น แล้วเราเหลือทำอะไร?"</p><p><span class="ans">→ "เราเลื่อนขึ้นไปเป็น <b>ผู้กำกับ</b>"</span></p>','ถามดัก'),
+    say('<p>"เหมือนผู้กำกับหนัง — ไม่ได้ถือกล้องเอง ไม่ได้แสดงเอง แต่เป็นคน <i>ตัดสิน</i> ว่าเทคไหนผ่าน นั่นคือเรา — AI ถือกล้อง เรากำกับ และคนกำกับเก่งคือคนที่ <b>ตาถึง</b> ซึ่งเราสร้างมาแล้วเมื่อวาน"</p>','พูดต่อ')
+  ]);
+
+  // 34 tools
+  scripts[34]=head(D2,35,'3-4 นาที')+title('เครื่องมือ AI ที่จะได้เล่น')+goal('แนะนำ "นิสัย" ของแต่ละตัว')+wrap([
+    say('<ul><li><b>Figma Make</b> — เพื่อนของ Figma ต่อยอดงานที่วาดเป็น prototype กดได้</li><li><b>Google Stitch</b> — พิมพ์ข้อความได้ UI + โค้ด (ฟรี)</li><li><b>Claude</b> — <b>พระเอกของเรา</b> prompt ปุ๊บได้ HTML หน้าเดียวจบ ตรงเป้า \'ส่งเดฟ\' สุด</li><li><b>v0 / Lovable</b> — สำหรับคนอยากไปไกลกว่า mockup (React รันได้จริง)</li></ul>'),
+    tip('<p>ไม่ต้องลงลึก เดี๋ยวได้จับจริงทีละตัว แค่ให้รู้ว่าตัวไหนเด่นเรื่องอะไร</p>')
+  ]);
+
+  // 35 pipeline
+  scripts[35]=head(D2,36,'3 นาที')+title('Pipeline ของเรา')+goal('ชี้ว่าหัวใจอยู่ที่ "วิจารณ์ + สั่งแก้"')+wrap([
+    say('<p><span class="stage">(ชี้ flow)</span> "คิดโจทย์+flow → AI generate → <b>วิจารณ์+สั่งแก้</b> → refine → ได้ HTML → ส่งเดฟ"</p><p><span class="stage">(ชี้ \'วิจารณ์+สั่งแก้\')</span> "โฟกัสตรงนี้ — นี่คือหัวใจ ขั้น generate ใครก็ทำได้ แต่ขั้นที่แยกคนเก่งคือ <b>\'มองออกว่าตรงไหนต้องแก้ แล้วสั่งให้ถูก\'</b> ตรงนี้เอา \'ตา\' จากเมื่อวานมาใช้เต็ม ๆ"</p>')
+  ]);
+
+  // 36 stitch
+  scripts[36]=head(WK,37,'10-15 นาที')+title('Hands-on: Google Stitch')+goal('เล่นตัวแรก ฝึกเขียน prompt')+wrap([
+    say('<p>"ลองตัวแรกแบบเบา ๆ — เปิด Stitch พิมพ์ prompt อธิบายหน้าจอที่อยากได้ ลองง่าย ๆ ก่อน เช่น \'หน้า landing แอปจองร้านอาหาร\'"</p>','โจทย์'),
+    tip('<p>"ลองพิมพ์สั้น ๆ ก่อนรอบนึง แล้วเติมรายละเอียด (สี โทน องค์ประกอบ) อีกรอบ — ดูว่าผลต่างกันแค่ไหน บทเรียนแรกของ prompt: <b>ยิ่งบอกชัด ยิ่งได้ตรง</b>"</p>','ให้น้องสังเกตความต่าง')
+  ]);
+
+  // 37 figma make
+  scripts[37]=head(WK,38,'10-15 นาที')+title('Hands-on: Figma Make')+goal('ฝึก "อ่านงาน AI ออก"')+wrap([
+    say('<p>"ต่อด้วย Figma Make — สร้าง prototype ที่ <i>คลิกได้จริง</i> แต่วันนี้สิ่งที่อยากให้ฝึกไม่ใช่แค่ generate — ฝึก <b>\'อ่านงาน AI ออก\'</b>"</p>'),
+    ask('<p class="q">"พอ AI ทำมา อย่าเพิ่งรับ — ส่องด้วย 6 ข้อเมื่อวาน: hierarchy ชัดไหม? spacing พอหายใจไหม? ปุ่มหลักเด่นไหม?"</p><p><span class="ans">เจอแล้วสั่งแก้เป็นภาษาคนได้เลย ไม่ต้องรู้โค้ด</span></p>','ชวนตรวจ')
+  ]);
+
+  // 38 claude
+  scripts[38]=head(WK,39,'15-20 นาที')+title('Hands-on: Claude → Interactive HTML ⭐')+goal('พระเอก — HTML ไฟล์เดียวจบ')+wrap([
+    say('<p>"มาถึงพระเอก — Claude บอกว่าอยากได้หน้าอะไร แนบรูป reference แล้วขอเป็น <b>\'ไฟล์ HTML เดียวจบ\'</b> รวม CSS+JS ในไฟล์เดียว ดับเบิลคลิกเปิดในเบราว์เซอร์ได้เลย ไม่ต้องลง npm"</p><p>"4 เคล็ดลับ:"</p><ul><li><b>แนบรูป/บรีฟให้ครบ</b></li><li><b>ขอ \'ไฟล์เดียวจบ\'</b></li><li><b>สั่งแก้ทีละสเต็ป</b> อย่ารื้อทั้งหมด</li><li><b>ใช้ตาดีไซน์ตรวจ</b> ทุกครั้ง</li></ul>'),
+    tip('<p>นี่คือทักษะหลักที่ใช้ใน Capstone — ให้เวลาเยอะ เดินช่วยตัวต่อตัว ใครติด prompt ช่วยเรียบเรียงให้</p>','คุมห้อง')
+  ]);
+
+  // 39 critique
+  scripts[39]=head(D2,40,'3 นาที')+title('"อ่านงาน AI ออก"')+goal('ตอกย้ำลูป Generate → Critique → Refine')+wrap([
+    say('<p>"ทักษะสำคัญที่สุดของวันนี้ ลูป 3 ขั้น — <b>Generate</b> ให้ AI ร่างก่อน · <b>Critique</b> ส่องด้วยตาดีไซน์ · <b>Refine</b> สั่งแก้เจาะจง"</p><p>"เปรียบเหมือนเชฟ — เชฟเก่งไม่ใช่คนที่ทำถูกตั้งแต่ครั้งแรก แต่เป็นคนที่ <b>ชิมแล้วรู้ว่าขาดอะไร</b> AI คือมือที่ปรุงให้ แต่ <b>ลิ้นที่ชิมเป็น</b> ต้องเป็นเรา — นี่คือสิ่งที่ AI แทนไม่ได้"</p>')
+  ]);
+
+  // 40 prompt tech
+  scripts[40]=head(D2,41,'4 นาที')+title('Prompt ให้ได้ HTML ที่ดี')+goal('สอนสั่งงานให้ชัด')+wrap([
+    ask('<p class="q">"สั่งบาริสต้าว่า \'ขอกาแฟแก้วนึง\' กับ \'ขอลาเต้ร้อน หวานน้อย นมโอ๊ต แก้วใหญ่\' — อันไหนได้ตรงใจกว่า?"</p><p><span class="ans">→ (อันหลัง)</span> "Prompt ก็เหมือนกันเป๊ะ"</p>','เปิดด้วยคำถาม'),
+    say('<p>"ใส่ให้ครบ — บอกหน้าจอ/หน้าที่ชัด, ระบุองค์ประกอบ, บอกโทน/สไตล์, ขอ responsive + interactive · เทคนิคเสริม — ให้รูป reference, สั่งแก้ทีละจุด, ขอใช้สีซ้ำ (token), บอกว่า \'<b>จะส่งให้เดฟ</b>\' เพื่อขอโค้ดสะอาด · กฎ — <b>AI ตอบได้ดีเท่าที่เราถาม</b>"</p>')
+  ]);
+
+  // 41 example
+  scripts[41]=head(D2,42,'4-5 นาที')+title('ตัวอย่างจริง: Prompt → Output')+goal('โชว์ prompt สั้น → เว็บกาแฟกดได้')+wrap([
+    tip('<p><b>เปิดเว็บจริงให้ดูสด ๆ</b> — คลิก preview ในสไลด์มันเปิด <code>examples/coffee-landing.html</code> ในแท็บใหม่</p>','สำคัญ'),
+    say('<p>"พิมพ์ prompt สั้น ๆ แค่นี้ \'เว็บร้านกาแฟ, hero มีปุ่มสั่งเลย, เมนู 3 การ์ด, responsive\' ได้ออกมาเป็นเว็บนี้เลย"</p><p><span class="stage">(คลิกเปิดเว็บจริง เลื่อนให้ดู กดปุ่ม hover)</span> "กดได้จริงนะ ไม่ใช่รูปนิ่ง และถ้าไม่ถูกใจ สั่งแก้ต่อเป็นภาษาคนได้เลย — \'ทำสีสดใสขึ้น\' \'เพิ่มปุ่มตะกร้า\' ไม่ต้องแตะโค้ดสักบรรทัด"</p>'),
+    bridge('<p>"นี่แหละสิ่งที่น้องทำได้ตอนจบคอร์ส"</p>')
+  ]);
+
+  // 42 skills
+  scripts[42]=head(D2,43,'3-4 นาที')+title('Claude Code: Skills & Commands')+goal('เก็บ prompt ที่ใช้บ่อยเป็นคำสั่งลัด')+wrap([
+    ask('<p class="q">"ใครเคยตั้ง text shortcut ในมือถือไหม? พิมพ์ \'จุดจุด\' แล้วมันเด้งเป็นเบอร์/อีเมลยาว ๆ"</p><p><span class="ans">→ "Slash Command คือแบบนั้นแหละ แต่สำหรับ prompt"</span></p>','เปิดด้วยคำถาม'),
+    say('<p>"<b>Slash Command</b> — เก็บ prompt เป็นไฟล์ พิมพ์ <code>/ชื่อ</code> เรียก เช่น <code>/make-landing</code> · <b>Skill</b> — แพ็กความรู้ใน SKILL.md แล้ว Claude หยิบมาใช้ <b>เองอัตโนมัติ</b> เก็บใน .claude/ ตั้งครั้งเดียว ใช้ทุกโปรเจกต์ <b>แชร์ทีมผ่าน git ได้</b>"</p>'),
+    tip('<p>หน้านี้เทคนิค ถ้าห้องเริ่มล้าให้พูดสั้น ๆ พอเห็นภาพ</p>')
+  ]);
+
+  // 43 create command
+  scripts[43]=head(D2,44,'2-3 นาที')+title('ให้ Claude สร้าง Command ให้')+goal('ไม่ต้องจำ format')+wrap([
+    say('<p>"ขี้เกียจเขียน command เอง? ไม่ต้องจำ format — บอก Claude เป็นภาษาคนตรง ๆ ว่า \'ช่วยสร้าง command /slide ที่เอาไว้สร้างสไลด์จากหัวข้อให้หน่อย\' Claude เขียนไฟล์ .md ให้เอง เสร็จแล้วพิมพ์ <code>/slide</code> ใช้ได้เลย · ธีมของทั้งคอร์ส — <b>บอกเป็นภาษาคน ให้ AI จัดการเรื่องเทคนิค</b>"</p>')
+  ]);
+
+  // 44 install command
+  scripts[44]=head(D2,45,'3-4 นาที')+title('วิธีติดตั้ง Command เอง (.md)')+goal('ติดตั้ง command แบบ manual (optional)')+wrap([
+    say('<p>"ถ้าได้ไฟล์ .md มา ติดตั้ง 3 ขั้น — โหลดไฟล์มา, วางใน <code>~/.claude/commands/</code>, พิมพ์ <code>/ชื่อ</code> เรียกใช้"</p>'),
+    tip('<p>"<code>.claude</code> เป็น hidden folder — กด <b>Cmd+Shift+G</b> พิมพ์ <code>~/.claude/commands</code> Enter เข้าได้เลย" · ถ้าห้องไม่ได้ใช้ Claude Code (CLI) จริง พูดผ่าน ๆ พอ</p>','ทริคหาโฟลเดอร์')
+  ]);
+
+  // 45 handoff
+  scripts[45]=head(D2,46,'3 นาที')+title('ส่งมอบให้เดฟยังไงดี')+goal('ปิด loop — สื่อสารกับเดฟ')+wrap([
+    ask('<p class="q">"น้องเป็นเดฟใช่ไหม — เคยได้รับงานจากดีไซเนอร์เป็นรูป JPG นิ่ง ๆ แล้วงงว่า \'กดปุ่มนี้แล้วไปไหน\' \'ตอน loading หน้าตาเป็นยังไง\' ไหม?"</p><p><span class="ans">→ (เดฟเคยเจอแน่)</span></p>','ใช้ประสบการณ์ตรง'),
+    say('<p>"นั่นแหละปัญหาของภาพนิ่ง — บอกได้แค่ \'หน้าตา\' บอกไม่ได้ว่า \'มันทำงานยังไง\' แต่ <b>mockup HTML ที่กดได้จริง</b> เดฟกดเองเห็นเลย ส่ง 3 อย่าง — ไฟล์ HTML, อธิบายโครงสร้าง, จุดต้องระวัง · <b>mockup ที่กดได้สื่อสารดีกว่าภาพนิ่ง 10 เท่า</b>"</p>')
+  ]);
+
+  // 46 capstone
+  scripts[46]=head(WK,47,'40-60 นาที + present')+title('Capstone: Interactive HTML ของระบบตัวเอง')+goal('รวมทุกอย่างเป็นชิ้นงานจริง')+wrap([
+    say('<p>"โปรเจกต์จบคอร์ส! เอา product ที่กลุ่มคิดตั้งแต่เมื่อวาน มาทำครบ loop — idea → AI generate → วิจารณ์+refine → ได้ HTML พร้อมส่งเดฟ → <b>present!</b> รวมทุกอย่าง 2 วัน — persona บอกทำให้ใคร, MoSCoW บอกทำอะไรก่อน, ตาดีไซน์ใช้วิจารณ์, Claude ใช้สร้าง"</p>','โจทย์'),
+    tip('<p>กำหนดเวลานำเสนอชัด (กลุ่มละ 3-5 นาที) · ให้แต่ละกลุ่มเล่าว่า "AI generate มาครั้งแรกเป็นยังไง แล้ว <b>วิจารณ์อะไร สั่งแก้ยังไง</b> จนได้แบบนี้" — <i>กระบวนการวิจารณ์-แก้</i> คือหัวใจ ไม่ใช่แค่ผลลัพธ์สวย</p>','สิ่งที่อยากเห็นตอน present'),
+    ask('<p class="q">"ถ้ามีเวลาอีกชั่วโมง จะแก้อะไรต่อ?"</p><p><span class="ans">→ ฝึกให้มองงานตัวเองออก</span></p>','ถามปิดแต่ละกลุ่ม')
+  ]);
+
+  // 47 resources
+  scripts[47]=head(D2,48,'2 นาที')+title('เรียนต่อได้ที่ไหน')+goal('ให้ทางไปต่อ')+wrap([
+    say('<p>"ไปต่อได้ที่ — <b>Figma Learn</b> คอร์ส official ฟรี, ลองเล่น <b>AI ทุกตัว</b> ฝึก prompt บ่อย ๆ"</p><p>"ทริคที่อยากเน้นสุด — <b>ฝึกตาทุกวัน</b> เปิด Mobbin/Dribbble ดูงานสวย วันละ 5 นาที แล้วบังคับตัวเองตอบให้ได้ว่า \'<b>ทำไมมันถึงดู ดี</b>\' ตาดีไซน์เหมือนกล้ามเนื้อ ยิ่งมองเยอะยิ่งแข็งแรง · ที่เก่งเร็วสุด — <b>ลงมือทำของจริงส่งทีม</b>"</p>')
+  ]);
+
+  // 48 end
+  scripts[48]=head(D2,49,'1-2 นาที')+title('Now Go Build! 🚀')+goal('ปิดคอร์สมีพลัง')+wrap([
+    say('<p>"จบแล้วค่ะ! 2 วันที่ผ่านมา น้องมีครบมือแล้ว — มี <b>ตา</b> ที่มองงานออก, มี <b>Figma</b> ที่วางโครงได้, มี <b>AI</b> ที่เป็นมือปั้นให้ เหลือแค่ลงมือเปลี่ยนไอเดียในหัวให้เป็นของจริง ขอบคุณทุกคนที่ตั้งใจสุด ๆ — <b>Now go build!</b> 💜"</p>'),
+    tip('<p>ปิดท้าย: ถ่ายรูปรวม / ขอ feedback / แจกรางวัล Challenge ตรงนี้เลย</p>','ปิดท้าย')
+  ]);
+
+  // ===== render & nav =====
+  const total=scripts.length;
+  let cur=0;
+  const scriptPane=document.getElementById('scriptPane');
+  const sbNav=document.getElementById('sbNav');
+  const sidebar=document.getElementById('sidebar');
+  const pvFrame=document.getElementById('pvFrame');
+  const pvNote=document.getElementById('pvNote');
+  const pvOpen=document.getElementById('pvOpen');
+  const previewPane=document.getElementById('previewPane');
+  const cleanT=t=>t.replace(/^—\s*/,'').replace(/\s*—$/,'');
+
+  // build sidebar (เหมือน index.html)
+  sbGroups.forEach(g=>{
+    const gl=document.createElement('div');gl.className='sb-group-label';gl.textContent=g.label;sbNav.appendChild(gl);
+    g.items.forEach(i=>{
+      const it=document.createElement('div');it.className='sb-item'+(i===0?' active':'');it.dataset.idx=i;
+      it.innerHTML='<span class="ix">'+String(i+1).padStart(2,'0')+'</span><span class="ic">'+(sbIcons[i]||'•')+'</span><span>'+cleanT(slideTitles[i])+'</span>';
+      it.addEventListener('click',()=>{go(i);if(window.innerWidth<=860)sidebar.classList.add('hidden');});
+      sbNav.appendChild(it);
+    });
+  });
+  document.getElementById('sbToggle').addEventListener('click',()=>sidebar.classList.remove('hidden'));
+  document.getElementById('sbCollapse').addEventListener('click',()=>sidebar.classList.add('hidden'));
+  if(window.innerWidth<=860)sidebar.classList.add('hidden');
+
+  // อัปเดตเฉพาะ "ฝั่งสคริปต์" (ไม่แตะ iframe) — ใช้ทั้งตอนกดเองและตอนรับสัญญาณจากพรีวิว
+  function syncScript(i){
+    if(i<0||i>=total)return;
+    cur=i;
+    scriptPane.innerHTML=scripts[i];
+    scriptPane.scrollTop=0;
+    pvOpen.href='index.html#'+(i+1);
+    pvNote.textContent='หน้านี้ตรงกับสไลด์นักเรียนหน้า '+(i+1);
+    document.getElementById('navCounter').textContent=(i+1)+' / '+total;
+    document.getElementById('progressTop').style.width=((i+1)/total*100)+'%';
+    document.getElementById('prevBtn').disabled=i===0;
+    document.getElementById('nextBtn').disabled=i===total-1;
+    sbNav.querySelectorAll('.sb-item').forEach(it=>{const on=(+it.dataset.idx===i);it.classList.toggle('active',on);if(on)it.scrollIntoView({block:'nearest'});});
+  }
+  // กดจากฝั่งสคริปต์ → สั่งให้ iframe (สไลด์นักเรียน) เปลี่ยนตาม แล้วอัปเดตฝั่งสคริปต์
+  function go(i){
+    if(i<0||i>=total||i===cur)return;
+    syncScript(i);
+    const w=pvFrame.contentWindow;
+    if(w){try{w.postMessage({type:'devnest-goto',index:i},'*');}catch(e){pvFrame.src='index.html#'+(i+1);}}
+    else{pvFrame.src='index.html#'+(i+1);}
+  }
+  // รับสัญญาณจากฝั่งพรีวิว (เมื่อกดเลื่อน/เลือกหน้าในสไลด์นักเรียน) → ฝั่งสคริปต์ตามไปด้วย
+  window.addEventListener('message',e=>{
+    const d=e.data;
+    if(d&&d.type==='devnest-slide'&&typeof d.index==='number'&&d.index!==cur)syncScript(d.index);
+  });
+  document.getElementById('prevBtn').addEventListener('click',()=>go(cur-1));
+  document.getElementById('nextBtn').addEventListener('click',()=>go(cur+1));
+  document.getElementById('togglePv').addEventListener('click',()=>previewPane.classList.toggle('hidden'));
+  document.addEventListener('keydown',e=>{
+    if(e.target.tagName==='INPUT')return;
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(cur+1);}
+    else if(e.key==='ArrowLeft'){e.preventDefault();go(cur-1);}
+    else if(e.key==='Home'){go(0);}
+    else if(e.key==='End'){go(total-1);}
+  });
+  go(0);
+})();
+</script>
+</body>
+</html>
