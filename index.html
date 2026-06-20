@@ -1025,22 +1025,6 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
     </div>
   </div>
 
-  <!-- 22 DEV MENTAL MODEL -->
-  <div class="slide" data-slide="25">
-    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>For Devs 💜</div><div class="slide-number">26</div></div>
-    <div class="slide-title">Figma = สิ่งที่น้องรู้อยู่แล้ว</div>
-    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">map ศัพท์ Figma กับโลกโค้ด — เรียนเร็วขึ้นเป็นเท่าตัว</div>
-    <div class="slide-content">
-      <div class="eq-list">
-        <div class="eq-row anim-item"><div class="eq-side eq-fig"><span class="ei">📦</span>Auto Layout (Hug/Fill/Gap)</div><div class="eq-eq">=</div><div class="eq-side eq-code"><span class="ei">🧱</span>Flexbox · gap</div></div>
-        <div class="eq-row anim-item"><div class="eq-side eq-fig"><span class="ei">🧩</span>Component</div><div class="eq-eq">=</div><div class="eq-side eq-code"><span class="ei">⚛️</span>React Component</div></div>
-        <div class="eq-row anim-item"><div class="eq-side eq-fig"><span class="ei">🎚️</span>Variants / Properties</div><div class="eq-eq">=</div><div class="eq-side eq-code"><span class="ei">🔧</span>props</div></div>
-        <div class="eq-row anim-item"><div class="eq-side eq-fig"><span class="ei">🎨</span>Styles / Variables</div><div class="eq-eq">=</div><div class="eq-side eq-code"><span class="ei">🪙</span>Design Tokens · CSS vars</div></div>
-        <div class="eq-row anim-item"><div class="eq-side eq-fig"><span class="ei">📌</span>Constraints</div><div class="eq-eq">=</div><div class="eq-side eq-code"><span class="ei">📱</span>responsive rules</div></div>
-      </div>
-    </div>
-  </div>
-
   <!-- 23 Wireframe -->
   <div class="slide" data-slide="26">
     <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Wireframe</div><div class="slide-number">27</div></div>
@@ -1580,6 +1564,7 @@ function openLightbox(src){const lb=document.getElementById('lightbox');document
     '— Day 2: AI → HTML —','AI Landscape','เครื่องมือ AI','Pipeline','Hands-on: Stitch','Hands-on: Figma Make',
     'Hands-on: Claude → HTML','อ่านงาน AI ออก','Prompt ให้ดี','ตัวอย่าง: Prompt → Output','Claude: Skills & Commands','สร้าง Command (ให้ Claude ทำ)','ติดตั้ง Command (.md)','ส่งมอบให้เดฟ','Capstone','เรียนต่อ','Now Go Build!'
   ];
+  slideTitles.splice(28,1); // ลบสไลด์ 29 (Figma = โค้ดที่คุณรู้)
   const navProgress=document.getElementById('navProgress');
   if(totalSlides<=15){for(let i=0;i<totalSlides;i++){const d=document.createElement('div');d.className='nav-dot'+(i===0?' active':'');d.addEventListener('click',()=>goToSlide(i));navProgress.appendChild(d);}}
   const dropdown=document.getElementById('pageDropdown');
@@ -1591,13 +1576,14 @@ function openLightbox(src){const lb=document.getElementById('lightbox');document
     {label:'Bad UX & ตาดีไซน์',items:[13,14,15,16,17,18,19,20]},
     {label:'รู้จักผู้ใช้ (User Persona)',items:[21,22,23]},
     {label:'จัดลำดับฟีเจอร์ (MoSCoW)',items:[24,25]},
-    {label:'Figma พื้นฐาน',items:[26,27,28,29,30,31]},
-    {label:'Day 2 · AI → HTML',items:[32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48]}
+    {label:'Figma พื้นฐาน',items:[26,27,28,29,30]},
+    {label:'Day 2 · AI → HTML',items:[31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47]}
   ];
   const sbNav=document.getElementById('sbNav');
   const sidebar=document.getElementById('sidebar');
   const cleanT=t=>t.replace(/^—\s*/,'').replace(/\s*—$/,'');
   const sbIcons=['🏠','🗺️','🎯','🧠','⬇️','🔗','⚔️','🧭','🎨','🔀','👥','🧩','💬','👁️','♿','🚧','🍵','🍅','🔍','🎮','📐','🧑‍💼','🧬','☕','📊','🧠','🧰','🗂️','💻','✏️','🛠️','✅','🚀','🌐','🤖','🔁','🧵','🪄','✳️','👀','✍️','🖥️','⚙️','🗣️','📥','🤝','🏁','📚','🎉'];
+  sbIcons.splice(28,1); // ลบไอคอนของสไลด์ 29 ที่ลบออก
   sbGroups.forEach(g=>{
     const gl=document.createElement('div');gl.className='sb-group-label';gl.textContent=g.label;sbNav.appendChild(gl);
     g.items.forEach(i=>{

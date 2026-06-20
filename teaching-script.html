@@ -523,6 +523,12 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
     tip('<p>ปิดท้าย: ถ่ายรูปรวม / ขอ feedback / แจกรางวัล Challenge ตรงนี้เลย</p>','ปิดท้าย')
   ]);
 
+  // ===== ลบสไลด์ 29 (Figma = โค้ดที่คุณรู้) ออกจากทั้ง content/title/icon/group =====
+  (function(idx){
+    slideTitles.splice(idx,1); sbIcons.splice(idx,1); scripts.splice(idx,1);
+    sbGroups.forEach(g=>{g.items=g.items.filter(x=>x!==idx).map(x=>x>idx?x-1:x);});
+  })(28);
+
   // ===== render & nav =====
   const total=scripts.length;
   let cur=0;
@@ -554,6 +560,7 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
     if(i<0||i>=total)return;
     cur=i;
     scriptPane.innerHTML=scripts[i];
+    const _pn=scriptPane.querySelector('.sc-pageno');if(_pn)_pn.textContent='หน้า '+(i+1); // เลขหน้าอัตโนมัติ
     scriptPane.scrollTop=0;
     pvOpen.href='index.html#'+(i+1);
     pvNote.textContent='หน้านี้ตรงกับสไลด์นักเรียนหน้า '+(i+1);
