@@ -573,7 +573,7 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
     <div class="slide-subtitle" style="margin-bottom:clamp(14px,1.8vw,24px)">ติดตั้งให้พร้อมก่อนเริ่มลงมือ</div>
     <div class="slide-content">
       <div class="cards-grid cols-3">
-        <div class="card anim-item"><span class="card-icon">🪟</span><div class="card-title">Windows / macOS</div><div class="card-desc">เข้า <b>figma.com/downloads</b> → โหลด Desktop App → ติดตั้งและ Login</div><span class="card-tag tag-blue">Full Features</span></div>
+        <a class="card anim-item" href="https://www.figma.com/th-th/downloads/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><span class="card-icon">🪟</span><div class="card-title">Windows / macOS</div><div class="card-desc">โหลด Desktop App → ติดตั้งและ Login <span style="display:inline-block;margin-top:7px;color:var(--primary);font-weight:700">⬇️ กดดาวน์โหลดที่นี่ →</span></div><span class="card-tag tag-blue">Full Features</span></a>
         <div class="card anim-item"><span class="card-icon">🌐</span><div class="card-title">Web Browser</div><div class="card-desc">เข้า <b>figma.com</b> → Sign up / Login → ใช้งานได้ทันที ไม่ต้องติดตั้ง</div><span class="card-tag tag-green">No Install</span></div>
         <div class="card anim-item"><span class="card-icon">📱</span><div class="card-title">Mobile App</div><div class="card-desc">โหลดจาก App Store / Play Store — เน้นดูงาน (Mirror) & คอมเมนต์</div><span class="card-tag tag-orange">Preview เท่านั้น</span></div>
       </div>
@@ -876,23 +876,6 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
     </div>
   </div>
 
-  <!-- ตาดีไซน์ principles (after User Inyerface) -->
-  <div class="slide" data-slide="20">
-    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Design Eye</div><div class="slide-number">21</div></div>
-    <div class="slide-title">หลัก "ตาดีไซน์" ที่ต้องรู้</div>
-    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">รู้ 6 ข้อนี้ มองงานออกทันทีว่าทำไมสวย/ไม่สวย</div>
-    <div class="slide-content">
-      <div class="cards-grid cols-3">
-        <div class="card anim-item"><span class="card-icon">📊</span><div class="card-title">Hierarchy</div><div class="card-desc">เรียงตามความสำคัญ — ตาควรรู้ว่ามองอะไรก่อน</div></div>
-        <div class="card anim-item"><span class="card-icon">🌗</span><div class="card-title">Contrast</div><div class="card-desc">ใช้ความต่าง (ขนาด/สี) สร้างจุดเด่นและอ่านง่าย</div></div>
-        <div class="card anim-item"><span class="card-icon">📏</span><div class="card-title">Spacing</div><div class="card-desc">ที่ว่างคือพระเอก — เว้นระยะให้หายใจ (8pt grid)</div></div>
-        <div class="card anim-item"><span class="card-icon">📐</span><div class="card-title">Alignment</div><div class="card-desc">จัดให้ตรงแนว ดูเป็นระเบียบทันที</div></div>
-        <div class="card anim-item"><span class="card-icon">🔁</span><div class="card-title">Consistency</div><div class="card-desc">ใช้สี/ระยะ/สไตล์ให้สม่ำเสมอทั้งงาน</div></div>
-        <div class="card anim-item"><span class="card-icon">🔤</span><div class="card-title">Typography</div><div class="card-desc">เลือกฟอนต์/ขนาด/ระยะบรรทัดให้อ่านสบาย</div></div>
-      </div>
-    </div>
-  </div>
-
   <!-- PERSONA 1: คืออะไร + ทำไมเดฟต้องสน -->
   <div class="slide" data-slide="P1">
     <div class="slide-header"><div class="slide-badge"><span class="dot"></span>UX Method</div><div class="slide-number">23</div></div>
@@ -962,6 +945,7 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
           </div>
         </div>
       </div>
+      <div class="anim-item" style="max-width:1180px;margin:clamp(12px,1.6vw,20px) auto 0;display:flex;align-items:center;justify-content:center;gap:11px;padding:clamp(11px,1.3vw,16px) clamp(16px,1.9vw,26px);border-radius:14px;background:rgba(6,182,212,0.10);border:1px solid rgba(6,182,212,0.32);color:var(--text-secondary);font-size:clamp(11px,1.15vw,15px);text-align:center"><span style="font-size:1.4em">🔗</span><div>รู้จัก user แล้ว → ขั้นต่อไปเอา <b>Pain Points</b> พวกนี้ไป <b>จัดลำดับว่าทำอะไรก่อน</b> ด้วย MoSCoW</div></div>
     </div>
   </div>
 
@@ -971,6 +955,7 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
     <div class="slide-title">จัดลำดับฟีเจอร์ด้วย MoSCoW</div>
     <div class="slide-subtitle" style="margin-bottom:clamp(10px,1.4vw,18px)">ของมีจำกัด เวลามีจำกัด — MoSCoW ช่วยให้ทั้งทีมเห็นตรงกันว่า "อะไรทำก่อน อะไรทำทีหลัง" แทนที่จะเถียงกันว่าฟีเจอร์ไหนสำคัญกว่า</div>
     <div class="slide-content">
+      <div class="anim-item" style="max-width:1000px;margin:0 auto clamp(10px,1.3vw,16px);display:flex;align-items:center;gap:10px;padding:clamp(10px,1.2vw,15px) clamp(14px,1.7vw,22px);border-radius:14px;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.25);color:var(--text-secondary);font-size:clamp(11px,1.1vw,15px)"><span style="font-size:1.3em">📌</span><div><b>ตั้งต้นจาก Persona เสมอ:</b> "Must / Should" วัดจาก <b>Pain Points &amp; Goals</b> ของ user ที่เพิ่งทำ — ไม่ใช่ฟีเจอร์ที่เราชอบเอง</div></div>
       <div class="cards-grid cols-2">
         <div class="card anim-item" style="border-color:rgba(16,185,129,0.3)"><span class="card-icon">✅</span><div class="card-title">Must Have — ต้องมี</div><div class="card-desc">หัวใจของระบบ ขาดไม่ได้เด็ดขาด ถ้าไม่มีคือ launch ไม่ได้ เช่น <b>Login, ตะกร้า/สั่งซื้อ, ชำระเงิน</b><br>🔎 ลองถาม: "ถ้าตัดออก โปรเจกต์ยังใช้งานได้ไหม?" — ถ้าไม่ได้ = Must</div></div>
         <div class="card anim-item" style="border-color:rgba(124,58,237,0.3)"><span class="card-icon">⭐</span><div class="card-title">Should Have — ควรมี</div><div class="card-desc">สำคัญมากแต่ยังไม่ถึงตาย เลื่อนไปเฟสหน้าได้โดยระบบไม่พัง เช่น <b>ค้นหา, ตัวกรอง, แจ้งเตือน</b><br>ทำให้ประสบการณ์ดีขึ้นชัดเจน แต่ไม่ใช่สิ่งที่ทำให้ระบบ "มีชีวิต"</div></div>
@@ -1005,7 +990,7 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
       <img class="divider-meme r1" src="img/img_other/image%20copy%206.png" alt="roll safe">
       <div class="divider-eyebrow anim-item">Hands-on 🛠️</div>
       <div class="divider-title anim-item">Figma<br>จากศูนย์</div>
-      <div class="divider-sub anim-item">ข่าวดีสำหรับสายเดฟ: สิ่งที่น้องรู้อยู่แล้ว ใช้กับ Figma ได้เลย</div>
+      <div class="divider-sub anim-item">มาเริ่มลงมือใช้ Figma ตั้งแต่ศูนย์ไปด้วยกัน</div>
     </div>
   </div>
 
@@ -1022,6 +1007,109 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
         <div class="card anim-item"><span class="card-icon">🧩</span><div class="card-title">Assets & Libraries</div><div class="card-desc">คลังเก็บ Components ใช้ซ้ำได้</div></div>
         <div class="card anim-item"><span class="card-icon">⚡</span><div class="card-title">Quick Actions</div><div class="card-desc">หาเมนูไม่เจอ? กด <span class="kbd">⌘</span>+<span class="kbd">/</span></div></div>
       </div>
+    </div>
+  </div>
+
+  <!-- FIGMA TOOLS 1 · Frame & Shapes -->
+  <div class="slide" data-slide="F1">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Figma Basics</div><div class="slide-number">26</div></div>
+    <div class="slide-title">Frame &amp; รูปทรงพื้นฐาน</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">พื้นที่ทำงานหลัก + เครื่องมือสร้างรูปทรง</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-3">
+        <div class="card anim-item"><span class="card-icon">🖼️</span><div class="card-title">Frame / Artboard <span class="kbd">F</span></div><div class="card-desc">คอนเทนเนอร์ใส่งาน ต่างจาก Group ตรงมี <b>Constraints</b> &amp; <b>Auto Layout</b></div></div>
+        <div class="card anim-item"><span class="card-icon">📐</span><div class="card-title">Presets</div><div class="card-desc">ขนาดมาตรฐานเลือกได้ทันที — iPhone 14 (390×844), Pro Max (430×932), MacBook Pro 14″ (1512×982)</div></div>
+        <div class="card anim-item"><span class="card-icon">🔲</span><div class="card-title">Rectangle <span class="kbd">R</span></div><div class="card-desc">พื้นหลัง / การ์ด / ปุ่ม — ปรับมุมโค้ง (Radius) ได้</div></div>
+        <div class="card anim-item"><span class="card-icon">⭕</span><div class="card-title">Ellipse <span class="kbd">O</span></div><div class="card-desc">วงกลม / วงรี — ทำ Avatar, Badge, จุดแจ้งเตือน</div></div>
+        <div class="card anim-item"><span class="card-icon">⭐</span><div class="card-title">Polygon / Star</div><div class="card-desc">หลายเหลี่ยม / ดาว — ปรับจำนวนเหลี่ยม (Count) ได้</div></div>
+        <div class="card anim-item"><span class="card-icon">↗️</span><div class="card-title">Line / Arrow <span class="kbd">L</span></div><div class="card-desc">เส้นแบ่ง / ลูกศรชี้ตำแหน่ง (Arrow = <span class="kbd">Shift</span>+<span class="kbd">L</span>)</div></div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(12px,1.6vw,22px);font-size:clamp(11px,1.1vw,15px);color:var(--text-muted)" class="anim-item">💡 กด <b>Shift</b> ค้างขณะลาก = รักษาสัดส่วน · Export ได้ทั้ง <b>PNG / JPG / PDF / SVG</b></div>
+    </div>
+  </div>
+
+  <!-- FIGMA TOOLS 2 · Pen, Text & Stroke -->
+  <div class="slide" data-slide="F2">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Figma Basics</div><div class="slide-number">27</div></div>
+    <div class="slide-title">Pen, Text &amp; Stroke</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">วาดเส้นอิสระ + คุมตัวอักษรและเส้นขอบ</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-3">
+        <div class="card anim-item"><span class="card-icon">✒️</span><div class="card-title">Pen Tool <span class="kbd">P</span></div><div class="card-desc">วาด Vector แม่นยำ คุมจุด (Node) และเส้นโค้ง (Bezier) ได้ละเอียด</div></div>
+        <div class="card anim-item"><span class="card-icon">✏️</span><div class="card-title">Pencil <span class="kbd">Shift</span>+<span class="kbd">P</span></div><div class="card-desc">วาดมือเปล่า (Freehand) เหมาะสเก็ตช์ — ระบบเกลี่ยเส้นให้เรียบอัตโนมัติ</div></div>
+        <div class="card anim-item"><span class="card-icon">🔤</span><div class="card-title">Text <span class="kbd">T</span></div><div class="card-desc">Font Family, Weight, Size, Line Height, Letter Spacing</div></div>
+        <div class="card anim-item"><span class="card-icon">📏</span><div class="card-title">Text Resize</div><div class="card-desc">Auto Width / Auto Height / Fixed Size — คุมพฤติกรรมกล่องข้อความ</div></div>
+        <div class="card anim-item"><span class="card-icon">〰️</span><div class="card-title">Stroke</div><div class="card-desc">ความหนา / สี-Gradient / Dash / หัวท้าย (Cap)</div></div>
+        <div class="card anim-item"><span class="card-icon">◻️</span><div class="card-title">Stroke Align</div><div class="card-desc">Inside / Center / Outside — เส้นขอบอยู่ด้านในหรือนอกวัตถุ</div></div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(12px,1.6vw,22px);font-size:clamp(11px,1.1vw,15px);color:var(--text-muted)" class="anim-item">💡 กด <b>T</b> สร้างข้อความ · กด <b>/</b> เปิดเมนูปรับค่าแบบละเอียด</div>
+    </div>
+  </div>
+
+  <!-- FIGMA TOOLS 3 · Effects -->
+  <div class="slide" data-slide="F3">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Visual Design</div><div class="slide-number">28</div></div>
+    <div class="slide-title">Effects: เงา &amp; เบลอ</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">เพิ่มมิติและความลึกให้งานออกแบบ</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-3">
+        <div class="card anim-item"><span class="card-icon">🟪</span><div class="card-title">Drop Shadow</div><div class="card-desc">เงา "ด้านหลัง" วัตถุ ทำให้ดูลอยและมีมิติ — นิยมใช้กับ Card, Button, Modal</div></div>
+        <div class="card anim-item"><span class="card-icon">🔳</span><div class="card-title">Inner Shadow</div><div class="card-desc">เงา "ภายใน" ให้ความรู้สึกยุบลง — นิยมใช้กับ Input หรือ Pressed State</div></div>
+        <div class="card anim-item"><span class="card-icon">💧</span><div class="card-title">Layer Blur</div><div class="card-desc">เบลอทั้งวัตถุ ลดความคมชัด เพื่อลดความสำคัญหรือทำ Abstract Background</div></div>
+        <div class="card anim-item"><span class="card-icon">👓</span><div class="card-title">Background Blur</div><div class="card-desc">เบลอสิ่งที่อยู่ "ด้านหลัง" (Glassmorphism) — ต้องลด Opacity ของ Fill ให้ &lt; 100%</div></div>
+        <div class="card anim-item"><span class="card-icon">🎚️</span><div class="card-title">Adjusting Values</div><div class="card-desc">ปรับ X, Y (ทิศทาง), Blur (ความฟุ้ง), Spread (ขนาดเงา)</div></div>
+        <div class="card anim-item"><span class="card-icon">🎨</span><div class="card-title">Effect Styles</div><div class="card-desc">บันทึกการตั้งค่าเป็น Style ใช้ซ้ำได้ทันที ให้ความลึกสม่ำเสมอทั้งโปรเจกต์</div></div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(12px,1.6vw,22px);font-size:clamp(11px,1.1vw,15px);color:var(--text-muted)" class="anim-item">💡 <b>Spread ติดลบ = เงาเล็กลง</b> · เก็บเป็น Effect Style ไว้ใช้ซ้ำ</div>
+    </div>
+  </div>
+
+  <!-- FIGMA TOOLS 4 · Auto Layout -->
+  <div class="slide" data-slide="F4">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Core Feature</div><div class="slide-number">30</div></div>
+    <div class="slide-title">Auto Layout คืออะไร</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,20px)">ระบบจัดวางเลเยอร์อัตโนมัติ — แนวคิดเดียวกับ <b>flexbox / gap</b> ใน CSS</div>
+    <div class="slide-content">
+      <div class="def-quote anim-item" style="max-width:920px;margin:0 auto clamp(14px,1.8vw,24px)">คุณสมบัติที่ช่วยจัดวางองค์ประกอบภายใน Frame ให้เป็นระเบียบ<span class="em">โดยอัตโนมัติ</span> ตามทิศทางและระยะที่กำหนด</div>
+      <div class="cards-grid cols-2" style="max-width:980px">
+        <div class="card anim-item"><span class="card-icon">↕️</span><div class="card-title">ทิศทาง (Direction)</div><div class="card-desc">เรียงแนวตั้ง / แนวนอน / ตัดบรรทัด (Wrap)</div></div>
+        <div class="card anim-item"><span class="card-icon">↔️</span><div class="card-title">ระยะห่าง (Gap)</div><div class="card-desc">ช่องว่างระหว่างชิ้น — เท่ากันทุกชิ้นอัตโนมัติ</div></div>
+        <div class="card anim-item"><span class="card-icon">⬜</span><div class="card-title">ระยะขอบใน (Padding)</div><div class="card-desc">ที่ว่างรอบเนื้อหาภายใน Frame</div></div>
+        <div class="card anim-item"><span class="card-icon">📊</span><div class="card-title">การจัดแนว (Align)</div><div class="card-desc">ตำแหน่ง + การกระจายตัว (Distribution)</div></div>
+      </div>
+      <div class="anim-item" style="max-width:980px;margin:clamp(12px,1.5vw,20px) auto 0;display:flex;align-items:center;gap:12px;padding:clamp(12px,1.4vw,18px) clamp(16px,1.8vw,24px);border-radius:16px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 12px 30px rgba(124,58,237,0.28)"><span style="font-size:1.6em">🪄</span><div><div style="font-size:clamp(10px,0.9vw,12px);font-weight:800;letter-spacing:0.08em;text-transform:uppercase;opacity:.85">Key Benefit · <span class="kbd" style="color:var(--primary)">Shift</span>+<span class="kbd" style="color:var(--primary)">A</span></div><div style="font-size:clamp(13px,1.3vw,18px);font-weight:800">ลดงานจัดระเบียบ · รองรับเนื้อหาแปรผันได้เอง</div></div></div>
+    </div>
+  </div>
+
+  <!-- FIGMA TOOLS 5 · Resizing Hug/Fixed/Fill -->
+  <div class="slide" data-slide="F5">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Auto Layout</div><div class="slide-number">31</div></div>
+    <div class="slide-title">Resizing: Hug / Fixed / Fill</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">3 โหมดปรับขนาดของ Element — หัวใจของงาน Responsive</div>
+    <div class="slide-content">
+      <div class="cards-grid cols-3" style="max-width:1100px">
+        <div class="card anim-item"><span class="card-icon">🤗</span><div class="card-title">Hug Contents</div><div class="card-desc">กล่อง<b>โอบอุ้ม</b>เนื้อหา ยืด/หดตามของข้างใน คงระยะ Padding เสมอ</div><span class="card-tag tag-blue">Button · Tag · Chip</span></div>
+        <div class="card anim-item"><span class="card-icon">🔒</span><div class="card-title">Fixed</div><div class="card-desc">ขนาด<b>คงที่</b>ตามตัวเลข (เช่น 240px) ไม่เปลี่ยนตามเนื้อหา</div><span class="card-tag tag-orange">Avatar · Icon · Sidebar</span></div>
+        <div class="card anim-item"><span class="card-icon">↔️</span><div class="card-title">Fill Container</div><div class="card-desc">ลูก<b>ยืดเต็ม</b>พื้นที่ที่เหลือใน Parent Frame อัตโนมัติ</div><span class="card-tag tag-pink">Grid · Input · Card</span></div>
+      </div>
+      <div style="text-align:center;margin-top:clamp(12px,1.6vw,22px);font-size:clamp(11px,1.1vw,15px);color:var(--text-muted)" class="anim-item">💡 <b>Fill</b> ต้องใช้คู่กับ Auto Layout ของพ่อ — ขนาดจริง = (กว้างพ่อ − Padding − Gap) ÷ จำนวนลูก</div>
+    </div>
+  </div>
+
+  <!-- FIGMA TOOLS 6 · Components -->
+  <div class="slide" data-slide="F6">
+    <div class="slide-header"><div class="slide-badge"><span class="dot"></span>Core Feature</div><div class="slide-number">32</div></div>
+    <div class="slide-title">Components คืออะไร</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,20px)">องค์ประกอบ UI ที่ใช้ซ้ำได้ — <b>รากฐานของ Design System</b></div>
+    <div class="slide-content">
+      <div class="def-quote anim-item" style="max-width:920px;margin:0 auto clamp(14px,1.8vw,24px)">แม่แบบหลักของ UI ที่นำกลับมา<span class="em">ใช้ซ้ำได้</span> ลดงานซ้ำซ้อนและคุมความสม่ำเสมอ</div>
+      <div class="cards-grid cols-2" style="max-width:980px">
+        <div class="card anim-item"><span class="card-icon">🗄️</span><div class="card-title">Source of Truth</div><div class="card-desc">แก้ที่ตัวแม่ (Main) ที่เดียว → ตัวที่ก๊อปไป (Instance) เปลี่ยนตามทั้งหมด</div></div>
+        <div class="card anim-item"><span class="card-icon">💠</span><div class="card-title">Consistency</div><div class="card-desc">ดีไซน์สม่ำเสมอทั้งงาน ปุ่มหน้าตาเดียวกันทุกหน้า</div></div>
+        <div class="card anim-item"><span class="card-icon">♻️</span><div class="card-title">Reusability</div><div class="card-desc">ดึงไปใช้ซ้ำได้ตลอด ไม่ต้องวาดใหม่</div></div>
+        <div class="card anim-item"><span class="card-icon">🗂️</span><div class="card-title">Organization</div><div class="card-desc">จัดการ Assets เป็นระบบ หาง่าย แชร์ทีมได้</div></div>
+      </div>
+      <div class="anim-item" style="max-width:980px;margin:clamp(12px,1.5vw,20px) auto 0;display:flex;align-items:center;gap:12px;padding:clamp(12px,1.4vw,18px) clamp(16px,1.8vw,24px);border-radius:16px;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;box-shadow:0 12px 30px rgba(124,58,237,0.28)"><span style="font-size:1.6em">🧩</span><div><div style="font-size:clamp(10px,0.9vw,12px);font-weight:800;letter-spacing:0.08em;text-transform:uppercase;opacity:.85">Common Examples → ต่อยอดเป็น Design System ใน Day 2</div><div style="font-size:clamp(13px,1.3vw,18px);font-weight:800">Buttons · Forms · Cards · Navbars</div></div></div>
     </div>
   </div>
 
@@ -1165,6 +1253,7 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
           <span class="hero-chip">📋 export ไป Figma/โค้ด</span>
         </div>
         <a class="hero-link" href="https://stitch.withgoogle.com/" target="_blank">เปิด Google Stitch →</a>
+        <div style="margin-top:14px"><button type="button" onclick="openStitchPrompts()" style="padding:11px 22px;border-radius:30px;border:1.5px solid var(--primary);background:rgba(124,58,237,0.08);color:var(--primary);font-weight:800;font-size:14.5px;cursor:pointer;font-family:inherit">📋 ก๊อป Prompt ตัวอย่าง (เว็บจองโรงแรม) →</button></div>
       </div>
     </div>
   </div>
@@ -1183,6 +1272,7 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
           <span class="hero-chip">💬 สั่งแก้เป็นภาษาคน</span>
         </div>
         <a class="hero-link" href="https://www.figma.com/make/" target="_blank">เปิด Figma Make →</a>
+        <div style="margin-top:14px"><button type="button" onclick="openFmPrompts()" style="padding:11px 22px;border-radius:30px;border:1.5px solid var(--secondary);background:rgba(236,72,153,0.08);color:var(--secondary-dark);font-weight:800;font-size:14.5px;cursor:pointer;font-family:inherit">📋 ก๊อป Prompt ตัวอย่าง (แอปดูดวง) →</button></div>
       </div>
     </div>
   </div>
@@ -1202,6 +1292,61 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
           <span class="hero-chip">👁️ ใช้ตาดีไซน์ตรวจ</span>
         </div>
         <a class="hero-link" href="https://claude.ai/" target="_blank">เปิด Claude →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- DS1 · Design System คืออะไร -->
+  <div class="slide" data-slide="DS1">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Design System</div><div class="slide-number">37</div></div>
+    <div class="slide-title">Design System คืออะไร</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(14px,1.8vw,26px)">ชุด "กติกาดีไซน์" ที่ใช้ซ้ำทั้งงาน — ยุค AI มันคือ <b>ภาษากลางที่เราใช้สั่ง Claude</b></div>
+    <div class="slide-content">
+      <div class="def-quote anim-item" style="max-width:920px;margin:0 auto clamp(16px,2vw,28px)">Claude สร้างหน้าสวยได้ใน 1 prompt... แต่ถ้าไม่มี Design System มันจะสร้างปุ่ม <span class="em">10 แบบใน 10 หน้า</span><br>Design System ทำให้ทุกอย่าง <span class="em">"เป็นระบบเดียวกัน"</span></div>
+      <div class="cards-grid cols-3" style="max-width:1040px">
+        <div class="card anim-item"><span class="card-icon">🧩</span><div class="card-title">ชุดที่ใช้ซ้ำได้</div><div class="card-desc">สี · ตัวอักษร · ระยะ · ปุ่ม · การ์ด — กำหนดครั้งเดียว หยิบไปใช้ได้ทั้งงาน</div></div>
+        <div class="card anim-item"><span class="card-icon">🎯</span><div class="card-title">แก้ที่เดียว เปลี่ยนทั้งระบบ</div><div class="card-desc">เปลี่ยนสีหลักจุดเดียว → ปุ่ม/การ์ด/ราคา เปลี่ยนตามทันทีทั้งเว็บ</div></div>
+        <div class="card anim-item"><span class="card-icon">🤝</span><div class="card-title">ภาษากลางกับ AI &amp; เดฟ</div><div class="card-desc">ส่ง "token" ให้ Claude/เดฟ → ได้งานที่กลมกลืน ไม่ต้องอธิบายสีทีละชิ้น</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DS2 · โครงสร้าง Design System -->
+  <div class="slide" data-slide="DS2">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Structure</div><div class="slide-number">38</div></div>
+    <div class="slide-title">จาก Token สู่ทั้งเว็บ</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">เล็ก → ใหญ่ ประกอบกันเป็นชั้น ๆ</div>
+    <div class="slide-content">
+      <div class="flow-container">
+        <div class="flow-row anim-item">
+          <div class="flow-step"><span class="icon">🎨</span>Tokens</div><span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="icon">🧩</span>Components</div><span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="icon">🧱</span>Patterns</div><span class="flow-arrow">→</span>
+          <div class="flow-step highlight"><span class="icon">📄</span>Pages</div>
+        </div>
+      </div>
+      <div class="cards-grid cols-3" style="max-width:1080px;margin-top:clamp(14px,1.8vw,24px)">
+        <div class="card anim-item"><span class="card-icon">🎨</span><div class="card-title">Tokens — DNA</div><div class="card-desc">ค่าพื้นฐานที่ใช้ซ้ำ เช่น <code>--primary</code> <code>#2E42C9</code> · <code>--r 18px</code> ของ SUMDAY</div><span class="card-tag tag-blue">ตัวแปร CSS</span></div>
+        <div class="card anim-item"><span class="card-icon">🧩</span><div class="card-title">Components</div><div class="card-desc">ปุ่ม · การ์ดเมนู · badge — ประกอบขึ้นจาก token ชุดเดียวกัน</div><span class="card-tag tag-green">ใช้ซ้ำ</span></div>
+        <div class="card anim-item"><span class="card-icon">🧱</span><div class="card-title">Patterns &amp; Pages</div><div class="card-desc">เอา component มาเรียงเป็นหน้า เช่น หน้าเมนู SUMDAY ทั้งหน้า</div><span class="card-tag tag-pink">ทั้งระบบ</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DS3 · Hands-on Token Playground -->
+  <div class="slide" data-slide="DS3">
+    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Hands-on · Design System</div><div class="slide-number">39</div></div>
+    <div class="slide-content">
+      <div class="hero-box anim-item">
+        <div class="hero-mission">🎛️ ลองของจริง</div>
+        <div class="hero-title">Live Token Playground — SUMDAY</div>
+        <div class="hero-desc">ลากสไลเดอร์/เลือกสี แล้วดูปุ่ม การ์ด badge ของ SUMDAY <b>เปลี่ยนพร้อมกันทั้งหน้า</b> — นี่คือพลังของ Design System: แก้ token ที่เดียว เปลี่ยนทั้งระบบ แล้วคัดลอก tokens + prompt <b>ส่งต่อให้เดฟ/AI</b> ได้เลย</div>
+        <div class="hero-chips">
+          <span class="hero-chip">🎨 ลากเปลี่ยน token</span>
+          <span class="hero-chip">🔁 สลับธีมทั้งแบรนด์</span>
+          <span class="hero-chip">🤝 export ส่งเดฟ/AI</span>
+        </div>
+        <a class="hero-link" href="examples/coffee-design-system.html" target="_blank">เปิด Token Playground →</a>
       </div>
     </div>
   </div>
@@ -1293,93 +1438,6 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
         </div>
       </div>
       <div style="text-align:center;margin-top:clamp(10px,1.4vw,18px);font-size:clamp(11px,1.1vw,15px);color:var(--text-secondary)" class="anim-item">👉 ได้ไฟล์ <b>.html</b> เปิดดู/กดได้ทันที — ไม่ถูกใจตรงไหน <b>สั่งแก้ต่อเป็นภาษาคน</b>ได้เลย (เช่น "ทำปุ่มให้เด่นกว่านี้")</div>
-    </div>
-  </div>
-
-  <!-- CLAUDE CODE: SKILLS & COMMANDS -->
-  <div class="slide" data-slide="39">
-    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Level Up</div><div class="slide-number">40</div></div>
-    <div class="slide-title">Claude Code: Skills &amp; Commands</div>
-    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">prompt ดีๆ ที่ใช้บ่อย → เก็บเป็น "คำสั่งลัด" ใช้ซ้ำได้ ทั้งของตัวเองและทั้งทีม</div>
-    <div class="slide-content">
-      <div class="cards-grid cols-2" style="max-width:1000px">
-        <div class="card anim-item" style="border-color:rgba(6,182,212,0.3)">
-          <span class="card-icon">⌨️</span>
-          <div class="card-title">Slash Command — เรียกด้วย /ชื่อ</div>
-          <div class="card-desc">เก็บ prompt ที่ใช้ประจำเป็นไฟล์ แล้วพิมพ์ <b>/ชื่อ</b> เรียกใช้ เช่น <b>/make-landing</b> — สั้นๆ แต่ได้งานแบบเดิมทุกครั้ง ไม่ต้องพิมพ์ prompt ยาวซ้ำ</div>
-        </div>
-        <div class="card anim-item" style="border-color:rgba(124,58,237,0.3)">
-          <span class="card-icon">🧩</span>
-          <div class="card-title">Skill — ความรู้ติดตัว Claude</div>
-          <div class="card-desc">แพ็กคำสั่ง + ตัวอย่าง + ขั้นตอน ไว้ใน <b>SKILL.md</b> แล้ว Claude หยิบมาใช้<b>เองอัตโนมัติ</b>เมื่อตรงกับงาน เช่น "สร้าง component ตามสไตล์ทีม"</div>
-        </div>
-      </div>
-      <div style="text-align:center;margin-top:clamp(12px,1.6vw,20px);font-size:clamp(11px,1.1vw,15px);color:var(--text-secondary)" class="anim-item">💡 เก็บไว้ที่ <b>.claude/skills/&lt;ชื่อ&gt;/SKILL.md</b> — ตั้งค่าครั้งเดียว ใช้ซ้ำได้ทุกโปรเจกต์ &amp; แชร์ทีมผ่าน git</div>
-    </div>
-  </div>
-
-  <!-- CREATE COMMAND VIA CLAUDE -->
-  <div class="slide" data-slide="40">
-    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Pro Tip</div><div class="slide-number">41</div></div>
-    <div class="slide-title">ขี้เกียจเขียนเอง? ให้ Claude สร้าง Command ให้</div>
-    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">ไม่ต้องจำ format — บอกเป็นภาษาคนว่าอยากได้คำสั่งอะไร เดี๋ยว Claude เขียนไฟล์ให้เอง</div>
-    <div class="slide-content">
-      <div style="max-width:860px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:clamp(14px,1.8vw,22px)">
-        <div class="code-block anim-item">
-          <span class="c-prompt">claude&gt;</span> <span class="c-cmd">ช่วยสร้าง command /slide</span> ที่เอาไว้สร้างสไลด์จากหัวข้อที่ให้ หน่อย<br>
-          <br>
-          <span class="c-cmt"># Claude จะเขียนไฟล์ .claude/commands/slide.md ให้อัตโนมัติ</span><br>
-          <span class="c-cmt"># เสร็จแล้วพิมพ์ /slide เรียกใช้ได้เลย</span>
-        </div>
-        <div class="cards-grid cols-3" style="max-width:860px">
-          <div class="card anim-item"><span class="card-icon">🗣️</span><div class="card-title">1. บอกเป็นภาษาคน</div><div class="card-desc">"อยากได้ command ที่ทำ ___ ให้หน่อย" — ไม่ต้องรู้ syntax</div></div>
-          <div class="card anim-item"><span class="card-icon">📝</span><div class="card-title">2. Claude เขียนไฟล์ให้</div><div class="card-desc">สร้างไฟล์ .md ในโฟลเดอร์ commands ให้พร้อมใช้</div></div>
-          <div class="card anim-item"><span class="card-icon">🔧</span><div class="card-title">3. ลองใช้ + สั่งปรับ</div><div class="card-desc">พิมพ์ /ชื่อ ใช้งาน ถ้าไม่ถูกใจ สั่งแก้ต่อได้เลย</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- INSTALL COMMAND MANUALLY -->
-  <div class="slide" data-slide="41">
-    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Setup</div><div class="slide-number">42</div></div>
-    <div class="slide-title">วิธีติดตั้ง Command เอง (.md)</div>
-    <div class="slide-content">
-      <div class="steps">
-        <div class="step anim-item">
-          <div class="step-num">1</div>
-          <div class="step-body">
-            <div class="step-title">ดาวน์โหลดไฟล์ .md</div>
-            <div class="step-sub">จาก GitHub repo หรือ zip ที่แจกท้าย workshop</div>
-          </div>
-        </div>
-        <div class="step anim-item">
-          <div class="step-num">2</div>
-          <div class="step-body">
-            <div class="step-title">วางในโฟลเดอร์ commands</div>
-            <div class="step-sub"><b>.claude</b> เป็น hidden folder — Finder ไม่แสดงปกติ</div>
-            <div class="code-block">
-              <span class="c-cmt"># สร้างโฟลเดอร์ (ถ้ายังไม่มี)</span><br>
-              <span class="c-prompt">$</span> mkdir -p ~/.claude/commands<br>
-              <br>
-              <span class="c-cmt"># คัดลอกไฟล์ .md เข้าไป</span><br>
-              <span class="c-prompt">$</span> cp *.md ~/.claude/commands/
-            </div>
-            <div class="tip-box" style="margin-top:10px">💡 <b>หาโฟลเดอร์ใน Finder:</b> กด <b>Cmd + Shift + G</b> → พิมพ์ <b>~/.claude/commands</b> → Enter</div>
-          </div>
-        </div>
-        <div class="step anim-item">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <div class="step-title">เรียกใช้ใน Claude Code</div>
-            <div class="code-block">
-              <span class="c-prompt">claude&gt;</span> <span class="c-cmd">/slide</span> สร้าง slide เรื่อง Sprint Review<br>
-              <span class="c-prompt">claude&gt;</span> <span class="c-cmd">/diagram</span> สร้าง flow จาก PROJ-123
-            </div>
-          </div>
-        </div>
-      </div>
-      <div style="text-align:center;margin-top:clamp(10px,1.4vw,18px);font-size:clamp(10px,1vw,13px);color:var(--text-muted)" class="anim-item">ℹ️ เวอร์ชันใหม่ของ Claude Code วางใน <b>.claude/skills/&lt;ชื่อ&gt;/SKILL.md</b> ได้เหมือนกัน</div>
     </div>
   </div>
 
@@ -1556,15 +1614,15 @@ function openLightbox(src){const lb=document.getElementById('lightbox');document
     'หน้าปก','ภาพรวม 2 วัน','Learning Outcomes','Mindset: Dev ยุค AI','ติดตั้ง Figma','ลิงก์ประกอบการเรียน',
     '— UX vs UI —','UX คืออะไร','UI คืออะไร','UX vs UI ต่างกันยังไง','บทบาทในทีม','บทบาท UX & UI (รายละเอียด)','Quote: Good UX',
     '— Bad UX รอบตัว —','Bad UX: ทางลาด','Bad UX: ทางม้าลาย','Bad UX: แก้วแมว','Bad vs Good: ซอส',
-    'Workshop: Bad UX รอบตัว','Challenge: User Inyerface','หลักตาดีไซน์',
+    'Workshop: Bad UX รอบตัว','Challenge: User Inyerface',
     'User Persona คืออะไร','องค์ประกอบของ Persona','ตัวอย่าง: ลูกค้า SUMDAY',
     'MoSCoW Method',
-    'Workshop A: FigJam','— Figma จากศูนย์ —','ทัวร์ Figma','Figma = โค้ดที่คุณรู้','Wireframe Lo-fi/Hi-fi',
+    'Workshop A: FigJam','— Figma จากศูนย์ —','ทัวร์ Figma','Frame & รูปทรง','Pen, Text & Stroke','Effects: เงา & เบลอ','Auto Layout คืออะไร','Resizing: Hug/Fixed/Fill','Components คืออะไร','Figma = โค้ดที่คุณรู้','Wireframe Lo-fi/Hi-fi',
     'Workshop 1: Wireframe','สรุป Day 1',
     '— Day 2: AI → HTML —','AI Landscape','เครื่องมือ AI','Pipeline','Hands-on: Stitch','Hands-on: Figma Make',
-    'Hands-on: Claude → HTML','อ่านงาน AI ออก','Prompt ให้ดี','ตัวอย่าง: Prompt → Output','Claude: Skills & Commands','สร้าง Command (ให้ Claude ทำ)','ติดตั้ง Command (.md)','ส่งมอบให้เดฟ','Capstone','เรียนต่อ','Now Go Build!'
+    'Hands-on: Claude → HTML','Design System คืออะไร','จาก Token สู่ทั้งเว็บ','Hands-on: Token Playground','อ่านงาน AI ออก','Prompt ให้ดี','ตัวอย่าง: Prompt → Output','ส่งมอบให้เดฟ','Capstone','เรียนต่อ','Now Go Build!'
   ];
-  slideTitles.splice(28,1); // ลบสไลด์ 29 (Figma = โค้ดที่คุณรู้)
+  slideTitles.splice(33,1); // ลบ phantom 'Figma = โค้ดที่คุณรู้' (เลื่อน →33 หลังเพิ่ม Auto Layout/Components)
   const navProgress=document.getElementById('navProgress');
   if(totalSlides<=15){for(let i=0;i<totalSlides;i++){const d=document.createElement('div');d.className='nav-dot'+(i===0?' active':'');d.addEventListener('click',()=>goToSlide(i));navProgress.appendChild(d);}}
   const dropdown=document.getElementById('pageDropdown');
@@ -1573,17 +1631,23 @@ function openLightbox(src){const lb=document.getElementById('lightbox');document
   const sbGroups=[
     {label:'บทนำ',items:[0,1,2,3,4,5]},
     {label:'UX vs UI',items:[6,7,8,9,10,11,12]},
-    {label:'Bad UX & ตาดีไซน์',items:[13,14,15,16,17,18,19,20]},
-    {label:'รู้จักผู้ใช้ (User Persona)',items:[21,22,23]},
-    {label:'จัดลำดับฟีเจอร์ (MoSCoW)',items:[24,25]},
-    {label:'Figma พื้นฐาน',items:[26,27,28,29,30]},
-    {label:'Day 2 · AI → HTML',items:[31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47]}
+    {label:'Bad UX & ตาดีไซน์',items:[13,14,15,16,17,18,19]},
+    {label:'รู้จักผู้ใช้ (User Persona)',items:[20,21,22]},
+    {label:'จัดลำดับฟีเจอร์ (MoSCoW)',items:[23,24]},
+    {label:'Figma พื้นฐาน',items:[25,26,27,28,29]},
+    {label:'Auto Layout & Components',items:[30,31,32]},
+    {label:'Wireframe & สรุป Day 1',items:[33,34,35]},
+    {label:'Day 2 · AI → HTML',items:[36,37,38,39]},
+    {label:'ลองใช้ AI Tools',items:[40,41,42]},
+    {label:'Design System',items:[43,44,45]},
+    {label:'วิจารณ์งาน & Prompt',items:[46,47,48]},
+    {label:'ส่งมอบ & ปิดคอร์ส',items:[49,50,51,52]}
   ];
   const sbNav=document.getElementById('sbNav');
   const sidebar=document.getElementById('sidebar');
   const cleanT=t=>t.replace(/^—\s*/,'').replace(/\s*—$/,'');
-  const sbIcons=['🏠','🗺️','🎯','🧠','⬇️','🔗','⚔️','🧭','🎨','🔀','👥','🧩','💬','👁️','♿','🚧','🍵','🍅','🔍','🎮','📐','🧑‍💼','🧬','☕','📊','🧠','🧰','🗂️','💻','✏️','🛠️','✅','🚀','🌐','🤖','🔁','🧵','🪄','✳️','👀','✍️','🖥️','⚙️','🗣️','📥','🤝','🏁','📚','🎉'];
-  sbIcons.splice(28,1); // ลบไอคอนของสไลด์ 29 ที่ลบออก
+  const sbIcons=['🏠','🗺️','🎯','🧠','⬇️','🔗','⚔️','🧭','🎨','🔀','👥','🧩','💬','👁️','♿','🚧','🍵','🍅','🔍','🎮','🧑‍💼','🧬','☕','📊','🧠','🧰','🗂️','🔲','✒️','🌫️','🧲','↔️','🧩','💻','✏️','🛠️','✅','🚀','🌐','🤖','🔁','🧵','🪄','✳️','🎨','🧱','🎛️','👀','✍️','🖥️','🤝','🏁','📚','🎉'];
+  sbIcons.splice(33,1); // ลบไอคอน phantom (เลื่อน →33 หลังเพิ่ม Auto Layout/Components)
   sbGroups.forEach(g=>{
     const gl=document.createElement('div');gl.className='sb-group-label';gl.textContent=g.label;sbNav.appendChild(gl);
     g.items.forEach(i=>{
@@ -1630,6 +1694,8 @@ function openLightbox(src){const lb=document.getElementById('lightbox');document
   document.getElementById('menuBtn').addEventListener('click',(e)=>{e.stopPropagation();toggleDropdown();});
   document.getElementById('fullscreenBtn').addEventListener('click',()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();});
   document.addEventListener('keydown',(e)=>{
+    var _pm=document.querySelector('.pmodal.open');
+    if(_pm){if(e.key==='Escape')_pm.classList.remove('open');return;}
     if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();goToSlide(currentSlide+1);}
     else if(e.key==='ArrowLeft'){e.preventDefault();goToSlide(currentSlide-1);}
     else if(e.key==='Home'||e.key==='h'||e.key==='H'){e.preventDefault();goToSlide(0);}
@@ -1742,6 +1808,258 @@ function openLightbox(src){const lb=document.getElementById('lightbox');document
     if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done).catch(()=>{});}
     else{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}document.body.removeChild(ta);}
   });
+})();
+</script>
+
+<!-- ===== Prompt library modal (นักเรียนกดจากสไลด์ Hands-on: Stitch) ===== -->
+<style>
+  .pmodal{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(30,27,46,0.55);backdrop-filter:blur(5px);}
+  .pmodal.open{display:flex;}
+  .pmodal-box{width:100%;max-width:740px;max-height:88vh;display:flex;flex-direction:column;background:#fff;border-radius:18px;box-shadow:0 30px 80px rgba(30,27,46,0.42);overflow:hidden;}
+  .pmodal-head{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border-color);}
+  .pmodal-title{font-size:14px;font-weight:800;color:var(--text-primary);flex:1;line-height:1.4;}
+  .pmodal-x{width:34px;height:34px;border-radius:9px;border:1px solid var(--border-color);background:#fff;color:var(--text-muted);font-size:15px;cursor:pointer;flex:0 0 auto;line-height:1;}
+  .pmodal-x:hover{color:var(--primary);border-color:var(--primary);}
+  .pmodal-tabs{display:flex;flex-wrap:wrap;gap:7px;padding:14px 20px 2px;}
+  .pm-tab{padding:7px 14px;border-radius:30px;border:1px solid var(--border-color);background:#fff;font-size:12.5px;font-weight:700;color:var(--text-secondary);cursor:pointer;font-family:inherit;}
+  .pm-tab:hover{border-color:var(--primary);color:var(--primary);}
+  .pm-tab.active{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;border-color:transparent;}
+  .pm-hint{padding:6px 20px 0;font-size:12px;color:var(--text-muted);}
+  .pmodal-codewrap{position:relative;flex:1 1 auto;min-height:0;display:flex;flex-direction:column;margin:12px 20px 20px;border-radius:12px;border:1px solid var(--border-color);background:#1b1830;overflow:hidden;}
+  .pmodal-copy{position:absolute;top:10px;right:10px;z-index:2;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.13);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .pmodal-copy:hover{background:var(--primary);border-color:var(--primary);}
+  .pmodal-codewrap pre{margin:0;flex:1 1 auto;min-height:0;overflow-y:auto;padding:16px 18px;}
+  .pmodal-codewrap code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.7;color:#e8e6f5;white-space:pre-wrap;word-break:break-word;}
+  .pmodal-toast{position:absolute;bottom:22px;left:50%;transform:translateX(-50%) translateY(14px);background:#fff;color:var(--text-primary);padding:10px 20px;border-radius:30px;font-weight:700;font-size:13px;box-shadow:0 12px 30px rgba(0,0,0,0.28);opacity:0;transition:all .22s;pointer-events:none;}
+  .pmodal-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+<div class="pmodal" id="stitchPromptModal">
+  <div class="pmodal-box">
+    <div class="pmodal-head">
+      <div class="pmodal-title">📋 Prompt ตัวอย่าง — เว็บจองโรงแรม "StayEasy" · ลองก๊อปไปใช้ใน Stitch</div>
+      <button class="pmodal-x" type="button" onclick="closeStitchPrompts()">✕</button>
+    </div>
+    <div class="pmodal-tabs" id="pmTabs"></div>
+    <div class="pm-hint">💡 ลองเริ่มจากตัวที่ 1 ก่อน แล้วค่อยลองตัวที่ละเอียดขึ้น — สังเกตว่าผลต่างกันยังไง</div>
+    <div class="pmodal-codewrap">
+      <button class="pmodal-copy" type="button" id="pmCopy">คัดลอก</button>
+      <pre><code id="pmCode"></code></pre>
+    </div>
+  </div>
+  <div class="pmodal-toast" id="pmToast">คัดลอกแล้ว ✓</div>
+</div>
+<script>
+(function(){
+  const PROMPTS=[
+    {tab:'1 · เริ่มง่าย', text:
+`ออกแบบหน้าแรกของเว็บจองโรงแรม ชื่อ StayEasy บนมือถือ`},
+
+    {tab:'2 · ละเอียด (หน้าค้นหา)', text:
+`ออกแบบหน้าแรกของเว็บจองโรงแรม ชื่อ "StayEasy"
+กลุ่มผู้ใช้คือนักท่องเที่ยวที่อยากจองที่พักง่าย ๆ จบในไม่กี่คลิก
+
+โครงหน้าจากบนลงล่าง:
+- Header: โลโก้ StayEasy ซ้าย + ปุ่มเข้าสู่ระบบขวา
+- กล่องค้นหาเด่นกลางหน้า: ช่องจุดหมายปลายทาง, วันเช็คอิน-เช็คเอาท์, จำนวนผู้เข้าพัก, ปุ่ม "ค้นหา"
+- หมวดหมู่ที่พัก: โรงแรม / รีสอร์ท / วิลล่า / โฮสเทล (ไอคอน + ชื่อ)
+- โรงแรมแนะนำ แสดงเป็นการ์ด (รูป + ชื่อ + เมือง + คะแนนรีวิว + ราคา/คืน)
+- ปลายทางยอดนิยม เป็นการ์ดรูปเมือง
+
+สไตล์: สะอาด ทันสมัย น่าเชื่อถือ โทนสีฟ้า-ขาว ตัดกับปุ่มสีส้ม
+ออกแบบเป็น mobile-first (จอมือถือ)`},
+
+    {tab:'3 · หน้ารายละเอียดโรงแรม', text:
+`ออกแบบหน้ารายละเอียดโรงแรมของเว็บ StayEasy บนมือถือ
+- แกลเลอรีรูปโรงแรมด้านบน (เลื่อนดูได้)
+- ชื่อโรงแรม + ที่ตั้ง + คะแนนรีวิว
+- สิ่งอำนวยความสะดวก (Wi-Fi, สระว่ายน้ำ, อาหารเช้า, ที่จอดรถ) เป็นไอคอน
+- รายการประเภทห้องพักให้เลือก (รูป + ชื่อห้อง + ราคา/คืน + ปุ่ม "เลือก")
+- ส่วนรีวิวจากผู้เข้าพัก
+- แถบล่างติดหน้าจอ: ราคารวม + ปุ่ม "จองเลย"
+โทนสีฟ้า-ขาว สะอาดตา mobile-first`},
+
+    {tab:'4 · ทั้งระบบ ⭐', text:
+`ออกแบบ UI ทั้งระบบของเว็บแอปจองโรงแรม ชื่อ "StayEasy"
+ทำเป็น mobile-first ออกแบบให้ครบทุกหน้าเป็น flow เดียวกัน หน้าตาสอดคล้องกันทั้งระบบ
+
+[เกี่ยวกับเว็บ]
+เว็บจองที่พักสำหรับนักท่องเที่ยว เน้นจองง่าย จบเร็ว ในไม่กี่คลิก
+
+[ธีมสี / สไตล์]
+สะอาด ทันสมัย น่าเชื่อถือ โทนสีฟ้า-ขาว ตัดกับปุ่มสีส้ม
+ฟอนต์อ่านง่าย มุมการ์ดและปุ่มโค้งมน
+
+[ออกแบบให้ครบ 5 หน้า ต่อเนื่องกัน]
+1. หน้าแรก (Home)
+   - Header: โลโก้ + ปุ่มเข้าสู่ระบบ
+   - กล่องค้นหา: จุดหมาย, วันเช็คอิน-เช็คเอาท์, จำนวนผู้เข้าพัก, ปุ่มค้นหา
+   - หมวดหมู่ที่พัก + โรงแรมแนะนำเป็นการ์ด (รูป ชื่อ คะแนน ราคา)
+
+2. หน้าผลการค้นหา
+   - แถบฟิลเตอร์ด้านบน (ราคา, คะแนน, ประเภท)
+   - รายการโรงแรมเป็นการ์ดแนวยาว (รูป + ชื่อ + ที่ตั้ง + คะแนน + ราคา/คืน + ปุ่มดู)
+
+3. หน้ารายละเอียดโรงแรม
+   - แกลเลอรีรูป + ชื่อ + ที่ตั้ง + คะแนนรีวิว
+   - สิ่งอำนวยความสะดวก (ไอคอน)
+   - เลือกประเภทห้อง (รูป + ราคา + ปุ่มเลือก)
+   - แถบล่าง: ราคารวม + ปุ่ม "จองเลย"
+
+4. หน้ายืนยันการจอง / ชำระเงิน
+   - สรุปการจอง: โรงแรม ห้อง วันเข้าพัก จำนวนคืน
+   - ฟอร์มข้อมูลผู้เข้าพัก
+   - วิธีชำระเงิน (บัตร / พร้อมเพย์) + ปุ่ม "ยืนยันการจอง"
+
+5. หน้าจองสำเร็จ
+   - ข้อความสำเร็จ + หมายเลขการจอง
+   - สรุปรายละเอียดที่พัก + ปุ่ม "ดูใบจอง"
+
+[ข้อกำหนดรวม]
+- ใช้สไตล์ปุ่ม การ์ด ฟอนต์ และระยะห่างชุดเดียวกันทุกหน้า (consistent design system)
+- ปุ่มหลักเด่นชัด แตะง่ายบนมือถือ`},
+
+    {tab:'5 · สั่งแก้ (refine)', text:
+`พิมพ์ต่อทีละจุด ไม่ต้องรื้อใหม่:
+
+ทำการ์ดโรงแรมให้ดูพรีเมียมขึ้น
+เพิ่มป้าย "ลดราคา" สีแดงที่มุมการ์ด
+ปุ่ม "จองเลย" ให้เด่นและอยู่ติดด้านล่างจอ
+เพิ่มดาวคะแนนรีวิวให้ชัดขึ้น
+ทำหน้าถัดไปด้วยสไตล์เดียวกัน
+เปลี่ยนเป็นเวอร์ชัน desktop`},
+  ];
+  let active=0;
+  const modal=document.getElementById('stitchPromptModal');
+  const tabsEl=document.getElementById('pmTabs');
+  const codeEl=document.getElementById('pmCode');
+  const toast=document.getElementById('pmToast');
+  PROMPTS.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.className='pm-tab'+(i===0?' active':'');b.textContent=p.tab;b.addEventListener('click',()=>{active=i;render();});tabsEl.appendChild(b);});
+  function render(){codeEl.textContent=PROMPTS[active].text;tabsEl.querySelectorAll('.pm-tab').forEach((b,i)=>b.classList.toggle('active',i===active));}
+  function showToast(){toast.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>toast.classList.remove('show'),1500);}
+  function copyText(txt){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(showToast).catch(()=>fb(txt));}else fb(txt);}
+  function fb(txt){const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');showToast();}catch(e){}document.body.removeChild(ta);}
+  window.openStitchPrompts=function(){render();modal.classList.add('open');};
+  window.closeStitchPrompts=function(){modal.classList.remove('open');};
+  document.getElementById('pmCopy').addEventListener('click',()=>copyText(PROMPTS[active].text));
+  modal.addEventListener('click',e=>{if(e.target===modal)closeStitchPrompts();});
+})();
+</script>
+
+<!-- ===== Prompt library modal: Figma Make (แอปดูดวง Mystica) ===== -->
+<div class="pmodal" id="fmPromptModal">
+  <div class="pmodal-box">
+    <div class="pmodal-head">
+      <div class="pmodal-title">📋 Prompt ตัวอย่าง — แอปดูดวง "Mystica" · ลองวางใน Figma Make</div>
+      <button class="pmodal-x" type="button" onclick="closeFmPrompts()">✕</button>
+    </div>
+    <div class="pmodal-tabs" id="fmTabs"></div>
+    <div class="pm-hint">💡 Figma Make ชอบคำว่า "prototype ที่กดได้จริง / clickable" — จะได้ของที่กดข้ามหน้าได้</div>
+    <div class="pmodal-codewrap">
+      <button class="pmodal-copy" type="button" id="fmCopy">คัดลอก</button>
+      <pre><code id="fmCode"></code></pre>
+    </div>
+  </div>
+  <div class="pmodal-toast" id="fmToast">คัดลอกแล้ว ✓</div>
+</div>
+<script>
+(function(){
+  const PROMPTS=[
+    {tab:'ทั้งระบบ ⭐', text:
+`สร้างเว็บแอปดูดวงออนไลน์ ชื่อ "Mystica" (มิสติก้า) เป็น prototype ที่กดได้จริง
+ออกแบบให้ responsive ใช้ได้ทั้งบนเว็บ (desktop) และมือถือ หน้าตาสอดคล้องกันทั้งระบบ
+
+[แนวคิด]
+แอปดูดวง 2 แบบหลัก: เปิดไพ่ทาโรต์ และเสี่ยงเซียมซี
+ผู้ใช้เปิดดูดวงเบื้องต้นได้ฟรี แต่ต้องสมัครสมาชิก (Subscription) เพื่อปลดล็อกการเปิดไพ่เต็มรูปแบบและเซียมซีแบบไม่จำกัด
+
+[ธีมสี / สไตล์ภาพ]
+- โทนสีหลัก: ม่วงอ่อน-ชมพูอ่อน พาสเทล สว่าง สดใส น่ารัก (ไล่เฉดลาเวนเดอร์ → ชมพูพีช)
+- อารมณ์: อ่อนโยน นุ่มนวล สดใส น่ารักแบบมหัศจรรย์ (soft / dreamy / cute pastel) — ไม่เอาโทนเข้มหรือมืด
+- มีประกายวิ้ง ๆ (sparkles / glitter) สีพาสเทล, แสงเรืองรองนุ่ม ๆ, ดวงดาวและพระจันทร์น้อย ๆ เป็นองค์ประกอบตกแต่งน่ารัก
+- ใช้สไตล์กระจกฝ้าโทนสว่าง (glassmorphism) กับการ์ดและกล่อง
+- พื้นหลังสว่างไล่เฉดพาสเทลม่วง-ชมพู มีประกายดาวกระพริบเบา ๆ และก้อนเมฆ/แสงฟุ้งนุ่ม ๆ
+- ฟอนต์หัวข้อดูน่ารักอ่อนโยนมีเสน่ห์ ตัวเนื้อหาอ่านง่าย มุมโค้งมนนุ่มนวล
+
+[หน้าจอทั้งหมด — ออกแบบให้ครบและเชื่อมเป็น flow เดียวกัน]
+1. หน้าแรก (Home)
+   - Header: โลโก้ Mystica + เมนู + ปุ่มเข้าสู่ระบบ/โปรไฟล์
+   - Hero: ข้อความต้อนรับมหัศจรรย์ + ปุ่มใหญ่ 2 ปุ่ม "เปิดไพ่วันนี้" และ "เสี่ยงเซียมซี"
+   - การ์ด "ดวงประจำวัน" สั้น ๆ
+   - ส่วนรีวิว/คำชมจากผู้ใช้
+
+2. หน้าเลือกหัวข้อดูดวง
+   - การ์ดให้เลือก: ความรัก / การงาน / การเงิน / สุขภาพ (ไอคอน + ชื่อ)
+
+3. หน้าเปิดไพ่ทาโรต์
+   - แสดงสำรับไพ่คว่ำเรียงสวยงาม
+   - ผู้ใช้แตะเพื่อสุ่มและเปิดไพ่ มีอนิเมชันพลิกไพ่พร้อมประกายวิ้ง ๆ สีพาสเทล
+   - เมื่อเปิดแล้ว แสดงรูปไพ่ + ชื่อไพ่ + คำทำนาย
+   - ผู้ใช้ฟรีเปิดได้แค่ใบเดียว/วัน ไพ่ใบถัดไปจะเบลอพร้อมไอคอนกุญแจ และปุ่ม "ปลดล็อกด้วย Premium"
+
+4. หน้าเสี่ยงเซียมซี
+   - กระบอกเซียมซีให้แตะหรือ "เขย่า"
+   - มีอนิเมชันใบเซียมซีเลื่อนออกพร้อมประกายน่ารัก
+   - แสดงเลขใบ + คำทำนาย
+   - ผู้ใช้ฟรีดูคำทำนายแบบย่อ ส่วนเต็มถูกเบลอ + ปุ่ม "ปลดล็อกด้วย Premium"
+
+5. หน้าแพ็กเกจสมาชิก (Subscription / Paywall)
+   - เปรียบเทียบ Free กับ Premium เป็น 2 การ์ด
+   - Premium: เปิดไพ่ไม่จำกัด, เซียมซีเต็มรูปแบบ, คำทำนายเชิงลึก, ไม่มีโฆษณา
+   - เลือกแบบรายเดือน / รายปี (รายปีมีป้าย "คุ้มที่สุด")
+   - ปุ่ม "สมัคร Premium"
+
+6. หน้าชำระเงิน
+   - สรุปแพ็กเกจที่เลือก + ราคา
+   - เลือกวิธีชำระเงิน (บัตรเครดิต / พร้อมเพย์)
+   - ปุ่ม "ยืนยันการสมัคร"
+
+7. หน้าสมัครสำเร็จ
+   - ข้อความยินดีต้อนรับสู่ Premium พร้อมเอฟเฟกต์ประกายวิ้งสีพาสเทล
+   - ปุ่ม "เริ่มเปิดไพ่เลย"
+
+8. หน้าโปรไฟล์ / ประวัติ
+   - สถานะสมาชิก (Free / Premium)
+   - ประวัติไพ่และเซียมซีที่เคยเปิด
+
+[ระบบ Subscription — สำคัญ]
+- เนื้อหาพรีเมียม (ไพ่ใบเพิ่ม, คำทำนายเต็ม, เซียมซีไม่จำกัด) ให้แสดงสถานะ "ล็อก" ด้วยการเบลอ + ไอคอนกุญแจ
+- กดที่เนื้อหาที่ล็อก → เด้งไปหน้าแพ็กเกจสมาชิก
+- หลังสมัครสำเร็จ เนื้อหาทั้งหมดปลดล็อก
+
+[อินเทอร์แอคชัน / อนิเมชัน]
+- ปุ่มและการ์ดมี hover/tap effect เรืองแสงนุ่มนวลโทนพาสเทล
+- อนิเมชันพลิกไพ่และใบเซียมซีเลื่อนออก มีประกายวิ้งน่ารัก
+- ทำให้กดข้ามหน้าได้จริงตาม flow ด้านบน (clickable prototype)
+
+[ข้อกำหนดรวม]
+- ใช้สไตล์ปุ่ม การ์ด ฟอนต์ สี และระยะห่างชุดเดียวกันทุกหน้า (consistent design system)
+- ออกแบบ 2 ขนาด: เวอร์ชันมือถือ และเวอร์ชันเว็บ (desktop) ที่จัด layout ให้เหมาะกับจอกว้าง
+- โทนรวมต้องสว่าง อ่อนโยน พาสเทล น่ารัก ไม่มืดหรือทึบ
+- ปุ่มหลัก ("เปิดไพ่", "เสี่ยงเซียมซี", "สมัคร Premium") ต้องเด่นชัดที่สุด`},
+
+    {tab:'สั่งแก้ (refine)', text:
+`พิมพ์ต่อทีละจุด ไม่ต้องรื้อใหม่:
+
+ทำพื้นหลังและทุกองค์ประกอบให้สว่างและพาสเทลขึ้นอีก ลดความเข้มของสีม่วงลง
+เพิ่มประกายวิ้งและดาวน้อย ๆ ให้มากขึ้น
+ทำอนิเมชันพลิกไพ่ให้ลื่นและน่ารักขึ้น
+ทำให้กดข้ามหน้าได้จริงตาม flow (clickable prototype)
+ทำเวอร์ชันมือถือเพิ่มจากเวอร์ชันเว็บ`},
+  ];
+  let active=0;
+  const modal=document.getElementById('fmPromptModal');
+  const tabsEl=document.getElementById('fmTabs');
+  const codeEl=document.getElementById('fmCode');
+  const toast=document.getElementById('fmToast');
+  PROMPTS.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.className='pm-tab'+(i===0?' active':'');b.textContent=p.tab;b.addEventListener('click',()=>{active=i;render();});tabsEl.appendChild(b);});
+  function render(){codeEl.textContent=PROMPTS[active].text;tabsEl.querySelectorAll('.pm-tab').forEach((b,i)=>b.classList.toggle('active',i===active));}
+  function showToast(){toast.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>toast.classList.remove('show'),1500);}
+  function copyText(txt){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(showToast).catch(()=>fb(txt));}else fb(txt);}
+  function fb(txt){const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');showToast();}catch(e){}document.body.removeChild(ta);}
+  window.openFmPrompts=function(){render();modal.classList.add('open');};
+  window.closeFmPrompts=function(){modal.classList.remove('open');};
+  document.getElementById('fmCopy').addEventListener('click',()=>copyText(PROMPTS[active].text));
+  modal.addEventListener('click',e=>{if(e.target===modal)closeFmPrompts();});
 })();
 </script>
 </body>

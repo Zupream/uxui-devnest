@@ -179,7 +179,7 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
     'หน้าปก','ภาพรวม 2 วัน','Learning Outcomes','Mindset: Dev ยุค AI','ติดตั้ง Figma','ลิงก์ประกอบการเรียน',
     '— UX vs UI —','UX คืออะไร','UI คืออะไร','UX vs UI ต่างกันยังไง','บทบาทในทีม','บทบาท UX & UI (รายละเอียด)','Quote: Good UX',
     '— Bad UX รอบตัว —','Bad UX: ทางลาด','Bad UX: ทางม้าลาย','Bad UX: แก้วแมว','Bad vs Good: ซอส',
-    'Workshop: Bad UX รอบตัว','Challenge: User Inyerface','หลักตาดีไซน์',
+    'Workshop: Bad UX รอบตัว','Challenge: User Inyerface',
     'User Persona คืออะไร','องค์ประกอบของ Persona','ตัวอย่าง: ลูกค้า SUMDAY',
     'MoSCoW Method',
     'Workshop A: FigJam','— Figma จากศูนย์ —','ทัวร์ Figma','Figma = โค้ดที่คุณรู้','Wireframe Lo-fi/Hi-fi',
@@ -187,16 +187,23 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
     '— Day 2: AI → HTML —','AI Landscape','เครื่องมือ AI','Pipeline','Hands-on: Stitch','Hands-on: Figma Make',
     'Hands-on: Claude → HTML','อ่านงาน AI ออก','Prompt ให้ดี','ตัวอย่าง: Prompt → Output','Claude: Skills & Commands','สร้าง Command (ให้ Claude ทำ)','ติดตั้ง Command (.md)','ส่งมอบให้เดฟ','Capstone','เรียนต่อ','Now Go Build!'
   ];
+  // index space สุดท้าย (0–50) ตรงกับ index.html หลังเพิ่ม Design System — ไม่ถูก IIFE splice แก้
   const sbGroups=[
     {label:'บทนำ',items:[0,1,2,3,4,5]},
     {label:'UX vs UI',items:[6,7,8,9,10,11,12]},
-    {label:'Bad UX & ตาดีไซน์',items:[13,14,15,16,17,18,19,20]},
-    {label:'รู้จักผู้ใช้ (User Persona)',items:[21,22,23]},
-    {label:'จัดลำดับฟีเจอร์ (MoSCoW)',items:[24,25]},
-    {label:'Figma พื้นฐาน',items:[26,27,28,29,30,31]},
-    {label:'Day 2 · AI → HTML',items:[32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48]}
+    {label:'Bad UX & ตาดีไซน์',items:[13,14,15,16,17,18,19]},
+    {label:'รู้จักผู้ใช้ (User Persona)',items:[20,21,22]},
+    {label:'จัดลำดับฟีเจอร์ (MoSCoW)',items:[23,24]},
+    {label:'Figma พื้นฐาน',items:[25,26,27,28,29]},
+    {label:'Auto Layout & Components',items:[30,31,32]},
+    {label:'Wireframe & สรุป Day 1',items:[33,34,35]},
+    {label:'Day 2 · AI → HTML',items:[36,37,38,39]},
+    {label:'ลองใช้ AI Tools',items:[40,41,42]},
+    {label:'Design System',items:[43,44,45]},
+    {label:'วิจารณ์งาน & Prompt',items:[46,47,48]},
+    {label:'ส่งมอบ & ปิดคอร์ส',items:[49,50,51,52]}
   ];
-  const sbIcons=['🏠','🗺️','🎯','🧠','⬇️','🔗','⚔️','🧭','🎨','🔀','👥','🧩','💬','👁️','♿','🚧','🍵','🍅','🔍','🎮','📐','🧑‍💼','🧬','☕','📊','🧠','🧰','🗂️','💻','✏️','🛠️','✅','🚀','🌐','🤖','🔁','🧵','🪄','✳️','👀','✍️','🖥️','⚙️','🗗️','📥','🤝','🏁','📚','🎉'];
+  const sbIcons=['🏠','🗺️','🎯','🧠','⬇️','🔗','⚔️','🧭','🎨','🔀','👥','🧩','💬','👁️','♿','🚧','🍵','🍅','🔍','🎮','🧑‍💼','🧬','☕','📊','🧠','🧰','🗂️','💻','✏️','🛠️','✅','🚀','🌐','🤖','🔁','🧵','🪄','✳️','👀','✍️','🖥️','⚙️','🗣️','📥','🤝','🏁','📚','🎉'];
 
   // ===== สคริปต์พูดของแต่ละหน้า (index ตรงกับสไลด์นักเรียน) =====
   const B={
@@ -344,13 +351,7 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
   scripts[19]=head(WK,20,'10-15 นาที')+title('Challenge: User Inyerface — เกมท้าประสาท')+goal('ให้รู้สึกถึง Bad UI ด้วยตัวเอง')+wrap([
     say('<p>"เกมนี้ชื่อ User Inyerface — เว็บที่จงใจออกแบบให้ใช้ยากที่สุดในโลก ลองเล่นแล้วน้องจะ <i>รู้สึก</i> เองว่า Bad UI ทรมานแค่ไหน — นี่คือสิ่งที่ user เจอทุกวันถ้าเราออกแบบไม่ดี"</p>','เกริ่น'),
     tip('<p><span class="stage">(ตั้งรหัสไว้ก่อนสอน — รหัสในไฟล์คือ devnest)</span> "อย่าเพิ่งเริ่มเองนะคะ! รอให้พร้อมพร้อมกันทั้งห้องก่อน เดี๋ยวบอกรหัส" · 🏆 "ใครเล่นจบใน 5 นาที มีรางวัล!"</p>','⚠️ สำคัญมาก — มีรหัสผ่าน'),
-    ask('<p class="q">"อะไรที่ทำให้หัวร้อนที่สุด?"</p><p><span class="ans">→ เก็บคำตอบไว้ มันจะตรงกับหลักตาดีไซน์หน้าถัดไปพอดี (ปุ่มหายาก = hierarchy, สีกลืน = contrast)</span></p>','หลังเกม')
-  ]);
-
-  // 20 design eye
-  scripts[20]=head(D1,21,'5-6 นาที')+title('หลัก "ตาดีไซน์" 6 ข้อ')+goal('ใส่ "ชื่อ" ให้ความรู้สึกที่เพิ่งเจอ')+wrap([
-    say('<p>"เมื่อกี้น้อง <i>รู้สึก</i> แล้วว่าอะไรทำให้ใช้ยาก ทีนี้มาใส่ชื่อให้มัน เพราะพอเรียกถูกชื่อ เราจะสั่งแก้มันได้ — ขอผูกกับเกมที่เพิ่งเล่นเลย:"</p><ul><li><b>Hierarchy</b> — เรียงตามความสำคัญ <span class="stage">(จำปุ่ม \'next\' ที่หาไม่เจอในเกมได้ไหม?)</span></li><li><b>Contrast</b> — ความต่างสร้างจุดเด่น <span class="stage">(ตัวหนังสือเทาบนพื้นเทา)</span></li><li><b>Spacing</b> — ที่ว่างคือพระเอก ของอัดแน่นจนหายใจไม่ออก = ใช้ยาก</li><li><b>Alignment</b> — จัดตรงแนว ตาคนชอบความเป็นระเบียบ</li><li><b>Consistency</b> — ปุ่มแบบเดียวกันควรหน้าตาเหมือนกันทั้งเว็บ</li><li><b>Typography</b> — ฟอนต์/ขนาด/ระยะบรรทัดที่อ่านสบายตา</li></ul>'),
-    bridge('<p>"6 ข้อนี้คือ \'แว่น\' ที่น้องจะใส่มองงาน AI ใน Day 2 — generate มาปุ๊บ ส่องด้วย 6 ข้อนี้ได้เลยว่าตรงไหนต้องแก้"</p>')
+    ask('<p class="q">"อะไรที่ทำให้หัวร้อนที่สุด?"</p><p><span class="ans">→ ชวนตั้งชื่อปัญหาให้ถูก: ปุ่มหายาก = hierarchy พัง, สีกลืนกัน = contrast ต่ำ — พอเรียกถูกชื่อ เดี๋ยวตอนวิจารณ์งาน AI ใน Day 2 จะสั่งแก้ได้ตรงจุด</span></p>','หลังเกม')
   ]);
 
   // 21 persona
@@ -448,13 +449,15 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
   // 36 stitch
   scripts[36]=head(WK,37,'10-15 นาที')+title('Hands-on: Google Stitch')+goal('เล่นตัวแรก ฝึกเขียน prompt')+wrap([
     say('<p>"ลองตัวแรกแบบเบา ๆ — เปิด Stitch พิมพ์ prompt อธิบายหน้าจอที่อยากได้ ลองง่าย ๆ ก่อน เช่น \'หน้า landing แอปจองร้านอาหาร\'"</p>','โจทย์'),
-    tip('<p>"ลองพิมพ์สั้น ๆ ก่อนรอบนึง แล้วเติมรายละเอียด (สี โทน องค์ประกอบ) อีกรอบ — ดูว่าผลต่างกันแค่ไหน บทเรียนแรกของ prompt: <b>ยิ่งบอกชัด ยิ่งได้ตรง</b>"</p>','ให้น้องสังเกตความต่าง')
+    tip('<p>"ลองพิมพ์สั้น ๆ ก่อนรอบนึง แล้วเติมรายละเอียด (สี โทน องค์ประกอบ) อีกรอบ — ดูว่าผลต่างกันแค่ไหน บทเรียนแรกของ prompt: <b>ยิ่งบอกชัด ยิ่งได้ตรง</b>"</p>','ให้น้องสังเกตความต่าง'),
+    '<div class="blk tip"><div class="blk-lbl"><span class="ic">📋</span>คลัง Prompt พร้อมก๊อป (SUMDAY)</div><p>กดปุ่มนี้เปิดคลัง prompt ตัวอย่าง — เริ่มง่าย → ละเอียด → หน้าเมนู → <b>ทั้งระบบ</b> → สั่งแก้ คัดลอกไปวางใน Stitch ให้นักเรียนดูสด ๆ ได้เลย</p><button type="button" onclick="openPromptModal()" style="margin-top:11px;padding:11px 22px;border-radius:30px;border:none;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:800;font-size:14.5px;cursor:pointer;font-family:inherit;box-shadow:0 8px 20px rgba(124,58,237,0.32)">📋 เปิดคลัง Prompt ตัวอย่าง →</button></div>'
   ]);
 
   // 37 figma make
   scripts[37]=head(WK,38,'10-15 นาที')+title('Hands-on: Figma Make')+goal('ฝึก "อ่านงาน AI ออก"')+wrap([
     say('<p>"ต่อด้วย Figma Make — สร้าง prototype ที่ <i>คลิกได้จริง</i> แต่วันนี้สิ่งที่อยากให้ฝึกไม่ใช่แค่ generate — ฝึก <b>\'อ่านงาน AI ออก\'</b>"</p>'),
-    ask('<p class="q">"พอ AI ทำมา อย่าเพิ่งรับ — ส่องด้วย 6 ข้อเมื่อวาน: hierarchy ชัดไหม? spacing พอหายใจไหม? ปุ่มหลักเด่นไหม?"</p><p><span class="ans">เจอแล้วสั่งแก้เป็นภาษาคนได้เลย ไม่ต้องรู้โค้ด</span></p>','ชวนตรวจ')
+    ask('<p class="q">"พอ AI ทำมา อย่าเพิ่งรับ — ส่องด้วย 6 ข้อเมื่อวาน: hierarchy ชัดไหม? spacing พอหายใจไหม? ปุ่มหลักเด่นไหม?"</p><p><span class="ans">เจอแล้วสั่งแก้เป็นภาษาคนได้เลย ไม่ต้องรู้โค้ด</span></p>','ชวนตรวจ'),
+    '<div class="blk tip"><div class="blk-lbl"><span class="ic">📋</span>คลัง Prompt พร้อมก๊อป (แอปดูดวง Mystica)</div><p>กดปุ่มนี้เปิด prompt ตัวอย่างทั้งระบบ — แอปดูดวงเปิดไพ่/เซียมซี โทนพาสเทลม่วงชมพู มีระบบ subscription คัดลอกไปวางใน Figma Make ให้นักเรียนดูสด ๆ ได้เลย</p><button type="button" onclick="openFmPrompts()" style="margin-top:11px;padding:11px 22px;border-radius:30px;border:none;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-weight:800;font-size:14.5px;cursor:pointer;font-family:inherit;box-shadow:0 8px 20px rgba(124,58,237,0.32)">📋 เปิดคลัง Prompt ตัวอย่าง →</button></div>'
   ]);
 
   // 38 claude
@@ -523,11 +526,87 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
     tip('<p>ปิดท้าย: ถ่ายรูปรวม / ขอ feedback / แจกรางวัล Challenge ตรงนี้เลย</p>','ปิดท้าย')
   ]);
 
-  // ===== ลบสไลด์ 29 (Figma = โค้ดที่คุณรู้) ออกจากทั้ง content/title/icon/group =====
-  (function(idx){
-    slideTitles.splice(idx,1); sbIcons.splice(idx,1); scripts.splice(idx,1);
-    sbGroups.forEach(g=>{g.items=g.items.filter(x=>x!==idx).map(x=>x>idx?x-1:x);});
-  })(28);
+  // ===== reconcile index space ให้ตรงกับ index.html (50 สไลด์) =====
+  // titles/icons literal ถูกเอา 'หลักตาดีไซน์'(idx20) ออกแล้วตอน edit · ส่วน scripts[20] ถูกลบ assignment เหลือ hole
+  scripts.splice(20,1);                                        // ลบ hole ของ ตาดีไซน์ ให้ scripts ตรงกับ titles/icons
+  // ตอนนี้ phantom 'Figma = โค้ดที่คุณรู้' อยู่ index 27 ทั้งสามอาเรย์
+  slideTitles.splice(27,1); sbIcons.splice(27,1); scripts.splice(27,1);
+
+  // ===== เพิ่มสคริปต์ "เครื่องมือใน Figma" 3 หน้า ที่ index 27 (หลัง ทัวร์ Figma, ก่อน Wireframe) =====
+  (function(at){
+    const figTitles=['Frame & รูปทรง','Pen, Text & Stroke','Effects: เงา & เบลอ'];
+    const figIcons=['🔲','✒️','🌫️'];
+    const figScripts=[
+      head(D1,'','4-5 นาที')+title('Frame & รูปทรงพื้นฐาน')+goal('สร้าง Frame + รูปทรงเป็น — สาธิตสดใน Figma')+wrap([
+        say('<p><span class="stage">(เปิด Figma จริง)</span> "เริ่มจากบ้านของเราก่อน — กด <b>F</b> แล้วเลือก preset <b>iPhone 14</b> ทางขวา ได้กรอบมือถือ 390×844 มาเลย นี่คือ <b>Frame</b> = พื้นที่หนึ่งหน้าจอ"</p><p>"Frame ต่างจาก Group ตรงที่มันมี <b>Constraints</b> (ตรึงตำแหน่งตอนรีไซส์) กับ <b>Auto Layout</b> — เดี๋ยวได้ใช้ตอนทำจริง"</p>','สาธิต Frame'),
+        say('<p><span class="stage">(ลากสร้างรูปทรงให้ดู)</span> "ทีนี้ของเล่นพื้นฐาน — <b>R</b> สี่เหลี่ยม ลากทำการ์ด/ปุ่ม ปรับมุมโค้งได้ · <b>O</b> วงกลม ทำ avatar · ดาว/หลายเหลี่ยมก็มี · <b>L</b> เส้น ไว้ขีดแบ่ง"</p>','สาธิตรูปทรง'),
+        tip('<p>"เคล็ดลับที่ใช้ตลอด — กด <b>Shift ค้าง</b> ขณะลาก จะได้สี่เหลี่ยมจัตุรัส/วงกลมเป๊ะ ไม่เบี้ยว" · เสร็จงาน export ได้ทั้ง PNG/JPG/PDF/SVG</p>','ชวนน้องลองพร้อมกัน')
+      ]),
+      head(D1,'','4-5 นาที')+title('Pen, Text & Stroke')+goal('คุมตัวอักษร เส้นขอบ และวาด vector')+wrap([
+        say('<p><span class="stage">(กด T พิมพ์ข้อความใน Figma)</span> "กด <b>T</b> คลิกแล้วพิมพ์ได้เลย ทางขวาปรับได้หมด — ฟอนต์ ขนาด น้ำหนัก ระยะบรรทัด (Line Height)"</p><p>"จุดที่คนพลาดบ่อย — <b>Text Resize</b>: <i>Auto Width</i> กล่องยืดตามตัวอักษร, <i>Fixed</i> ล็อกขนาดแล้วตัดบรรทัด เลือกให้ถูกตามงาน"</p>','สาธิต Text'),
+        say('<p>"<b>Pen</b> <span class="kbd">P</span> วาดเส้น vector แบบแม่นยำ คุมจุดและความโค้งได้ · <b>Pencil</b> <span class="kbd">Shift</span>+<span class="kbd">P</span> วาดมือเปล่าเหมือนสเก็ตช์ ระบบเกลี่ยเส้นให้เอง"</p><p><span class="stage">(เลือกเส้นแล้วชี้ panel Stroke)</span> "เส้นขอบปรับ ความหนา/สี/เส้นประ ได้ และ <b>Align</b> — Inside/Center/Outside คือเส้นอยู่ในหรือนอกขอบวัตถุ"</p>','Pen & Stroke'),
+        tip('<p>กด <b>T</b> สร้างข้อความ · กด <b>/</b> ค้นหาเครื่องมือ/เมนูได้ทุกอย่าง ไม่ต้องจำที่อยู่</p>')
+      ]),
+      head(D1,'','3-4 นาที')+title('Effects: เงา & เบลอ')+goal('เพิ่มมิติด้วย Shadow / Blur — สาธิตสด')+wrap([
+        say('<p><span class="stage">(เลือกการ์ด → panel Effects → กด +)</span> "เลือกการ์ดที่ทำไว้ ไปที่ <b>Effects</b> ทางขวา กด + เลือก <b>Drop Shadow</b> — ปรับ X/Y (ทิศเงา), Blur (ความฟุ้ง), Spread (ขนาด) การ์ดจะดูลอยขึ้นมาทันที"</p>','สาธิต Drop Shadow'),
+        say('<p>"มีเงาอีกแบบ — <b>Inner Shadow</b> เงาด้านในให้ดูยุบ (เหมาะช่อง Input) · <b>Layer Blur</b> เบลอทั้งชิ้น · <b>Background Blur</b> เบลอฉากหลังทำกระจกฝ้า (Glassmorphism)"</p><p><span class="stage">(เน้นย้ำ)</span> "Background Blur จะเห็นผลก็ต่อเมื่อ <b>ลด Opacity ของ Fill ให้ต่ำกว่า 100%</b> — จุดที่คนงงบ่อยมาก"</p>','เงา/เบลอแบบอื่น'),
+        bridge('<p>"ตั้งค่าเงาสวย ๆ แล้ว เก็บเป็น <b>Effect Style</b> ไว้กดใช้ซ้ำทั้งโปรเจกต์ — นี่แหละจุดเชื่อมไป Design System ที่จะเจอใน Day 2"</p>')
+      ])
+    ];
+    slideTitles.splice(at,0,...figTitles); sbIcons.splice(at,0,...figIcons); scripts.splice(at,0,...figScripts);
+  })(27);
+
+  // ===== เพิ่มสคริปต์ "Auto Layout & Components" 3 หน้า ที่ index 30 (หลัง Effects, ก่อน Wireframe) =====
+  (function(at){
+    const alTitles=['Auto Layout คืออะไร','Resizing: Hug/Fixed/Fill','Components คืออะไร'];
+    const alIcons=['🧲','↔️','🧩'];
+    const alScripts=[
+      head(D1,'','4-5 นาที')+title('Auto Layout คืออะไร')+goal('Auto Layout = flexbox/gap ของ Figma')+wrap([
+        say('<p><span class="stage">(เลือกหลายชิ้นใน Figma แล้วกด Shift+A)</span> "ดูสิ — พอกด <b>Shift+A</b> ของที่วางมั่ว ๆ เรียงเป็นระเบียบทันที นี่คือ <b>Auto Layout</b> ปรับได้ 4 อย่างทางขวา — <b>ทิศทาง</b> (ตั้ง/นอน), <b>Gap</b> (ระยะห่าง), <b>Padding</b> (ขอบใน), <b>จัดแนว</b>"</p>','สาธิตสด'),
+        bridge('<p>"ใครเขียนเว็บจะคุ้นเลย — มันคือ <b>flexbox + gap</b> ของ CSS เป๊ะ ๆ ตรงนี้แหละที่บอกว่า \'Figma = โค้ดที่คุณรู้อยู่แล้ว\'"</p>'),
+        tip('<p>"ข้อดีจริง ๆ คือ <b>พอเนื้อหาเปลี่ยน Layout ไม่พัง</b> — เพิ่มปุ่ม/ข้อความ ของจัดเรียงให้เองอัตโนมัติ ไม่ต้องขยับทีละชิ้น"</p>','ย้ำประโยชน์')
+      ]),
+      head(D1,'','4 นาที')+title('Resizing: Hug / Fixed / Fill')+goal('เลือกโหมดปรับขนาดให้ถูกงาน')+wrap([
+        say('<p>"พอมี Auto Layout แล้ว แต่ละชิ้นเลือกได้ว่าจะปรับขนาดยังไง 3 แบบ:"</p><ul><li><b>Hug</b> — กล่องหดมาโอบเนื้อหาพอดี <span class="stage">(นึกถึงปุ่ม ยาวตามตัวอักษร)</span></li><li><b>Fixed</b> — ล็อกขนาดเป๊ะ เช่น avatar 40×40 ไม่ขยับ</li><li><b>Fill</b> — ยืดเต็มพื้นที่พ่อ <span class="stage">(นึกถึง input ที่กว้างเต็มฟอร์ม)</span></li></ul>','สาธิตทีละโหมด'),
+        ask('<p class="q">"ปุ่ม \'ส่งใบสมัคร\' ควรใช้โหมดไหน? แล้วช่องกรอกอีเมลล่ะ?"</p><p><span class="ans">→ ปุ่ม = Hug (พอดีข้อความ), ช่องกรอก = Fill (เต็มฟอร์ม)</span></p>','ลองให้ห้องตอบ'),
+        tip('<p><b>Fill</b> ต้องอยู่ใน Frame ที่เปิด Auto Layout ก่อนถึงจะเลือกได้ — คนใหม่มักหาไม่เจอเพราะลืมเปิด Auto Layout</p>')
+      ]),
+      head(D1,'','4 นาที')+title('Components คืออะไร')+goal('แม่แบบใช้ซ้ำ → รากของ Design System')+wrap([
+        say('<p><span class="stage">(คลิกขวาที่ปุ่ม → Create Component)</span> "ทำปุ่มสวย ๆ เสร็จ คลิกขวา <b>Create Component</b> — มันกลายเป็น <b>แม่แบบ (Main)</b> ทีนี้ก๊อปไปใช้กี่ที่ก็ได้ เรียกว่า <b>Instance</b>"</p><p><span class="stage">(แก้สีที่ตัวแม่ให้ดู)</span> "เด็ดตรงนี้ — แก้ที่ตัวแม่ที่เดียว <b>ทุก Instance เปลี่ยนตามหมดทั้งไฟล์</b> นี่คือ Source of Truth"</p>','สาธิตสด'),
+        say('<p>"ประโยชน์ 4 ข้อ — <b>แก้ที่เดียวเปลี่ยนทั้งหมด · สม่ำเสมอ · ใช้ซ้ำ · จัดการเป็นระบบ</b> ของที่ทำบ่อย ๆ เช่น Button, Card, Navbar ควรเป็น Component หมด"</p>'),
+        bridge('<p>"จำคำนี้ไว้ — Components คือ <b>รากฐานของ Design System</b> ที่เราจะเจอเต็ม ๆ ใน Day 2 พอ AI สร้างงาน เราก็คุมมันด้วยแนวคิดเดียวกันนี้"</p>')
+      ])
+    ];
+    slideTitles.splice(at,0,...alTitles); sbIcons.splice(at,0,...alIcons); scripts.splice(at,0,...alScripts);
+  })(30);
+
+  // ===== เพิ่มสคริปต์ Design System 3 หน้า (ซิงก์ index.html: หลัง Claude → HTML, ก่อน 'อ่านงาน AI ออก') =====
+  (function(at){
+    const dsTitles=['Design System คืออะไร','จาก Token สู่ทั้งเว็บ','Hands-on: Token Playground'];
+    const dsIcons=['🎨','🧱','🎛️'];
+    const dsScripts=[
+      head(D2,'','3-4 นาที')+title('Design System คืออะไร')+goal('ทำไมยุค Claude ยิ่งต้องมี Design System')+wrap([
+        hook('<p class="q">"Claude สร้างหน้าสวยได้ใน 1 prompt... แต่ถ้าสั่งทำ 10 หน้าโดยไม่มีกติกา จะได้ปุ่ม <b>10 แบบใน 10 หน้า</b> สีเพี้ยน ขนาดมั่ว"</p>'),
+        say('<p>"Design System คือ <b>ชุดกติกาดีไซน์ที่ใช้ซ้ำทั้งงาน</b> — สี ตัวอักษร ระยะ ปุ่ม การ์ด กำหนดครั้งเดียว หยิบใช้ได้ทั้งเว็บ 3 ข้อที่ได้:"</p><ul><li><b>ใช้ซ้ำได้</b> — ไม่ต้องคิดใหม่ทุกหน้า</li><li><b>แก้ที่เดียว เปลี่ยนทั้งระบบ</b> — เปลี่ยนสีหลักจุดเดียว ทั้งเว็บเปลี่ยนตาม</li><li><b>ภาษากลางกับ AI &amp; เดฟ</b> — ส่ง token ให้ Claude/เดฟ ได้งานกลมกลืน</li></ul>'),
+        bridge('<p>"ยุค AI สิ่งนี้ยิ่งสำคัญ — มันคือ <b>ภาษาที่เราใช้สั่ง Claude</b> ให้สร้างของที่เป็นระบบเดียวกัน"</p>')
+      ]),
+      head(D2,'','3 นาที')+title('จาก Token สู่ทั้งเว็บ')+goal('เห็นโครงเป็นชั้น Tokens → Pages')+wrap([
+        say('<p><span class="stage">(ชี้ flow)</span> "ประกอบกันเป็นชั้น ๆ จากเล็กไปใหญ่ — <b>Tokens → Components → Patterns → Pages</b>"</p>'),
+        say('<ul><li><b>Tokens</b> = DNA ค่าพื้นฐาน เช่น <code>--primary #2E42C9</code>, <code>--r 18px</code> ของ SUMDAY</li><li><b>Components</b> = ปุ่ม การ์ดเมนู badge ประกอบจาก token ชุดเดียวกัน</li><li><b>Patterns &amp; Pages</b> = เอา component มาเรียงเป็นหน้าเมนู SUMDAY ทั้งหน้า</li></ul>','อธิบายแต่ละชั้น'),
+        tip('<p>เปรียบเทียบให้เห็นภาพ: token เหมือนเม็ดสี/อิฐ · component เหมือนกำแพง · page เหมือนบ้านทั้งหลัง — เปลี่ยนเม็ดสีที่เดียว บ้านทั้งหลังเปลี่ยน</p>')
+      ]),
+      head(WK,'','5-10 นาที')+title('Hands-on: Live Token Playground')+goal('เห็นพลัง "แก้ที่เดียว เปลี่ยนทั้งระบบ" สด ๆ')+wrap([
+        tip('<p><b>เปิดของจริงให้ดูสด ๆ</b> — คลิก preview ในสไลด์ เปิด <code>examples/coffee-design-system.html</code> ในแท็บใหม่</p>','สำคัญ'),
+        say('<p><span class="stage">(ลากสไลเดอร์ --primary)</span> "ดูสิ — เปลี่ยนสีหลักจุดเดียว ปุ่ม การ์ด ราคา tab <b>เปลี่ยนพร้อมกันทั้งหน้า</b> นี่แหละพลังของ token"</p><p><span class="stage">(กด preset Dark Roast / Matcha)</span> "หรือสลับทั้งธีมแบรนด์ใน 1 คลิก"</p>'),
+        say('<p>"ด้านล่างมีกล่อง <b>tokens.css</b> กับ <b>prompt สำหรับเดฟ/AI</b> ที่อัปเดตตามสด — คัดลอกไปวางใน Claude สั่ง \'สร้าง component ใหม่โดยใช้ token เหล่านี้\' ได้เลย"</p>','ปิดด้วยการเชื่อม AI'),
+        bridge('<p>"นี่คือวิธีคุยกับ AI ในยุคนี้ — <b>ส่ง token ไม่ใช่ส่งคำว่า \'ทำให้สวย ๆ\'</b>"</p>')
+      ])
+    ];
+    slideTitles.splice(at,0,...dsTitles); sbIcons.splice(at,0,...dsIcons); scripts.splice(at,0,...dsScripts);
+  })(43);
+
+  // ===== เอาหมวด "Claude Skills & Commands" ออก 3 หน้า (idx 49-51: Skills, สร้าง Command, ติดตั้ง Command) — ไม่ได้สอนทันเวลา =====
+  slideTitles.splice(49,3); sbIcons.splice(49,3); scripts.splice(49,3);
 
   // ===== render & nav =====
   const total=scripts.length;
@@ -588,12 +667,274 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
   document.getElementById('togglePv').addEventListener('click',()=>previewPane.classList.toggle('hidden'));
   document.addEventListener('keydown',e=>{
     if(e.target.tagName==='INPUT')return;
+    var _pm=document.querySelector('.pmodal.open');
+    if(_pm){if(e.key==='Escape')_pm.classList.remove('open');return;}
     if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(cur+1);}
     else if(e.key==='ArrowLeft'){e.preventDefault();go(cur-1);}
     else if(e.key==='Home'){go(0);}
     else if(e.key==='End'){go(total-1);}
   });
-  go(0);
+  syncScript(0); // เติมสคริปต์หน้าแรก + ตัวนับตอนโหลด (go(0) เดิมติด guard i===cur เลยไม่ทำงาน)
+})();
+</script>
+
+<!-- ===== Prompt library modal (กดจากหน้า Hands-on: Stitch) ===== -->
+<style>
+  .pmodal{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(30,27,46,0.55);backdrop-filter:blur(5px);}
+  .pmodal.open{display:flex;}
+  .pmodal-box{width:100%;max-width:740px;max-height:88vh;display:flex;flex-direction:column;background:#fff;border-radius:18px;box-shadow:0 30px 80px rgba(30,27,46,0.42);overflow:hidden;}
+  .pmodal-head{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border-color);}
+  .pmodal-title{font-size:14px;font-weight:800;color:var(--text-primary);flex:1;line-height:1.4;}
+  .pmodal-x{width:34px;height:34px;border-radius:9px;border:1px solid var(--border-color);background:#fff;color:var(--text-muted);font-size:15px;cursor:pointer;flex:0 0 auto;line-height:1;}
+  .pmodal-x:hover{color:var(--primary);border-color:var(--primary);}
+  .pmodal-tabs{display:flex;flex-wrap:wrap;gap:7px;padding:14px 20px 2px;}
+  .pm-tab{padding:7px 14px;border-radius:30px;border:1px solid var(--border-color);background:#fff;font-size:12.5px;font-weight:700;color:var(--text-secondary);cursor:pointer;font-family:inherit;}
+  .pm-tab:hover{border-color:var(--primary);color:var(--primary);}
+  .pm-tab.active{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;border-color:transparent;}
+  .pm-hint{padding:6px 20px 0;font-size:12px;color:var(--text-muted);}
+  .pmodal-codewrap{position:relative;flex:1 1 auto;min-height:0;display:flex;flex-direction:column;margin:12px 20px 20px;border-radius:12px;border:1px solid var(--border-color);background:#1b1830;overflow:hidden;}
+  .pmodal-copy{position:absolute;top:10px;right:10px;z-index:2;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.13);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .pmodal-copy:hover{background:var(--primary);border-color:var(--primary);}
+  .pmodal-codewrap pre{margin:0;flex:1 1 auto;min-height:0;overflow-y:auto;padding:16px 18px;}
+  .pmodal-codewrap code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.7;color:#e8e6f5;white-space:pre-wrap;word-break:break-word;}
+  .pmodal-toast{position:absolute;bottom:22px;left:50%;transform:translateX(-50%) translateY(14px);background:#fff;color:var(--text-primary);padding:10px 20px;border-radius:30px;font-weight:700;font-size:13px;box-shadow:0 12px 30px rgba(0,0,0,0.28);opacity:0;transition:all .22s;pointer-events:none;}
+  .pmodal-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+<div class="pmodal" id="promptModal">
+  <div class="pmodal-box">
+    <div class="pmodal-head">
+      <div class="pmodal-title">📋 คลัง Prompt สำหรับ Stitch — เลือกตัวอย่าง แล้วกดคัดลอก</div>
+      <button class="pmodal-x" type="button" onclick="closePromptModal()">✕</button>
+    </div>
+    <div class="pmodal-tabs" id="pmTabs"></div>
+    <div class="pm-hint">💡 อย่าลืมแนบรูปธีมสีใน Stitch ก่อนวาง prompt (ตัวอย่างทั้งระบบมีบรรทัดอ้างอิงรูปให้แล้ว)</div>
+    <div class="pmodal-codewrap">
+      <button class="pmodal-copy" type="button" id="pmCopy">คัดลอก</button>
+      <pre><code id="pmCode"></code></pre>
+    </div>
+  </div>
+  <div class="pmodal-toast" id="pmToast">คัดลอกแล้ว ✓</div>
+</div>
+<script>
+(function(){
+  const PROMPTS=[
+    {tab:'1 · เริ่มง่าย', text:
+`ออกแบบหน้า landing page เว็บสั่งเครื่องดื่มออนไลน์ ของร้านชื่อ SUMDAY บนมือถือ`},
+
+    {tab:'2 · ละเอียด (Landing)', text:
+`ออกแบบหน้า Landing Page สำหรับเว็บสั่งเครื่องดื่มออนไลน์ ร้านชื่อ "SUMDAY"
+กลุ่มลูกค้าคือพนักงานออฟฟิศที่รีบ อยากสั่งล่วงหน้าไม่ต้องต่อคิว
+
+โครงหน้าจากบนลงล่าง:
+- Header: โลโก้ SUMDAY ซ้าย + ปุ่มตะกร้าขวาบน
+- Hero: รูปเครื่องดื่มเด่น ๆ พร้อมหัวข้อใหญ่ และปุ่ม "สั่งเลย"
+- แถบโปรโมชันวันนี้
+- เมนูแนะนำ แสดงเป็นการ์ด 4 ใบ (รูป + ชื่อเมนู + ราคา + ปุ่มเพิ่ม)
+- ส่วนวิธีสั่ง 3 ขั้น: เลือกเมนู → จ่าย PromptPay → รับที่ร้าน
+- Footer: ที่อยู่ร้าน + เวลาเปิด + โซเชียล
+
+สไตล์: สดใส อบอุ่น น่ารัก โทนสีเหลือง-ครีม ตัดกับปุ่มสีน้ำเงินและส้ม
+ฟอนต์หัวข้อแบบมนกลม อ่านง่าย
+ออกแบบเป็น mobile-first (จอมือถือ)`},
+
+    {tab:'3 · หน้าเมนู', text:
+`ออกแบบหน้าเมนูเครื่องดื่มของร้าน SUMDAY บนมือถือ
+มีแท็บหมวดหมู่ด้านบน (ทั้งหมด / กาแฟ / ชา / นม / โซดา) เลื่อนแนวนอนได้
+แสดงเมนูเป็นการ์ด 2 คอลัมน์ แต่ละการ์ดมีรูป ชื่อเมนู ราคา และปุ่มเพิ่มลงตะกร้า
+มีปุ่มตะกร้าลอยมุมขวาล่าง โทนสีเหลือง-น้ำเงินสดใส mobile-first`},
+
+    {tab:'4 · ทั้งระบบ ⭐', text:
+`ออกแบบ UI ทั้งระบบของเว็บแอปสั่งเครื่องดื่มออนไลน์ ร้านชื่อ "SUMDAY"
+ทำเป็น mobile-first ออกแบบให้ครบทุกหน้าเป็น flow เดียวกัน หน้าตาสอดคล้องกันทั้งระบบ
+
+[เกี่ยวกับร้าน]
+ร้านขายกาแฟ ชา นม และโซดา ลูกค้าหลักคือพนักงานออฟฟิศที่รีบ
+อยากสั่งล่วงหน้าแล้วแวะรับ ไม่ต้องต่อคิว จุดขายคือ "สั่งได้เลย ไม่ต้องสมัครสมาชิก"
+
+[ธีมสี / สไตล์]
+ยึดโทนสีและอารมณ์ตามรูปที่แนบเป็นหลัก (ดึงพาเลตสีจากรูปมาใช้กับปุ่ม พื้นหลัง และไฮไลต์)
+อารมณ์โดยรวม: สดใส อบอุ่น เป็นมิตร น่ารักนิด ๆ
+ฟอนต์หัวข้อแบบมนกลม อ่านง่าย มุมการ์ดและปุ่มโค้งมน
+
+[ออกแบบให้ครบ 6 หน้า ต่อเนื่องกัน]
+1. หน้าแรก (Home)
+   - Header: โลโก้ SUMDAY + ปุ่มตะกร้ามุมขวาบน
+   - Hero: รูปเครื่องดื่มเด่น + หัวข้อใหญ่ + ปุ่ม "สั่งเลย"
+   - แถบโปรโมชันวันนี้
+   - เมนูแนะนำเป็นการ์ด (รูป + ชื่อ + ราคา + ปุ่มเพิ่ม)
+   - ส่วน "วิธีสั่ง 3 ขั้น": เลือกเมนู → จ่าย PromptPay → รับที่ร้าน
+
+2. หน้าเมนูทั้งหมด
+   - แท็บหมวดหมู่เลื่อนแนวนอน (ทั้งหมด / กาแฟ / ชา / นม / โซดา)
+   - การ์ดเมนู 2 คอลัมน์ มีรูป ชื่อ ราคา ปุ่มเพิ่มลงตะกร้า
+
+3. หน้ารายละเอียดเมนู
+   - รูปเครื่องดื่มใหญ่ + ชื่อ + ราคา
+   - เลือกขนาด (เล็ก/กลาง/ใหญ่), ระดับความหวาน, จำนวน
+   - ปุ่ม "เพิ่มลงตะกร้า" ติดด้านล่าง
+
+4. หน้าตะกร้า (Cart)
+   - รายการที่สั่ง แก้จำนวน/ลบได้
+   - สรุปยอดรวม + ปุ่ม "ดำเนินการสั่งซื้อ"
+
+5. หน้าชำระเงิน
+   - กรอกชื่อ + เบอร์ (ไม่ต้องสมัครสมาชิก)
+   - แสดง PromptPay QR + ปุ่มแนบสลิป
+   - ปุ่ม "ยืนยันการสั่งซื้อ"
+
+6. หน้ายืนยันออเดอร์
+   - ข้อความสำเร็จ + หมายเลขออเดอร์
+   - สถานะ "กำลังทำเครื่องดื่ม → พร้อมรับ"
+   - เวลาที่มารับได้ + ที่อยู่ร้าน
+
+[ข้อกำหนดรวม]
+- ใช้สไตล์ปุ่ม การ์ด ฟอนต์ และระยะห่างชุดเดียวกันทุกหน้า (consistent design system)
+- ปุ่มหลักเด่นชัด แตะง่ายบนมือถือ
+- เน้นข้อความ "ไม่ต้องสมัครสมาชิก" ให้เห็นชัดในหน้าแรกและหน้าชำระเงิน`},
+
+    {tab:'5 · สั่งแก้ (refine)', text:
+`พิมพ์ต่อทีละจุด ไม่ต้องรื้อใหม่:
+
+ทำสีให้สดใสและอบอุ่นขึ้นอีก
+เพิ่มป้าย "ขายดี" สีแดงที่มุมการ์ดเมนู
+ปุ่ม "สั่งเลย" ให้ใหญ่ขึ้นและอยู่กลางจอ
+เพิ่มข้อความ "สั่งได้เลย ไม่ต้องสมัครสมาชิก" ใต้ปุ่ม
+ทำหน้าถัดไปด้วยสไตล์เดียวกัน
+ปรับทุกหน้าให้ใช้โทนสีตามรูปแนบให้ตรงกว่านี้
+เปลี่ยนเป็นเวอร์ชัน desktop`},
+  ];
+  let active=0;
+  const modal=document.getElementById('promptModal');
+  const tabsEl=document.getElementById('pmTabs');
+  const codeEl=document.getElementById('pmCode');
+  const toast=document.getElementById('pmToast');
+  PROMPTS.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.className='pm-tab'+(i===0?' active':'');b.textContent=p.tab;b.addEventListener('click',()=>{active=i;render();});tabsEl.appendChild(b);});
+  function render(){codeEl.textContent=PROMPTS[active].text;tabsEl.querySelectorAll('.pm-tab').forEach((b,i)=>b.classList.toggle('active',i===active));}
+  function showToast(){toast.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>toast.classList.remove('show'),1500);}
+  function copyText(txt){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(showToast).catch(()=>fb(txt));}else fb(txt);}
+  function fb(txt){const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');showToast();}catch(e){}document.body.removeChild(ta);}
+  window.openPromptModal=function(){render();modal.classList.add('open');};
+  window.closePromptModal=function(){modal.classList.remove('open');};
+  document.getElementById('pmCopy').addEventListener('click',()=>copyText(PROMPTS[active].text));
+  modal.addEventListener('click',e=>{if(e.target===modal)closePromptModal();});
+})();
+</script>
+
+<!-- ===== Prompt library modal: Figma Make (แอปดูดวง Mystica) ===== -->
+<div class="pmodal" id="fmPromptModal">
+  <div class="pmodal-box">
+    <div class="pmodal-head">
+      <div class="pmodal-title">📋 คลัง Prompt สำหรับ Figma Make — แอปดูดวง "Mystica"</div>
+      <button class="pmodal-x" type="button" onclick="closeFmPrompts()">✕</button>
+    </div>
+    <div class="pmodal-tabs" id="fmTabs"></div>
+    <div class="pm-hint">💡 Figma Make ชอบคำว่า "prototype ที่กดได้จริง / clickable" — จะได้ของที่กดข้ามหน้าได้</div>
+    <div class="pmodal-codewrap">
+      <button class="pmodal-copy" type="button" id="fmCopy">คัดลอก</button>
+      <pre><code id="fmCode"></code></pre>
+    </div>
+  </div>
+  <div class="pmodal-toast" id="fmToast">คัดลอกแล้ว ✓</div>
+</div>
+<script>
+(function(){
+  const PROMPTS=[
+    {tab:'ทั้งระบบ ⭐', text:
+`สร้างเว็บแอปดูดวงออนไลน์ ชื่อ "Mystica" (มิสติก้า) เป็น prototype ที่กดได้จริง
+ออกแบบให้ responsive ใช้ได้ทั้งบนเว็บ (desktop) และมือถือ หน้าตาสอดคล้องกันทั้งระบบ
+
+[แนวคิด]
+แอปดูดวง 2 แบบหลัก: เปิดไพ่ทาโรต์ และเสี่ยงเซียมซี
+ผู้ใช้เปิดดูดวงเบื้องต้นได้ฟรี แต่ต้องสมัครสมาชิก (Subscription) เพื่อปลดล็อกการเปิดไพ่เต็มรูปแบบและเซียมซีแบบไม่จำกัด
+
+[ธีมสี / สไตล์ภาพ]
+- โทนสีหลัก: ม่วงอ่อน-ชมพูอ่อน พาสเทล สว่าง สดใส น่ารัก (ไล่เฉดลาเวนเดอร์ → ชมพูพีช)
+- อารมณ์: อ่อนโยน นุ่มนวล สดใส น่ารักแบบมหัศจรรย์ (soft / dreamy / cute pastel) — ไม่เอาโทนเข้มหรือมืด
+- มีประกายวิ้ง ๆ (sparkles / glitter) สีพาสเทล, แสงเรืองรองนุ่ม ๆ, ดวงดาวและพระจันทร์น้อย ๆ เป็นองค์ประกอบตกแต่งน่ารัก
+- ใช้สไตล์กระจกฝ้าโทนสว่าง (glassmorphism) กับการ์ดและกล่อง
+- พื้นหลังสว่างไล่เฉดพาสเทลม่วง-ชมพู มีประกายดาวกระพริบเบา ๆ และก้อนเมฆ/แสงฟุ้งนุ่ม ๆ
+- ฟอนต์หัวข้อดูน่ารักอ่อนโยนมีเสน่ห์ ตัวเนื้อหาอ่านง่าย มุมโค้งมนนุ่มนวล
+
+[หน้าจอทั้งหมด — ออกแบบให้ครบและเชื่อมเป็น flow เดียวกัน]
+1. หน้าแรก (Home)
+   - Header: โลโก้ Mystica + เมนู + ปุ่มเข้าสู่ระบบ/โปรไฟล์
+   - Hero: ข้อความต้อนรับมหัศจรรย์ + ปุ่มใหญ่ 2 ปุ่ม "เปิดไพ่วันนี้" และ "เสี่ยงเซียมซี"
+   - การ์ด "ดวงประจำวัน" สั้น ๆ
+   - ส่วนรีวิว/คำชมจากผู้ใช้
+
+2. หน้าเลือกหัวข้อดูดวง
+   - การ์ดให้เลือก: ความรัก / การงาน / การเงิน / สุขภาพ (ไอคอน + ชื่อ)
+
+3. หน้าเปิดไพ่ทาโรต์
+   - แสดงสำรับไพ่คว่ำเรียงสวยงาม
+   - ผู้ใช้แตะเพื่อสุ่มและเปิดไพ่ มีอนิเมชันพลิกไพ่พร้อมประกายวิ้ง ๆ สีพาสเทล
+   - เมื่อเปิดแล้ว แสดงรูปไพ่ + ชื่อไพ่ + คำทำนาย
+   - ผู้ใช้ฟรีเปิดได้แค่ใบเดียว/วัน ไพ่ใบถัดไปจะเบลอพร้อมไอคอนกุญแจ และปุ่ม "ปลดล็อกด้วย Premium"
+
+4. หน้าเสี่ยงเซียมซี
+   - กระบอกเซียมซีให้แตะหรือ "เขย่า"
+   - มีอนิเมชันใบเซียมซีเลื่อนออกพร้อมประกายน่ารัก
+   - แสดงเลขใบ + คำทำนาย
+   - ผู้ใช้ฟรีดูคำทำนายแบบย่อ ส่วนเต็มถูกเบลอ + ปุ่ม "ปลดล็อกด้วย Premium"
+
+5. หน้าแพ็กเกจสมาชิก (Subscription / Paywall)
+   - เปรียบเทียบ Free กับ Premium เป็น 2 การ์ด
+   - Premium: เปิดไพ่ไม่จำกัด, เซียมซีเต็มรูปแบบ, คำทำนายเชิงลึก, ไม่มีโฆษณา
+   - เลือกแบบรายเดือน / รายปี (รายปีมีป้าย "คุ้มที่สุด")
+   - ปุ่ม "สมัคร Premium"
+
+6. หน้าชำระเงิน
+   - สรุปแพ็กเกจที่เลือก + ราคา
+   - เลือกวิธีชำระเงิน (บัตรเครดิต / พร้อมเพย์)
+   - ปุ่ม "ยืนยันการสมัคร"
+
+7. หน้าสมัครสำเร็จ
+   - ข้อความยินดีต้อนรับสู่ Premium พร้อมเอฟเฟกต์ประกายวิ้งสีพาสเทล
+   - ปุ่ม "เริ่มเปิดไพ่เลย"
+
+8. หน้าโปรไฟล์ / ประวัติ
+   - สถานะสมาชิก (Free / Premium)
+   - ประวัติไพ่และเซียมซีที่เคยเปิด
+
+[ระบบ Subscription — สำคัญ]
+- เนื้อหาพรีเมียม (ไพ่ใบเพิ่ม, คำทำนายเต็ม, เซียมซีไม่จำกัด) ให้แสดงสถานะ "ล็อก" ด้วยการเบลอ + ไอคอนกุญแจ
+- กดที่เนื้อหาที่ล็อก → เด้งไปหน้าแพ็กเกจสมาชิก
+- หลังสมัครสำเร็จ เนื้อหาทั้งหมดปลดล็อก
+
+[อินเทอร์แอคชัน / อนิเมชัน]
+- ปุ่มและการ์ดมี hover/tap effect เรืองแสงนุ่มนวลโทนพาสเทล
+- อนิเมชันพลิกไพ่และใบเซียมซีเลื่อนออก มีประกายวิ้งน่ารัก
+- ทำให้กดข้ามหน้าได้จริงตาม flow ด้านบน (clickable prototype)
+
+[ข้อกำหนดรวม]
+- ใช้สไตล์ปุ่ม การ์ด ฟอนต์ สี และระยะห่างชุดเดียวกันทุกหน้า (consistent design system)
+- ออกแบบ 2 ขนาด: เวอร์ชันมือถือ และเวอร์ชันเว็บ (desktop) ที่จัด layout ให้เหมาะกับจอกว้าง
+- โทนรวมต้องสว่าง อ่อนโยน พาสเทล น่ารัก ไม่มืดหรือทึบ
+- ปุ่มหลัก ("เปิดไพ่", "เสี่ยงเซียมซี", "สมัคร Premium") ต้องเด่นชัดที่สุด`},
+
+    {tab:'สั่งแก้ (refine)', text:
+`พิมพ์ต่อทีละจุด ไม่ต้องรื้อใหม่:
+
+ทำพื้นหลังและทุกองค์ประกอบให้สว่างและพาสเทลขึ้นอีก ลดความเข้มของสีม่วงลง
+เพิ่มประกายวิ้งและดาวน้อย ๆ ให้มากขึ้น
+ทำอนิเมชันพลิกไพ่ให้ลื่นและน่ารักขึ้น
+ทำให้กดข้ามหน้าได้จริงตาม flow (clickable prototype)
+ทำเวอร์ชันมือถือเพิ่มจากเวอร์ชันเว็บ`},
+  ];
+  let active=0;
+  const modal=document.getElementById('fmPromptModal');
+  const tabsEl=document.getElementById('fmTabs');
+  const codeEl=document.getElementById('fmCode');
+  const toast=document.getElementById('fmToast');
+  PROMPTS.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.className='pm-tab'+(i===0?' active':'');b.textContent=p.tab;b.addEventListener('click',()=>{active=i;render();});tabsEl.appendChild(b);});
+  function render(){codeEl.textContent=PROMPTS[active].text;tabsEl.querySelectorAll('.pm-tab').forEach((b,i)=>b.classList.toggle('active',i===active));}
+  function showToast(){toast.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>toast.classList.remove('show'),1500);}
+  function copyText(txt){if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(showToast).catch(()=>fb(txt));}else fb(txt);}
+  function fb(txt){const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');showToast();}catch(e){}document.body.removeChild(ta);}
+  window.openFmPrompts=function(){render();modal.classList.add('open');};
+  window.closeFmPrompts=function(){modal.classList.remove('open');};
+  document.getElementById('fmCopy').addEventListener('click',()=>copyText(PROMPTS[active].text));
+  modal.addEventListener('click',e=>{if(e.target===modal)closeFmPrompts();});
 })();
 </script>
 </body>

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMDAY — Design System · Live Token Playground ☕</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&family=Mali:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* =========================================================
+     PLAYGROUND CHROME  (ใช้ตัวแปร --ui-* แยกจาก design tokens
+     ของ SUMDAY เพื่อไม่ให้การลากสไลเดอร์ไปเปลี่ยน UI ของเครื่องมือ)
+     ========================================================= */
+  :root{
+    --ui-bg:#0F1117; --ui-panel:#171A22; --ui-panel-2:#1F2330;
+    --ui-line:#2A2F3D; --ui-text:#E6E8EE; --ui-text-soft:#9AA1B2;
+    --ui-text-mut:#646B7E; --ui-acc:#7C8CFF; --ui-acc-2:#FF8A65;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--ui-bg);color:var(--ui-text);
+    -webkit-font-smoothing:antialiased;line-height:1.55;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  ::-webkit-scrollbar{width:9px;height:9px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:#333a4a;border-radius:5px;}
+  ::-webkit-scrollbar-thumb:hover{background:#475067;}
+
+  /* ---------- top bar ---------- */
+  .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    padding:14px clamp(16px,3vw,30px);background:rgba(15,17,23,.86);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--ui-line);}
+  .tb-burger{width:38px;height:38px;border-radius:10px;border:1px solid var(--ui-line);background:var(--ui-panel-2);
+    color:var(--ui-text);font-size:17px;display:grid;place-items:center;transition:all .15s;flex:0 0 auto;}
+  .tb-burger:hover{border-color:var(--ui-acc);color:#fff;}
+  .tb-logo{display:flex;align-items:center;gap:10px;}
+  .tb-logo .sq{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--ui-acc),var(--ui-acc-2));
+    display:grid;place-items:center;font-size:17px;}
+  .tb-logo b{font-family:'Poppins';font-size:16px;letter-spacing:.01em;}
+  .tb-logo small{display:block;font-size:11px;color:var(--ui-text-mut);font-weight:500;letter-spacing:.04em;}
+  .tb-spacer{flex:1;}
+  .tb-note{font-size:12.5px;color:var(--ui-text-soft);max-width:430px;line-height:1.45;}
+  .tb-note b{color:var(--ui-text);}
+
+  /* ---------- layout ---------- */
+  .layout{display:grid;grid-template-columns:330px 1fr;align-items:start;transition:grid-template-columns .28s ease;}
+  .layout.collapsed{grid-template-columns:0 1fr;}
+  .layout.collapsed .controls{transform:translateX(-100%);opacity:0;pointer-events:none;border-right-color:transparent;}
+  @media(max-width:1080px){.layout{grid-template-columns:1fr;}.layout.collapsed{grid-template-columns:1fr;}
+    .layout.collapsed .controls{display:none;}}
+
+  /* ---------- controls panel ---------- */
+  .controls{position:sticky;top:64px;align-self:start;height:calc(100vh - 64px);overflow-y:auto;
+    background:var(--ui-panel);border-right:1px solid var(--ui-line);padding:20px 18px 40px;overflow-x:hidden;
+    transition:transform .28s ease,opacity .2s ease;}
+  @media(max-width:1080px){.controls{position:relative;top:0;height:auto;border-right:none;border-bottom:1px solid var(--ui-line);}}
+  .cg{margin-bottom:24px;}
+  .cg-h{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ui-text-mut);margin-bottom:13px;}
+  .cg-h .ln{flex:1;height:1px;background:var(--ui-line);}
+
+  /* presets */
+  .presets{display:flex;flex-wrap:wrap;gap:8px;}
+  .preset{display:flex;align-items:center;gap:7px;padding:7px 12px;border-radius:30px;border:1px solid var(--ui-line);
+    background:var(--ui-panel-2);font-size:12.5px;font-weight:600;color:var(--ui-text-soft);transition:all .15s;}
+  .preset:hover{border-color:#475067;color:var(--ui-text);transform:translateY(-1px);}
+  .preset .dots{display:flex;}
+  .preset .dots i{width:11px;height:11px;border-radius:50%;display:block;margin-left:-3px;border:1.5px solid var(--ui-panel-2);}
+  .preset.active{border-color:var(--ui-acc);color:#fff;background:rgba(124,140,255,.12);}
+
+  /* color rows */
+  .crow{display:flex;align-items:center;gap:11px;padding:6px 0;}
+  .crow label{flex:1;font-size:13px;color:var(--ui-text-soft);}
+  .crow label code{font-family:'Inter',ui-monospace,monospace;font-size:11px;color:var(--ui-text-mut);display:block;margin-top:1px;}
+  .swatch{position:relative;width:38px;height:30px;border-radius:9px;overflow:hidden;border:1px solid var(--ui-line);flex:0 0 auto;}
+  .swatch input[type=color]{position:absolute;inset:-6px;width:150%;height:150%;border:none;padding:0;cursor:pointer;background:none;}
+  .hex{font-family:'Inter',monospace;font-size:11.5px;color:var(--ui-text-soft);width:64px;text-align:right;}
+
+  /* sliders */
+  .srow{padding:9px 0;}
+  .srow .lab{display:flex;justify-content:space-between;font-size:13px;color:var(--ui-text-soft);margin-bottom:7px;}
+  .srow .lab b{color:var(--ui-text);font-family:'Inter',monospace;font-weight:600;font-size:12.5px;}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:5px;
+    background:var(--ui-panel-2);outline:none;cursor:pointer;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+    background:var(--ui-acc);border:3px solid var(--ui-panel);box-shadow:0 2px 8px rgba(0,0,0,.4);}
+  input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--ui-acc);border:3px solid var(--ui-panel);}
+
+  /* select */
+  .sel{width:100%;padding:9px 12px;border-radius:10px;background:var(--ui-panel-2);border:1px solid var(--ui-line);
+    color:var(--ui-text);font-size:13px;font-family:inherit;}
+
+  .reset-btn{width:100%;padding:11px;border-radius:11px;background:var(--ui-panel-2);border:1px solid var(--ui-line);
+    color:var(--ui-text-soft);font-weight:600;font-size:13px;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:7px;}
+  .reset-btn:hover{border-color:var(--ui-acc-2);color:#fff;}
+
+  /* =========================================================
+     STAGE  (พื้นที่พรีวิว — รับค่า design tokens สด)
+     ========================================================= */
+  #stage{
+    /* ===== DESIGN TOKENS ของ SUMDAY (จะถูก JS อัปเดตสด) ===== */
+    --bg:#FAF4EA; --surface:#FFFFFF; --surface-2:#FBF5EB;
+    --border:#ECE0CD; --border-2:#E0D1B8;
+    --ink:#3E3127; --ink-soft:#6E5D4B; --muted:#A1907A;
+    --primary:#2E42C9; --primary-soft:#EEF0FC;
+    --accent:#EC6450; --gold:#F2B233; --green:#3FAE7E; --yellow:#FFCE1F;
+    --r:18px; --r-lg:26px; --fs:16px; --head:'Fredoka';
+    --sh-sm:0 4px 16px rgba(86,62,38,.07);
+    --sh:0 16px 44px rgba(86,62,38,.13);
+
+    background:var(--bg);color:var(--ink);min-height:calc(100vh - 64px);
+    padding:clamp(20px,3vw,38px);font-size:var(--fs);transition:background .3s;
+  }
+  #stage .stage-head{margin-bottom:26px;}
+  #stage .stage-head .k{font-family:var(--head);font-weight:600;color:var(--accent);letter-spacing:.14em;
+    text-transform:uppercase;font-size:13px;}
+  #stage .stage-head h2{font-family:var(--head);font-weight:700;font-size:clamp(26px,3.4vw,38px);line-height:1.05;
+    color:var(--ink);margin-top:4px;}
+  #stage .stage-head p{color:var(--ink-soft);font-size:14.5px;margin-top:6px;max-width:560px;}
+
+  .block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+    padding:clamp(16px,2vw,24px);box-shadow:var(--sh-sm);margin-bottom:20px;}
+  .block > .bh{display:flex;align-items:center;gap:9px;margin-bottom:16px;}
+  .block > .bh .n{font-family:var(--head);font-weight:600;font-size:18px;color:var(--ink);}
+  .block > .bh .tk{font-family:'Inter',monospace;font-size:11px;color:var(--muted);background:var(--surface-2);
+    padding:3px 9px;border-radius:30px;border:1px solid var(--border);}
+
+  /* token swatches */
+  .tokrow{display:flex;flex-wrap:wrap;gap:12px;}
+  .tok{width:92px;}
+  .tok .chip{height:54px;border-radius:14px;border:1px solid rgba(0,0,0,.06);box-shadow:var(--sh-sm);}
+  .tok .nm{font-size:12px;font-weight:600;color:var(--ink);margin-top:7px;}
+  .tok .hx{font-family:'Inter',monospace;font-size:10.5px;color:var(--muted);}
+
+  /* SUMDAY components (faithful to coffee-landing.html) */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15.5px;
+    padding:13px 26px;border-radius:50px;transition:transform .16s ease,box-shadow .16s ease,background .16s;white-space:nowrap;}
+  .btn-primary{background:var(--primary);color:#fff;box-shadow:0 8px 20px rgba(46,66,201,.28);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-accent{background:var(--accent);color:#fff;box-shadow:0 8px 20px rgba(236,100,80,.28);}
+  .btn-accent:hover{transform:translateY(-2px);}
+  .btn-ghost{background:var(--surface);color:var(--ink);border:1.5px solid var(--border-2);box-shadow:var(--sh-sm);}
+  .btn-ghost:hover{transform:translateY(-2px);border-color:var(--ink-soft);}
+  .btn-green{background:var(--green);color:#fff;box-shadow:0 8px 20px rgba(63,174,126,.28);}
+  .btn-green:hover{transform:translateY(-2px);}
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
+  .btn-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+
+  .badge-row{display:flex;flex-wrap:wrap;gap:11px;}
+  .b-badge{font-family:var(--head);font-weight:600;font-size:12px;padding:5px 13px;border-radius:50px;
+    background:#fff;color:var(--ink);box-shadow:var(--sh-sm);border:1px solid var(--border);}
+  .b-badge.hot{background:var(--accent);color:#fff;border-color:transparent;}
+  .b-badge.new{background:var(--primary);color:#fff;border-color:transparent;}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:10px;}
+  .tab{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14.5px;padding:9px 18px;border-radius:50px;
+    background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);box-shadow:var(--sh-sm);transition:all .15s;}
+  .tab:hover{border-color:var(--border-2);color:var(--ink);}
+  .tab.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 8px 18px rgba(46,66,201,.26);}
+
+  .price-grid{display:flex;flex-wrap:wrap;gap:9px;}
+  .price-chip{padding:13px 18px;border-radius:14px;background:var(--surface-2);border:1.5px solid transparent;text-align:center;
+    font-family:var(--head);font-weight:700;font-size:18px;color:var(--ink);transition:all .15s;}
+  .price-chip:hover{border-color:var(--border-2);}
+  .price-chip.active{background:var(--primary);border-color:var(--primary);color:#fff;box-shadow:0 6px 14px rgba(46,66,201,.26);}
+
+  .stepper{display:inline-flex;align-items:center;border:1.5px solid var(--border-2);border-radius:50px;overflow:hidden;background:var(--surface-2);}
+  .stepper button{width:46px;height:46px;font-size:22px;font-weight:600;color:var(--ink);transition:background .14s;}
+  .stepper button:hover{background:var(--border);}
+  .stepper .qv{min-width:46px;text-align:center;font-family:var(--head);font-weight:700;font-size:19px;}
+
+  /* menu cards */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:18px;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-sm);
+    cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;display:flex;flex-direction:column;}
+  .card:hover{transform:translateY(-6px);box-shadow:var(--sh);}
+  .card .thumb{position:relative;aspect-ratio:1/1;overflow:hidden;background:var(--surface-2);display:grid;place-items:center;font-size:64px;}
+  .card .badge{position:absolute;top:11px;left:11px;font-family:var(--head);font-weight:600;font-size:11px;padding:4px 11px;border-radius:50px;background:#fff;color:var(--ink);box-shadow:var(--sh-sm);}
+  .card .badge.hot{background:var(--accent);color:#fff;} .card .badge.new{background:var(--primary);color:#fff;}
+  .card .add{position:absolute;bottom:11px;right:11px;width:38px;height:38px;border-radius:50%;background:var(--primary);color:#fff;
+    font-size:23px;line-height:1;display:grid;place-items:center;box-shadow:0 6px 14px rgba(46,66,201,.34);transition:transform .15s,background .15s;}
+  .card .add:hover{background:var(--accent);transform:scale(1.1);}
+  .card .body{padding:14px 15px 16px;display:flex;flex-direction:column;gap:2px;flex:1;}
+  .card .body h3{font-size:16.5px;font-weight:600;line-height:1.18;color:var(--ink);}
+  .card .body .th{font-size:13px;color:var(--muted);}
+  .card .body .price{margin-top:auto;padding-top:9px;font-family:var(--head);font-weight:700;font-size:20px;color:var(--primary);}
+
+  /* mini header sample */
+  .mini-head{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;background:var(--yellow);
+    border-radius:var(--r);border:1px solid rgba(62,49,39,.14);}
+  .mini-head .brand{font-family:var(--head);font-weight:700;font-size:20px;color:var(--ink);}
+  .mini-head .cart{display:inline-flex;align-items:center;gap:8px;background:rgba(62,49,39,.82);color:#fff;font-weight:600;
+    font-size:14px;padding:10px 18px;border-radius:50px;}
+
+  /* ---------- export / AI panel ---------- */
+  .export{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:760px){.export{grid-template-columns:1fr;}}
+  .codebox{background:#11131A;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+  .codebox .ch{display:flex;align-items:center;gap:8px;padding:11px 15px;border-bottom:1px solid #232838;background:#0D0F15;}
+  .codebox .ch .t{font-size:12.5px;font-weight:700;color:#C9D0E0;letter-spacing:.02em;flex:1;}
+  .codebox .ch .copy{font-size:12px;font-weight:600;color:#9AA1B2;background:#1B2030;border:1px solid #2A3142;
+    padding:5px 12px;border-radius:8px;transition:all .15s;}
+  .codebox .ch .copy:hover{color:#fff;border-color:var(--ui-acc);}
+  .codebox pre{margin:0;padding:15px;overflow:auto;max-height:340px;}
+  .codebox code{font-family:'Inter',ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.7;color:#C9D0E0;white-space:pre;}
+  .codebox code .c{color:#6B7488;} .codebox code .v{color:#FFB088;} .codebox code .p{color:#8AB4FF;}
+
+  .hint{display:flex;gap:10px;background:rgba(124,140,255,.08);border:1px solid rgba(124,140,255,.22);
+    border-radius:14px;padding:13px 16px;font-size:13px;color:var(--ui-text-soft);line-height:1.6;margin-bottom:18px;}
+  .hint b{color:var(--ui-text);}
+  .hint .ic{font-size:17px;flex:0 0 auto;}
+
+  /* toast */
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#fff;color:#11131A;
+    padding:12px 22px;border-radius:30px;font-weight:600;font-size:13.5px;box-shadow:0 14px 40px rgba(0,0,0,.4);
+    opacity:0;pointer-events:none;transition:all .25s;z-index:100;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .section-pad{padding:clamp(20px,3vw,38px);}
+  .sub-h{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ui-text-mut);
+    margin:0 0 14px;display:flex;align-items:center;gap:9px;}
+  .sub-h .ln{flex:1;height:1px;background:var(--ui-line);}
+</style>
+</head>
+<body>
+
+  <!-- ===== TOP BAR ===== -->
+  <div class="topbar">
+    <button class="tb-burger" id="burger" aria-label="เปิด/ปิดแผงควบคุม" title="เปิด/ปิดแผงควบคุม">☰</button>
+    <div class="tb-logo">
+      <span class="sq">☕</span>
+      <div><b>SUMDAY Design System</b><small>Live Token Playground · DevNest</small></div>
+    </div>
+    <div class="tb-spacer"></div>
+    <div class="tb-note">ลาก/เลือก <b>token</b> ทางซ้าย → component จริงทั้งหมดเปลี่ยนพร้อมกัน นี่คือหัวใจของ design system:
+      <b>แก้ที่เดียว เปลี่ยนทั้งระบบ</b></div>
+  </div>
+
+  <div class="layout collapsed" id="layout">
+
+    <!-- ===== CONTROLS ===== -->
+    <aside class="controls">
+
+      <div class="cg">
+        <div class="cg-h">🎨 Theme Presets <span class="ln"></span></div>
+        <div class="presets" id="presets"></div>
+      </div>
+
+      <div class="cg">
+        <div class="cg-h">Brand Colors <span class="ln"></span></div>
+        <div id="brandColors"></div>
+      </div>
+
+      <div class="cg">
+        <div class="cg-h">Neutrals <span class="ln"></span></div>
+        <div id="neutralColors"></div>
+      </div>
+
+      <div class="cg">
+        <div class="cg-h">Shape · Radius <span class="ln"></span></div>
+        <div class="srow">
+          <div class="lab"><span>มุมโค้งเล็ก <code>--r</code></span><b id="rVal">18px</b></div>
+          <input type="range" id="r" min="0" max="40" value="18">
+        </div>
+        <div class="srow">
+          <div class="lab"><span>มุมโค้งใหญ่ <code>--r-lg</code></span><b id="rlgVal">26px</b></div>
+          <input type="range" id="rlg" min="0" max="50" value="26">
+        </div>
+      </div>
+
+      <div class="cg">
+        <div class="cg-h">Elevation · Shadow <span class="ln"></span></div>
+        <div class="srow">
+          <div class="lab"><span>ความเข้มเงา</span><b id="shVal">100%</b></div>
+          <input type="range" id="sh" min="0" max="220" value="100">
+        </div>
+      </div>
+
+      <div class="cg">
+        <div class="cg-h">Typography <span class="ln"></span></div>
+        <div class="srow">
+          <div class="lab"><span>ขนาดฐาน <code>--fs</code></span><b id="fsVal">16px</b></div>
+          <input type="range" id="fs" min="13" max="20" value="16">
+        </div>
+        <div style="margin-top:6px;">
+          <label style="font-size:13px;color:var(--ui-text-soft);display:block;margin-bottom:7px;">ฟอนต์หัวข้อ <code style="font-family:'Inter',monospace;font-size:11px;color:var(--ui-text-mut);">--head</code></label>
+          <select class="sel" id="head">
+            <option value="Fredoka">Fredoka (default)</option>
+            <option value="Poppins">Poppins</option>
+            <option value="Mali">Mali</option>
+            <option value="IBM Plex Sans Thai">IBM Plex Sans Thai</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="reset-btn" id="reset">↺ คืนค่าเริ่มต้น SUMDAY</button>
+    </aside>
+
+    <!-- ===== STAGE (LIVE PREVIEW) ===== -->
+    <main id="stage">
+      <div class="stage-head">
+        <div class="k">Live Preview</div>
+        <h2>เมนูเครื่องดื่ม · SUMDAY</h2>
+        <p>ทุกชิ้นด้านล่างวาดจาก <b>token ชุดเดียวกัน</b> — ลองเปลี่ยนสี/มุมโค้ง/เงาทางซ้าย แล้วดูว่ามันขยับพร้อมกันทั้งหน้า</p>
+      </div>
+
+      <!-- color tokens -->
+      <div class="block">
+        <div class="bh"><span class="n">1 · Color Tokens</span><span class="tk">DNA ของแบรนด์</span></div>
+        <div class="tokrow" id="tokrow"></div>
+      </div>
+
+      <!-- mini header -->
+      <div class="block">
+        <div class="bh"><span class="n">2 · Header</span><span class="tk">--yellow · --r</span></div>
+        <div class="mini-head">
+          <span class="brand">SUMDAY ☕</span>
+          <span class="cart">🛒 ตะกร้า · 2</span>
+        </div>
+      </div>
+
+      <!-- buttons -->
+      <div class="block">
+        <div class="bh"><span class="n">3 · Buttons</span><span class="tk">--primary · --accent · --green · radius 50px</span></div>
+        <div class="btn-row">
+          <button class="btn btn-primary">สั่งเลย</button>
+          <button class="btn btn-accent">โปรโมชั่น</button>
+          <button class="btn btn-green">✓ ชำระเงิน</button>
+          <button class="btn btn-ghost">ดูเมนู</button>
+          <button class="btn btn-primary" disabled>หมด (disabled)</button>
+        </div>
+      </div>
+
+      <!-- badges + tabs -->
+      <div class="block">
+        <div class="bh"><span class="n">4 · Badges &amp; Tabs</span><span class="tk">--accent · --primary</span></div>
+        <div class="badge-row" style="margin-bottom:18px;">
+          <span class="b-badge hot">🔥 ฮิต</span>
+          <span class="b-badge new">ใหม่</span>
+          <span class="b-badge">แนะนำ</span>
+        </div>
+        <div class="tabs">
+          <span class="tab active">☕ ทั้งหมด</span>
+          <span class="tab">กาแฟ</span>
+          <span class="tab">นม</span>
+          <span class="tab">ชา</span>
+          <span class="tab">โซดา</span>
+        </div>
+      </div>
+
+      <!-- price chips + stepper -->
+      <div class="block">
+        <div class="bh"><span class="n">5 · Selectors</span><span class="tk">price-chip · stepper</span></div>
+        <div class="price-grid" style="margin-bottom:20px;">
+          <span class="price-chip">ร้อน</span>
+          <span class="price-chip active">เย็น</span>
+          <span class="price-chip">ปั่น</span>
+          <span class="price-chip">ขวด</span>
+        </div>
+        <div class="stepper">
+          <button>−</button><span class="qv">2</span><button>+</button>
+        </div>
+      </div>
+
+      <!-- menu cards -->
+      <div class="block">
+        <div class="bh"><span class="n">6 · Menu Cards</span><span class="tk">--surface · --r-lg · --sh</span></div>
+        <div class="grid" id="cards"></div>
+      </div>
+
+      <!-- EXPORT + AI -->
+      <div class="section-pad" style="padding:8px 0 0;">
+        <div class="sub-h">🤝 ส่งต่อให้เดฟ <span class="ln"></span></div>
+        <div class="export">
+          <div class="codebox">
+            <div class="ch"><span class="t">📦 tokens.css — วาง :root นี้ในโปรเจกต์</span><button class="copy" id="copyCss">คัดลอก</button></div>
+            <pre><code id="cssOut"></code></pre>
+          </div>
+          <div class="codebox">
+            <div class="ch"><span class="t">✨ Prompt สำหรับ AI</span><button class="copy" id="copyPrompt">คัดลอก</button></div>
+            <pre><code id="promptOut"></code></pre>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <div class="toast" id="toast">คัดลอกแล้ว ✓</div>
+
+<script>
+/* =========================================================
+   DESIGN TOKENS — single source of truth
+   ========================================================= */
+const DEFAULTS = {
+  // brand
+  primary:'#2E42C9', accent:'#EC6450', gold:'#F2B233', green:'#3FAE7E', yellow:'#FFCE1F',
+  // neutrals
+  bg:'#FAF4EA', surface:'#FFFFFF', ink:'#3E3127', border:'#ECE0CD',
+  // scalars
+  r:18, rlg:26, sh:100, fs:16, head:'Fredoka'
+};
+
+const BRAND = [
+  {key:'primary', label:'Primary · ปุ่มหลัก', token:'--primary'},
+  {key:'accent',  label:'Accent · โปร/ฮิต',  token:'--accent'},
+  {key:'gold',    label:'Gold · ป้ายวิ่ง',    token:'--gold'},
+  {key:'green',   label:'Green · สำเร็จ',      token:'--green'},
+  {key:'yellow',  label:'Yellow · header',     token:'--yellow'},
+];
+const NEUTRAL = [
+  {key:'bg',      label:'Background · พื้นหลัง', token:'--bg'},
+  {key:'surface', label:'Surface · การ์ด',      token:'--surface'},
+  {key:'ink',     label:'Ink · ตัวอักษร',        token:'--ink'},
+  {key:'border',  label:'Border · เส้นขอบ',      token:'--border'},
+];
+
+const PRESETS = {
+  'SUMDAY':      {...DEFAULTS},
+  'Dark Roast':  {primary:'#C8782F', accent:'#E94F37', gold:'#E0A458', green:'#5B8C5A', yellow:'#D9A441', bg:'#2A211B', surface:'#3A2E25', ink:'#F3E9DB', border:'#4D3E32', r:14, rlg:20, sh:140, fs:16, head:'Poppins'},
+  'Matcha':      {primary:'#3F7D52', accent:'#E08D3C', gold:'#C9A227', green:'#5BAE6E', yellow:'#EDD96B', bg:'#F2F4EA', surface:'#FFFFFF', ink:'#2C3327', border:'#DDE3CE', r:22, rlg:30, sh:80, fs:16, head:'Mali'},
+  'Berry Soda':  {primary:'#8B3FBF', accent:'#FF5C8A', gold:'#FFB23E', green:'#3FAE9E', yellow:'#FFD84D', bg:'#FBF0FA', surface:'#FFFFFF', ink:'#3A2440', border:'#F0DCEF', r:26, rlg:34, sh:120, fs:16, head:'Fredoka'},
+  'Mono Minimal':{primary:'#1A1A1A', accent:'#7A7A7A', gold:'#B0B0B0', green:'#4A4A4A', yellow:'#EDEDED', bg:'#FAFAFA', surface:'#FFFFFF', ink:'#1A1A1A', border:'#E4E4E4', r:6, rlg:10, sh:60, fs:16, head:'Poppins'},
+};
+
+const PRODUCTS = [
+  {emoji:'🧋', en:'Brown Sugar Milk', th:'นมสดน้ำตาลไหม้', price:'฿65', badge:'hot'},
+  {emoji:'☕', en:'Iced Espresso',    th:'เอสเพรสโซเย็น',   price:'฿55', badge:'new'},
+  {emoji:'🍵', en:'Matcha Latte',     th:'มัทฉะลาเต้',       price:'฿70', badge:''},
+];
+
+const stage = document.getElementById('stage');
+let T = {...DEFAULTS};
+
+/* ---------- color helpers ---------- */
+function hexToRgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');
+  return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+function lighten(hex,amt){const[r,g,b]=hexToRgb(hex);
+  const m=(c)=>Math.round(c+(255-c)*amt);
+  return `#${[m(r),m(g),m(b)].map(c=>c.toString(16).padStart(2,'0')).join('')}`;}
+function rgba(hex,a){const[r,g,b]=hexToRgb(hex);return `rgba(${r},${g},${b},${a})`;}
+
+/* ---------- apply tokens to the stage ---------- */
+function apply(){
+  const s = stage.style;
+  s.setProperty('--primary', T.primary);
+  s.setProperty('--primary-soft', lighten(T.primary,.90));
+  s.setProperty('--accent', T.accent);
+  s.setProperty('--gold', T.gold);
+  s.setProperty('--green', T.green);
+  s.setProperty('--yellow', T.yellow);
+  s.setProperty('--bg', T.bg);
+  s.setProperty('--surface', T.surface);
+  s.setProperty('--surface-2', lighten(T.bg,.35));
+  s.setProperty('--ink', T.ink);
+  s.setProperty('--ink-soft', lighten(T.ink,.30));
+  s.setProperty('--muted', lighten(T.ink,.55));
+  s.setProperty('--border', T.border);
+  s.setProperty('--border-2', lighten(T.border,-0.12));
+  s.setProperty('--r', T.r+'px');
+  s.setProperty('--r-lg', T.rlg+'px');
+  s.setProperty('--fs', T.fs+'px');
+  s.setProperty('--head', `'${T.head}'`);
+  const k = T.sh/100;
+  s.setProperty('--sh-sm', `0 ${4*k}px ${16*k}px ${rgba('#563E26',.07*k)}`);
+  s.setProperty('--sh', `0 ${16*k}px ${44*k}px ${rgba('#563E26',.13*k)}`);
+
+  syncControls();
+  renderTokenSwatches();
+  renderCode();
+}
+
+/* ---------- build controls ---------- */
+function colorRow(item){
+  return `<div class="crow">
+      <span class="swatch"><input type="color" data-key="${item.key}" value="${T[item.key]}"></span>
+      <label>${item.label}<code>${item.token}</code></label>
+      <span class="hex" id="hex-${item.key}">${T[item.key].toUpperCase()}</span>
+    </div>`;
+}
+document.getElementById('brandColors').innerHTML = BRAND.map(colorRow).join('');
+document.getElementById('neutralColors').innerHTML = NEUTRAL.map(colorRow).join('');
+
+document.querySelectorAll('input[type=color]').forEach(inp=>{
+  inp.addEventListener('input', e=>{
+    T[e.target.dataset.key] = e.target.value;
+    clearActivePreset();
+    apply();
+  });
+});
+
+const ranges = {r:'rVal', rlg:'rlgVal', sh:'shVal', fs:'fsVal'};
+Object.keys(ranges).forEach(id=>{
+  document.getElementById(id).addEventListener('input', e=>{
+    T[id] = +e.target.value; clearActivePreset(); apply();
+  });
+});
+document.getElementById('head').addEventListener('change', e=>{
+  T.head = e.target.value; clearActivePreset(); apply();
+});
+
+/* presets */
+const presetsEl = document.getElementById('presets');
+presetsEl.innerHTML = Object.entries(PRESETS).map(([name,p])=>`
+  <button class="preset${name==='SUMDAY'?' active':''}" data-preset="${name}">
+    <span class="dots">
+      <i style="background:${p.primary}"></i><i style="background:${p.accent}"></i><i style="background:${p.bg}"></i>
+    </span>${name}</button>`).join('');
+presetsEl.querySelectorAll('.preset').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    T = {...PRESETS[b.dataset.preset]};
+    presetsEl.querySelectorAll('.preset').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    apply();
+  });
+});
+function clearActivePreset(){presetsEl.querySelectorAll('.preset').forEach(x=>x.classList.remove('active'));}
+
+document.getElementById('reset').addEventListener('click', ()=>{
+  T = {...DEFAULTS};
+  presetsEl.querySelectorAll('.preset').forEach(x=>x.classList.toggle('active', x.dataset.preset==='SUMDAY'));
+  apply();
+});
+
+/* keep control widgets in sync with T (after presets/reset) */
+function syncControls(){
+  document.querySelectorAll('input[type=color]').forEach(inp=>{
+    inp.value = T[inp.dataset.key];
+    document.getElementById('hex-'+inp.dataset.key).textContent = T[inp.dataset.key].toUpperCase();
+  });
+  document.getElementById('r').value=T.r;   document.getElementById('rVal').textContent=T.r+'px';
+  document.getElementById('rlg').value=T.rlg;document.getElementById('rlgVal').textContent=T.rlg+'px';
+  document.getElementById('sh').value=T.sh;  document.getElementById('shVal').textContent=T.sh+'%';
+  document.getElementById('fs').value=T.fs;  document.getElementById('fsVal').textContent=T.fs+'px';
+  document.getElementById('head').value=T.head;
+}
+
+/* ---------- token swatches ---------- */
+function renderTokenSwatches(){
+  const list = [
+    ['--primary',T.primary],['--accent',T.accent],['--gold',T.gold],['--green',T.green],
+    ['--yellow',T.yellow],['--bg',T.bg],['--surface',T.surface],['--ink',T.ink],['--border',T.border]
+  ];
+  document.getElementById('tokrow').innerHTML = list.map(([n,c])=>`
+    <div class="tok">
+      <div class="chip" style="background:${c}"></div>
+      <div class="nm">${n}</div><div class="hx">${c.toUpperCase()}</div>
+    </div>`).join('');
+}
+
+/* ---------- menu cards ---------- */
+document.getElementById('cards').innerHTML = PRODUCTS.map(p=>`
+  <div class="card">
+    <div class="thumb">${p.emoji}${p.badge?`<span class="badge ${p.badge}">${p.badge==='hot'?'🔥 ฮิต':'ใหม่'}</span>`:''}<span class="add">+</span></div>
+    <div class="body"><h3>${p.th}</h3><span class="th">${p.en}</span><span class="price">${p.price}</span></div>
+  </div>`).join('');
+
+/* ---------- export: CSS + AI prompt ---------- */
+function renderCode(){
+  const k = (T.sh/100);
+  const css =
+`<span class="c">/* SUMDAY · design tokens */</span>
+<span class="p">:root</span> {
+  <span class="p">--primary</span>: <span class="v">${T.primary}</span>;
+  <span class="p">--accent</span>:  <span class="v">${T.accent}</span>;
+  <span class="p">--gold</span>:    <span class="v">${T.gold}</span>;
+  <span class="p">--green</span>:   <span class="v">${T.green}</span>;
+  <span class="p">--yellow</span>:  <span class="v">${T.yellow}</span>;
+  <span class="p">--bg</span>:      <span class="v">${T.bg}</span>;
+  <span class="p">--surface</span>: <span class="v">${T.surface}</span>;
+  <span class="p">--ink</span>:     <span class="v">${T.ink}</span>;
+  <span class="p">--border</span>:  <span class="v">${T.border}</span>;
+  <span class="p">--r</span>:       <span class="v">${T.r}px</span>;
+  <span class="p">--r-lg</span>:    <span class="v">${T.rlg}px</span>;
+  <span class="p">--fs</span>:      <span class="v">${T.fs}px</span>;
+  <span class="p">--font-head</span>: <span class="v">'${T.head}'</span>;
+}`;
+  document.getElementById('cssOut').innerHTML = css;
+
+  const prompt =
+`นี่คือ design tokens ของแบรนด์ SUMDAY:
+
+--primary: ${T.primary}   /* ปุ่มหลัก/ราคา */
+--accent:  ${T.accent}    /* โปรโมชั่น/ป้ายฮิต */
+--green:   ${T.green}     /* ปุ่มสำเร็จ */
+--yellow:  ${T.yellow}    /* แถบ header */
+--bg:      ${T.bg}        /* พื้นหลัง */
+--surface: ${T.surface}   /* การ์ด */
+--ink:     ${T.ink}       /* ตัวอักษร */
+--border:  ${T.border}    /* เส้นขอบ */
+--r: ${T.r}px · --r-lg: ${T.rlg}px · ปุ่ม radius 50px
+ฟอนต์หัวข้อ: ${T.head} · เนื้อหา: IBM Plex Sans Thai
+
+โจทย์: สร้าง component "การ์ดโปรโมชั่นรายวัน" เป็น HTML+CSS
+กติกา: ใช้เฉพาะ token ด้านบนผ่าน var(--token) เท่านั้น
+ห้ามใส่สี/รัศมีใหม่นอก token เพื่อให้กลมกลืนกับทั้งระบบ`;
+  document.getElementById('promptOut').textContent = prompt;
+}
+
+/* ---------- copy buttons ---------- */
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1600);}
+function copyText(txt){navigator.clipboard.writeText(txt).then(()=>toast('คัดลอกแล้ว ✓')).catch(()=>toast('คัดลอกไม่ได้'));}
+document.getElementById('copyCss').addEventListener('click', ()=>{
+  copyText(document.getElementById('cssOut').textContent);
+});
+document.getElementById('copyPrompt').addEventListener('click', ()=>{
+  copyText(document.getElementById('promptOut').textContent);
+});
+
+/* ---------- sidebar toggle ---------- */
+document.getElementById('burger').addEventListener('click', ()=>{
+  document.getElementById('layout').classList.toggle('collapsed');
+});
+
+/* ---------- go ---------- */
+apply();
+</script>
+</body>
+</html>
