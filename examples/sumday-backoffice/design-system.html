@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMDAY · Back-office Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   SUMDAY — Back-office Design System
+   Single source of truth · Light theme · Thai-first
+   ========================================================= */
+:root{
+  /* ---- Brand palette (5 core) ---- */
+  --sandy:#FC9F5B;     /* Sandy Brown   */
+  --apricot:#FBD1A2;   /* Apricot Cream */
+  --vanilla:#ECE4B7;   /* Vanilla Custard */
+  --aqua:#7DCFB6;      /* Pearl Aqua    */
+  --emerald:#33CA7F;   /* Emerald       */
+
+  /* ---- Semantic roles ---- */
+  --primary:#33CA7F;          /* main action — accept / confirm */
+  --primary-strong:#23A866;   /* hover / pressed */
+  --primary-soft:#E4F7EE;     /* tinted surface */
+  --on-primary:#0C2C1D;
+
+  --accent:#FC9F5B;           /* secondary highlight */
+  --accent-strong:#F1812F;
+  --accent-soft:#FFEEDD;
+
+  /* ---- Status (orders) ---- */
+  --warning:#FC9F5B;  --warning-soft:#FFEEDD;  --warning-ink:#9A4E11;  /* รอรับ */
+  --info:#2BB39A;     --info-soft:#DCF4EE;     --info-ink:#0F5A4D;     /* กำลังทำ */
+  --success:#33CA7F;  --success-soft:#E4F7EE;  --success-ink:#0F6B41;  /* เสร็จแล้ว */
+  --muted-s:#8B978E;  --muted-soft:#EEF1ED;    --muted-ink:#525B53;    /* ยกเลิก */
+  --danger:#EC5B57;   --danger-soft:#FDE7E6;   --danger-ink:#A02B27;   /* ปฏิเสธ/ลบ */
+
+  /* ---- Neutrals (warm-tinted) ---- */
+  --bg:#FBFAF5;
+  --surface:#FFFFFF;
+  --surface-2:#F7F4EB;
+  --ink:#23332B;
+  --ink-soft:#5A675F;
+  --muted:#8B978E;
+  --border:#ECE6D8;
+  --border-2:#E0D9C7;
+
+  /* ---- Scales ---- */
+  --r-sm:8px; --r:12px; --r-lg:18px; --r-xl:26px; --r-pill:999px;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px;
+  --sh-sm:0 1px 2px rgba(35,51,43,.06), 0 1px 3px rgba(35,51,43,.05);
+  --sh:0 6px 16px rgba(35,51,43,.08);
+  --sh-lg:0 18px 44px rgba(35,51,43,.13);
+
+  --font:'IBM Plex Sans Thai','Segoe UI',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.55;
+  -webkit-font-smoothing:antialiased;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+input,select,textarea{font-family:inherit;}
+code,.mono{font-family:var(--mono);}
+a{color:inherit;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-thumb{background:#D8D2C2;border-radius:6px;}
+::-webkit-scrollbar-thumb:hover{background:#C3BCA8;}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;
+  padding:14px clamp(16px,4vw,40px);background:rgba(251,250,245,.86);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);}
+.brand{display:flex;align-items:center;gap:11px;}
+.brand .mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--emerald),var(--aqua));
+  display:grid;place-items:center;font-size:20px;box-shadow:var(--sh-sm);}
+.brand b{font-size:17px;font-weight:700;letter-spacing:.01em;line-height:1.1;}
+.brand small{display:block;font-size:11.5px;color:var(--muted);font-weight:500;letter-spacing:.02em;}
+.tb-spacer{flex:1;}
+.tb-nav{display:flex;gap:6px;flex-wrap:wrap;}
+.tb-nav a{font-size:13px;font-weight:600;color:var(--ink-soft);padding:7px 13px;border-radius:var(--r-pill);
+  transition:all .15s;text-decoration:none;}
+.tb-nav a:hover{background:var(--surface-2);color:var(--ink);}
+@media(max-width:880px){.tb-nav{display:none;}}
+
+/* ---------- layout ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:clamp(20px,4vw,52px) clamp(16px,4vw,40px) 90px;}
+
+.hero{padding:clamp(28px,5vw,56px);border-radius:var(--r-xl);position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#FFF7EE 0%,#EAF8F1 100%);border:1px solid var(--border);margin-bottom:var(--sp-7);}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(51,202,127,.22),transparent 70%);}
+.hero .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent-strong);}
+.hero h1{font-size:clamp(28px,5vw,46px);font-weight:700;line-height:1.08;margin:10px 0 12px;max-width:16ch;}
+.hero p{font-size:clamp(15px,1.6vw,17px);color:var(--ink-soft);max-width:62ch;}
+.hero .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
+.hero .pill{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);
+  padding:8px 15px;border-radius:var(--r-pill);font-size:13px;font-weight:600;box-shadow:var(--sh-sm);}
+.hero .pill i{width:13px;height:13px;border-radius:50%;display:block;}
+
+/* ---------- section ---------- */
+section{margin-bottom:var(--sp-7);scroll-margin-top:80px;}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:var(--sp-5);flex-wrap:wrap;}
+.sec-head .no{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent-strong);}
+.sec-head h2{font-size:clamp(20px,2.6vw,27px);font-weight:700;}
+.sec-head p{flex-basis:100%;color:var(--ink-soft);font-size:14.5px;max-width:70ch;margin-top:2px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:clamp(18px,2.4vw,26px);box-shadow:var(--sh-sm);}
+.stack{display:flex;flex-direction:column;gap:var(--sp-5);}
+.cap{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:13px;}
+
+/* ---------- palette swatches ---------- */
+.palette{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--sp-4);}
+.sw{border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--border);box-shadow:var(--sh-sm);background:var(--surface);}
+.sw .chip{height:96px;display:flex;align-items:flex-end;padding:11px;}
+.sw .chip code{font-family:var(--mono);font-size:12px;font-weight:600;background:rgba(255,255,255,.78);
+  padding:3px 8px;border-radius:6px;color:#1d1d1d;}
+.sw .meta{padding:11px 13px 13px;}
+.sw .meta b{display:block;font-size:14px;font-weight:600;}
+.sw .meta span{font-size:12px;color:var(--muted);}
+
+/* token grid */
+.tok-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:var(--sp-3);}
+.tok{display:flex;align-items:center;gap:11px;padding:9px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);}
+.tok .dot{width:34px;height:34px;border-radius:9px;border:1px solid rgba(0,0,0,.06);flex:0 0 auto;}
+.tok .t b{display:block;font-family:var(--mono);font-size:12px;font-weight:600;}
+.tok .t span{font-size:11px;color:var(--muted);}
+
+/* ---------- typography sample ---------- */
+.type-row{display:flex;align-items:baseline;gap:18px;padding:13px 0;border-bottom:1px dashed var(--border);flex-wrap:wrap;}
+.type-row:last-child{border-bottom:none;}
+.type-row .lbl{flex:0 0 130px;font-family:var(--mono);font-size:12px;color:var(--muted);}
+.t-display{font-size:40px;font-weight:700;line-height:1.05;}
+.t-h1{font-size:30px;font-weight:700;}
+.t-h2{font-size:23px;font-weight:600;}
+.t-h3{font-size:18px;font-weight:600;}
+.t-body{font-size:16px;font-weight:400;}
+.t-sm{font-size:14px;font-weight:400;color:var(--ink-soft);}
+.t-cap{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.02em;}
+
+/* weights */
+.weights{display:flex;gap:22px;flex-wrap:wrap;margin-top:18px;}
+.weights div{font-size:21px;}
+.weights span{display:block;font-size:11px;font-family:var(--mono);color:var(--muted);font-weight:400;}
+
+/* ---------- spacing / radius ---------- */
+.scale-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.scale-row .box{display:flex;flex-direction:column;align-items:center;gap:7px;}
+.scale-row .box i{background:var(--accent-soft);border:1px solid var(--accent);display:block;border-radius:4px;}
+.scale-row .box code{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.radius-row{display:flex;gap:18px;flex-wrap:wrap;}
+.radius-row .rb{width:84px;height:84px;background:var(--primary-soft);border:1.5px solid var(--primary);
+  display:grid;place-items:end center;padding-bottom:7px;}
+.radius-row .rb code{font-family:var(--mono);font-size:11px;color:var(--success-ink);background:#fff;padding:1px 6px;border-radius:5px;}
+.elev-row{display:flex;gap:22px;flex-wrap:wrap;}
+.elev-row .eb{width:140px;height:90px;background:var(--surface);border-radius:var(--r);display:grid;place-items:center;
+  font-family:var(--mono);font-size:12px;color:var(--muted);}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;
+  padding:11px 22px;border-radius:var(--r-pill);transition:transform .14s,box-shadow .14s,background .14s,border-color .14s;
+  white-space:nowrap;line-height:1.2;}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--primary);color:#fff;box-shadow:0 6px 16px rgba(51,202,127,.30);}
+.btn-primary:hover{background:var(--primary-strong);}
+.btn-accent{background:var(--accent);color:#fff;box-shadow:0 6px 16px rgba(252,159,91,.32);}
+.btn-accent:hover{background:var(--accent-strong);}
+.btn-ghost{background:var(--surface);color:var(--ink);border:1.5px solid var(--border-2);}
+.btn-ghost:hover{border-color:var(--ink-soft);background:var(--surface-2);}
+.btn-soft{background:var(--primary-soft);color:var(--success-ink);}
+.btn-soft:hover{background:#D6F2E3;}
+.btn-danger{background:var(--surface);color:var(--danger-ink);border:1.5px solid var(--danger);}
+.btn-danger:hover{background:var(--danger);color:#fff;}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-sm{padding:8px 15px;font-size:13.5px;}
+.btn-lg{padding:14px 30px;font-size:16.5px;}
+.btn-icon{width:42px;height:42px;padding:0;border-radius:50%;}
+.btn-row{display:flex;flex-wrap:wrap;gap:13px;align-items:center;}
+
+/* ---------- badges / status ---------- */
+.badge{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px;
+  padding:5px 12px;border-radius:var(--r-pill);line-height:1.3;}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;}
+.badge.wait{background:var(--warning-soft);color:var(--warning-ink);}
+.badge.doing{background:var(--info-soft);color:var(--info-ink);}
+.badge.done{background:var(--success-soft);color:var(--success-ink);}
+.badge.cancel{background:var(--muted-soft);color:var(--muted-ink);}
+.badge.solid-wait{background:var(--warning);color:#fff;}
+.badge.solid-doing{background:var(--info);color:#fff;}
+.badge.solid-done{background:var(--success);color:#fff;}
+.badge.solid-cancel{background:var(--muted-s);color:#fff;}
+.badge-row{display:flex;gap:11px;flex-wrap:wrap;align-items:center;}
+
+/* ---------- form controls ---------- */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--sp-4);}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--ink-soft);}
+.input,.select,.textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border-2);border-radius:var(--r);
+  background:var(--surface);font-size:14.5px;color:var(--ink);transition:border-color .15s,box-shadow .15s;}
+.input:focus,.select:focus,.textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-soft);}
+.textarea{resize:vertical;min-height:88px;}
+.search{position:relative;}
+.search .ic{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:16px;}
+.search .input{padding-left:38px;}
+
+/* toggle */
+.toggle{position:relative;width:46px;height:26px;border-radius:var(--r-pill);background:var(--border-2);
+  transition:background .18s;flex:0 0 auto;}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;
+  box-shadow:var(--sh-sm);transition:left .18s;}
+.toggle.on{background:var(--primary);}
+.toggle.on::after{left:23px;}
+.switch-row{display:flex;align-items:center;gap:11px;font-size:14px;}
+
+/* check / radio */
+.opt{display:flex;align-items:center;gap:9px;font-size:14.5px;cursor:pointer;}
+.opt .cb{width:21px;height:21px;border-radius:6px;border:1.5px solid var(--border-2);display:grid;place-items:center;
+  color:#fff;font-size:13px;transition:all .15s;}
+.opt.on .cb{background:var(--primary);border-color:var(--primary);}
+.opt .rd{width:21px;height:21px;border-radius:50%;border:1.5px solid var(--border-2);display:grid;place-items:center;transition:all .15s;}
+.opt.on .rd{border-color:var(--primary);}
+.opt.on .rd::after{content:"";width:11px;height:11px;border-radius:50%;background:var(--primary);}
+
+/* ---------- order card (hero component) ---------- */
+.orders{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:var(--sp-4);}
+.order{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:var(--sh-sm);display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s;}
+.order:hover{transform:translateY(-3px);box-shadow:var(--sh);}
+.order .oh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 17px;
+  border-bottom:1px solid var(--border);}
+.order .oh .no{font-family:var(--mono);font-weight:600;font-size:16px;}
+.order .oh .time{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.order .ob{padding:15px 17px;flex:1;}
+.order .cust{display:flex;align-items:center;gap:10px;margin-bottom:13px;}
+.order .cust .av{width:36px;height:36px;border-radius:50%;background:var(--accent-soft);color:var(--accent-strong);
+  display:grid;place-items:center;font-weight:700;font-size:15px;flex:0 0 auto;}
+.order .cust b{font-size:14.5px;}
+.order .cust span{display:block;font-size:12px;color:var(--muted);}
+.order .items{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.order .items li{display:flex;justify-content:space-between;font-size:14px;gap:10px;}
+.order .items li .q{color:var(--accent-strong);font-weight:600;font-family:var(--mono);}
+.order .items li .nm{flex:1;}
+.order .items li .pr{color:var(--ink-soft);font-family:var(--mono);}
+.order .of{padding:14px 17px;border-top:1px solid var(--border);background:var(--surface-2);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.order .of .total{font-size:13px;color:var(--ink-soft);}
+.order .of .total b{display:block;font-size:20px;font-family:var(--mono);font-weight:600;color:var(--ink);}
+.order .of .acts{display:flex;gap:8px;}
+
+/* ---------- table ---------- */
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--r-lg);}
+table{width:100%;border-collapse:collapse;min-width:620px;}
+thead th{text-align:left;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);padding:13px 16px;background:var(--surface-2);border-bottom:1px solid var(--border);white-space:nowrap;}
+tbody td{padding:13px 16px;border-bottom:1px solid var(--border);font-size:14px;vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:var(--surface-2);}
+td .mono{font-family:var(--mono);font-weight:600;}
+.row-act{display:flex;gap:7px;}
+
+/* ---------- tabs / filter chips ---------- */
+.tabs{display:flex;gap:9px;flex-wrap:wrap;}
+.tab{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:14px;padding:8px 16px;
+  border-radius:var(--r-pill);background:var(--surface);border:1px solid var(--border);color:var(--ink-soft);transition:all .15s;}
+.tab:hover{border-color:var(--border-2);color:var(--ink);}
+.tab.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 5px 14px rgba(51,202,127,.26);}
+.tab .ct{font-family:var(--mono);font-size:12px;background:rgba(0,0,0,.08);padding:1px 7px;border-radius:var(--r-pill);}
+.tab.active .ct{background:rgba(255,255,255,.25);}
+
+/* ---------- stat cards ---------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:var(--sp-4);}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 20px;box-shadow:var(--sh-sm);}
+.stat .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:21px;margin-bottom:13px;}
+.stat .lbl{font-size:13px;color:var(--muted);font-weight:500;}
+.stat .val{font-size:29px;font-weight:700;font-family:var(--mono);line-height:1.1;margin-top:2px;}
+.stat .trend{font-size:12.5px;font-weight:600;margin-top:6px;}
+.trend.up{color:var(--success-ink);} .trend.down{color:var(--danger-ink);}
+
+/* ---------- alert ---------- */
+.alert{display:flex;gap:12px;padding:14px 16px;border-radius:var(--r);border:1px solid;align-items:flex-start;}
+.alert .ic{font-size:18px;flex:0 0 auto;line-height:1.4;}
+.alert b{font-weight:600;}
+.alert p{font-size:13.5px;margin-top:1px;}
+.alert.a-success{background:var(--success-soft);border-color:#BCE9D2;color:var(--success-ink);}
+.alert.a-warn{background:var(--warning-soft);border-color:#F8D3AE;color:var(--warning-ink);}
+.alert.a-info{background:var(--info-soft);border-color:#B7E5DB;color:var(--info-ink);}
+.alert.a-danger{background:var(--danger-soft);border-color:#F6C4C2;color:var(--danger-ink);}
+
+/* ---------- app shell preview ---------- */
+.shell{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;display:grid;
+  grid-template-columns:230px 1fr;min-height:420px;box-shadow:var(--sh);}
+@media(max-width:680px){.shell{grid-template-columns:1fr;}.shell .side{display:none;}}
+.shell .side{background:var(--ink);color:#D7E0DA;padding:20px 14px;display:flex;flex-direction:column;gap:5px;}
+.shell .side .lg{display:flex;align-items:center;gap:10px;padding:0 8px 16px;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,.09);}
+.shell .side .lg .mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--emerald),var(--aqua));
+  display:grid;place-items:center;font-size:17px;}
+.shell .side .lg b{font-size:15px;color:#fff;}
+.shell .side a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;
+  color:#AFBBB3;text-decoration:none;transition:all .14s;}
+.shell .side a:hover{background:rgba(255,255,255,.07);color:#fff;}
+.shell .side a.on{background:var(--primary);color:#fff;font-weight:600;}
+.shell .side a .ico{font-size:17px;}
+.shell .side a .pin{margin-left:auto;font-family:var(--mono);font-size:11px;background:var(--accent);color:#fff;
+  padding:1px 8px;border-radius:var(--r-pill);}
+.shell .main{background:var(--bg);padding:22px;}
+.shell .main .mh{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap;}
+.shell .main .mh h3{font-size:20px;font-weight:700;}
+.shell .main .mh .who{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;}
+.shell .main .mh .who .av{width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent-strong);
+  display:grid;place-items:center;font-weight:700;}
+
+/* ---------- tokens export ---------- */
+.codebox{background:#15201A;border-radius:var(--r-lg);overflow:hidden;border:1px solid #20302A;}
+.codebox .ch{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid #233A30;}
+.codebox .ch .t{font-size:13px;font-weight:600;color:#CFE6DA;flex:1;}
+.codebox .ch .copy{font-size:12.5px;font-weight:600;color:#9FB6AA;background:#1E2E26;border:1px solid #2C4439;
+  padding:6px 13px;border-radius:8px;transition:all .15s;}
+.codebox .ch .copy:hover{color:#fff;border-color:var(--emerald);}
+.codebox pre{margin:0;padding:18px;overflow:auto;max-height:440px;}
+.codebox code{font-family:var(--mono);font-size:12.5px;line-height:1.75;color:#CFE6DA;white-space:pre;}
+.codebox .c{color:#6E8478;} .codebox .v{color:#FFC58A;} .codebox .p{color:#7DCFB6;}
+
+/* toast */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(18px);background:var(--ink);color:#fff;
+  padding:12px 22px;border-radius:var(--r-pill);font-weight:600;font-size:14px;box-shadow:var(--sh-lg);
+  opacity:0;pointer-events:none;transition:all .25s;z-index:100;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+.foot{text-align:center;color:var(--muted);font-size:13px;padding-top:30px;border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP BAR ===== -->
+<div class="topbar">
+  <div class="brand">
+    <span class="mark">🧾</span>
+    <div><b>SUMDAY</b><small>Back-office · Design System</small></div>
+  </div>
+  <div class="tb-spacer"></div>
+  <nav class="tb-nav">
+    <a href="#palette">สี</a>
+    <a href="#type">ตัวอักษร</a>
+    <a href="#scales">สเกล</a>
+    <a href="#buttons">ปุ่ม</a>
+    <a href="#status">สถานะ</a>
+    <a href="#forms">ฟอร์ม</a>
+    <a href="#orders">ออเดอร์</a>
+    <a href="#shell">หน้าจอ</a>
+    <a href="#tokens">Tokens</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <div class="eyebrow">Design System · v1.0</div>
+    <h1>ระบบหลังบ้านรับออเดอร์ SUMDAY</h1>
+    <p>รากฐานและคอมโพเนนต์ทั้งหมดสำหรับหน้าจอจัดการออเดอร์ — รับออเดอร์จากลูกค้า กดรับงาน
+       และอัปเดตสถานะจนเสร็จ ทุกชิ้นวาดจาก <b>design token ชุดเดียวกัน</b> แก้ที่เดียวเปลี่ยนทั้งระบบ</p>
+    <div class="meta">
+      <span class="pill"><i style="background:var(--primary)"></i> Primary · Emerald</span>
+      <span class="pill"><i style="background:var(--accent)"></i> Accent · Sandy</span>
+      <span class="pill">☀️ Light theme</span>
+      <span class="pill">🇹🇭 IBM Plex Sans Thai</span>
+    </div>
+  </header>
+
+  <!-- ===== 01 PALETTE ===== -->
+  <section id="palette">
+    <div class="sec-head">
+      <span class="no">01</span><h2>Brand Palette</h2>
+      <p>5 สีหลักของแบรนด์ โทนส้มอุ่น–เขียวสด ให้ความรู้สึกเป็นมิตร สดใหม่ และน่าเชื่อถือ เหมาะกับงานบริการ</p>
+    </div>
+    <div class="palette">
+      <div class="sw"><div class="chip" style="background:#FC9F5B"><code>#FC9F5B</code></div><div class="meta"><b>Sandy Brown</b><span>Accent · ป้าย/ไฮไลต์</span></div></div>
+      <div class="sw"><div class="chip" style="background:#FBD1A2"><code>#FBD1A2</code></div><div class="meta"><b>Apricot Cream</b><span>Surface อุ่น · พื้นรอง</span></div></div>
+      <div class="sw"><div class="chip" style="background:#ECE4B7"><code>#ECE4B7</code></div><div class="meta"><b>Vanilla Custard</b><span>Neutral · พื้นกลาง</span></div></div>
+      <div class="sw"><div class="chip" style="background:#7DCFB6"><code>#7DCFB6</code></div><div class="meta"><b>Pearl Aqua</b><span>Info · กำลังทำ</span></div></div>
+      <div class="sw"><div class="chip" style="background:#33CA7F"><code>#33CA7F</code></div><div class="meta"><b>Emerald</b><span>Primary · แอคชันหลัก</span></div></div>
+    </div>
+  </section>
+
+  <!-- ===== 02 SEMANTIC TOKENS ===== -->
+  <section id="semantic">
+    <div class="sec-head">
+      <span class="no">02</span><h2>Color Tokens</h2>
+      <p>สีเชิงความหมายที่ derive จากพาเลต + เติมสีแดงอุ่นให้กลมกลืน ใช้ผ่าน <code>var(--token)</code> เสมอ ห้ามใส่ค่าสีดิบในคอมโพเนนต์</p>
+    </div>
+    <div class="stack">
+      <div class="card">
+        <div class="cap">Roles · บทบาทหลัก</div>
+        <div class="tok-grid">
+          <div class="tok"><span class="dot" style="background:var(--primary)"></span><div class="t"><b>--primary</b><span>#33CA7F</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--primary-strong)"></span><div class="t"><b>--primary-strong</b><span>#23A866</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--primary-soft)"></span><div class="t"><b>--primary-soft</b><span>#E4F7EE</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--accent)"></span><div class="t"><b>--accent</b><span>#FC9F5B</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--accent-strong)"></span><div class="t"><b>--accent-strong</b><span>#F1812F</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--accent-soft)"></span><div class="t"><b>--accent-soft</b><span>#FFEEDD</span></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="cap">Status · สถานะออเดอร์</div>
+        <div class="tok-grid">
+          <div class="tok"><span class="dot" style="background:var(--warning)"></span><div class="t"><b>--warning</b><span>รอรับ · #FC9F5B</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--info)"></span><div class="t"><b>--info</b><span>กำลังทำ · #2BB39A</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--success)"></span><div class="t"><b>--success</b><span>เสร็จแล้ว · #33CA7F</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--muted-s)"></span><div class="t"><b>--muted</b><span>ยกเลิก · #8B978E</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--danger)"></span><div class="t"><b>--danger</b><span>ปฏิเสธ/ลบ · #EC5B57</span></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="cap">Neutrals · พื้น & ตัวอักษร</div>
+        <div class="tok-grid">
+          <div class="tok"><span class="dot" style="background:var(--bg)"></span><div class="t"><b>--bg</b><span>#FBFAF5</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--surface)"></span><div class="t"><b>--surface</b><span>#FFFFFF</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--surface-2)"></span><div class="t"><b>--surface-2</b><span>#F7F4EB</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--ink)"></span><div class="t"><b>--ink</b><span>#23332B</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--ink-soft)"></span><div class="t"><b>--ink-soft</b><span>#5A675F</span></div></div>
+          <div class="tok"><span class="dot" style="background:var(--border)"></span><div class="t"><b>--border</b><span>#ECE6D8</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 03 TYPOGRAPHY ===== -->
+  <section id="type">
+    <div class="sec-head">
+      <span class="no">03</span><h2>Typography</h2>
+      <p>ฟอนต์ <b>IBM Plex Sans Thai</b> อ่านง่ายทั้งไทย–อังกฤษ–ตัวเลข · ตัวเลข/รหัสออเดอร์ใช้ <b>IBM Plex Mono</b></p>
+    </div>
+    <div class="card">
+      <div class="type-row"><span class="lbl">Display · 40/700</span><span class="t-display">ออเดอร์วันนี้</span></div>
+      <div class="type-row"><span class="lbl">H1 · 30/700</span><span class="t-h1">รายการที่รอรับ</span></div>
+      <div class="type-row"><span class="lbl">H2 · 23/600</span><span class="t-h2">รายละเอียดออเดอร์ #1042</span></div>
+      <div class="type-row"><span class="lbl">H3 · 18/600</span><span class="t-h3">ข้อมูลลูกค้า</span></div>
+      <div class="type-row"><span class="lbl">Body · 16/400</span><span class="t-body">ลูกค้าสั่งกาแฟเย็น 2 แก้ว และขนมปัง 1 ชิ้น โปรดยืนยันก่อนเริ่มทำ</span></div>
+      <div class="type-row"><span class="lbl">Small · 14/400</span><span class="t-sm">อัปเดตล่าสุดเมื่อ 2 นาทีที่แล้ว</span></div>
+      <div class="type-row"><span class="lbl">Caption · 12/500</span><span class="t-cap">ORDER ID · 2026-06-25</span></div>
+      <div class="weights">
+        <div style="font-weight:300">Aa กขค<span>300 Light</span></div>
+        <div style="font-weight:400">Aa กขค<span>400 Regular</span></div>
+        <div style="font-weight:500">Aa กขค<span>500 Medium</span></div>
+        <div style="font-weight:600">Aa กขค<span>600 SemiBold</span></div>
+        <div style="font-weight:700">Aa กขค<span>700 Bold</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 04 SCALES ===== -->
+  <section id="scales">
+    <div class="sec-head">
+      <span class="no">04</span><h2>Spacing · Radius · Elevation</h2>
+      <p>สเกลคงที่เพื่อให้ระยะห่าง มุมโค้ง และเงา สม่ำเสมอกันทั้งระบบ</p>
+    </div>
+    <div class="stack">
+      <div class="card">
+        <div class="cap">Spacing scale (4px base)</div>
+        <div class="scale-row">
+          <div class="box"><i style="width:4px;height:30px"></i><code>4</code></div>
+          <div class="box"><i style="width:8px;height:30px"></i><code>8</code></div>
+          <div class="box"><i style="width:12px;height:30px"></i><code>12</code></div>
+          <div class="box"><i style="width:16px;height:30px"></i><code>16</code></div>
+          <div class="box"><i style="width:24px;height:30px"></i><code>24</code></div>
+          <div class="box"><i style="width:32px;height:30px"></i><code>32</code></div>
+          <div class="box"><i style="width:48px;height:30px"></i><code>48</code></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="cap">Radius</div>
+        <div class="radius-row">
+          <div class="rb" style="border-radius:8px"><code>8 · sm</code></div>
+          <div class="rb" style="border-radius:12px"><code>12 · base</code></div>
+          <div class="rb" style="border-radius:18px"><code>18 · lg</code></div>
+          <div class="rb" style="border-radius:26px"><code>26 · xl</code></div>
+          <div class="rb" style="border-radius:999px"><code>pill</code></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="cap">Elevation</div>
+        <div class="elev-row">
+          <div class="eb" style="box-shadow:var(--sh-sm)">--sh-sm</div>
+          <div class="eb" style="box-shadow:var(--sh)">--sh</div>
+          <div class="eb" style="box-shadow:var(--sh-lg)">--sh-lg</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 05 BUTTONS ===== -->
+  <section id="buttons">
+    <div class="sec-head">
+      <span class="no">05</span><h2>Buttons</h2>
+      <p>ปุ่ม Primary (เขียว) = แอคชันยืนยันหลัก เช่น "กดรับออเดอร์" · Danger ใช้กับการปฏิเสธ/ยกเลิกเท่านั้น</p>
+    </div>
+    <div class="card stack">
+      <div>
+        <div class="cap">Variants</div>
+        <div class="btn-row">
+          <button class="btn btn-primary">✓ กดรับออเดอร์</button>
+          <button class="btn btn-accent">พิมพ์ใบเสร็จ</button>
+          <button class="btn btn-soft">ดูรายละเอียด</button>
+          <button class="btn btn-ghost">ย้อนกลับ</button>
+          <button class="btn btn-danger">ยกเลิกออเดอร์</button>
+          <button class="btn btn-primary" disabled>รับแล้ว</button>
+        </div>
+      </div>
+      <div>
+        <div class="cap">Sizes & icon</div>
+        <div class="btn-row">
+          <button class="btn btn-primary btn-lg">Large</button>
+          <button class="btn btn-primary">Default</button>
+          <button class="btn btn-primary btn-sm">Small</button>
+          <button class="btn btn-ghost btn-icon" title="แก้ไข">✎</button>
+          <button class="btn btn-ghost btn-icon" title="พิมพ์">🖨</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 06 STATUS ===== -->
+  <section id="status">
+    <div class="sec-head">
+      <span class="no">06</span><h2>Status Badges</h2>
+      <p>4 สถานะหลักของออเดอร์ มีทั้งแบบ soft (ในตาราง/การ์ด) และ solid (เน้น) — แต่ละสีแยกกันชัดในพาเลตเดียว</p>
+    </div>
+    <div class="card stack">
+      <div>
+        <div class="cap">Soft</div>
+        <div class="badge-row">
+          <span class="badge wait">รอรับ</span>
+          <span class="badge doing">กำลังทำ</span>
+          <span class="badge done">เสร็จแล้ว</span>
+          <span class="badge cancel">ยกเลิก</span>
+        </div>
+      </div>
+      <div>
+        <div class="cap">Solid</div>
+        <div class="badge-row">
+          <span class="badge solid-wait">รอรับ</span>
+          <span class="badge solid-doing">กำลังทำ</span>
+          <span class="badge solid-done">เสร็จแล้ว</span>
+          <span class="badge solid-cancel">ยกเลิก</span>
+        </div>
+      </div>
+      <div>
+        <div class="cap">Alerts</div>
+        <div class="stack" style="gap:12px">
+          <div class="alert a-success"><span class="ic">✅</span><div><b>รับออเดอร์ #1042 แล้ว</b><p>เริ่มทำได้เลย ระบบแจ้งลูกค้าให้อัตโนมัติ</p></div></div>
+          <div class="alert a-warn"><span class="ic">⏳</span><div><b>มีออเดอร์ใหม่ 3 รายการรอรับ</b><p>กรุณากดรับภายใน 5 นาทีเพื่อรักษาเวลาจัดส่ง</p></div></div>
+          <div class="alert a-info"><span class="ic">ℹ️</span><div><b>ออเดอร์ #1039 กำลังทำอยู่</b><p>เหลืออีก 1 รายการก่อนทำเสร็จทั้งบิล</p></div></div>
+          <div class="alert a-danger"><span class="ic">⚠️</span><div><b>ลูกค้าขอยกเลิกออเดอร์ #1035</b><p>กดยืนยันเพื่อปฏิเสธและคืนยอด</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 07 FORMS ===== -->
+  <section id="forms">
+    <div class="sec-head">
+      <span class="no">07</span><h2>Form Controls</h2>
+      <p>อินพุตสำหรับค้นหาออเดอร์ ตั้งค่าร้าน และจัดการสถานะ · โฟกัสใช้ ring สีเขียวจาก primary</p>
+    </div>
+    <div class="card stack">
+      <div class="search" style="max-width:420px">
+        <span class="ic">🔍</span>
+        <input class="input" placeholder="ค้นหาเลขออเดอร์ หรือชื่อลูกค้า…">
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>ชื่อลูกค้า</label><input class="input" value="คุณอริสา"></div>
+        <div class="field"><label>เบอร์โทร</label><input class="input" placeholder="08x-xxx-xxxx"></div>
+        <div class="field"><label>ช่องทางรับ</label>
+          <select class="select"><option>รับที่ร้าน</option><option>เดลิเวอรี</option><option>นัดรับ</option></select>
+        </div>
+      </div>
+      <div class="field"><label>หมายเหตุถึงครัว</label><textarea class="textarea" placeholder="เช่น หวานน้อย ไม่ใส่ผัก…"></textarea></div>
+      <div style="display:flex;gap:26px;flex-wrap:wrap;align-items:center">
+        <div class="switch-row"><span class="toggle on" data-toggle></span> รับออเดอร์อัตโนมัติ</div>
+        <div class="opt on" data-opt><span class="cb">✓</span> พิมพ์ใบเสร็จทันที</div>
+        <div class="opt" data-opt><span class="cb"></span> แจ้งเตือนทาง SMS</div>
+        <div class="opt on" data-opt><span class="rd"></span> ร้านสาขาสีลม</div>
+        <div class="opt" data-opt><span class="rd"></span> ร้านสาขาทองหล่อ</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 08 ORDERS ===== -->
+  <section id="orders">
+    <div class="sec-head">
+      <span class="no">08</span><h2>Order Cards</h2>
+      <p>คอมโพเนนต์หัวใจของระบบ — แสดงออเดอร์ที่ลูกค้าสั่งเข้ามา พร้อมปุ่มกดรับ/อัปเดตสถานะตามขั้นตอนงานจริง</p>
+    </div>
+
+    <div class="tabs" style="margin-bottom:var(--sp-4)">
+      <span class="tab active">ทั้งหมด <span class="ct">12</span></span>
+      <span class="tab">รอรับ <span class="ct">3</span></span>
+      <span class="tab">กำลังทำ <span class="ct">5</span></span>
+      <span class="tab">เสร็จแล้ว <span class="ct">4</span></span>
+    </div>
+
+    <div class="orders">
+      <!-- waiting -->
+      <article class="order">
+        <div class="oh"><span class="no">#1042</span><span class="badge wait">รอรับ</span></div>
+        <div class="ob">
+          <div class="cust"><span class="av">อ</span><div><b>คุณอริสา</b><span>🛵 เดลิเวอรี · 2 นาทีที่แล้ว</span></div></div>
+          <ul class="items">
+            <li><span class="q">2×</span><span class="nm">อเมริกาโน่เย็น</span><span class="pr">110</span></li>
+            <li><span class="q">1×</span><span class="nm">ครัวซองต์เนย</span><span class="pr">65</span></li>
+          </ul>
+        </div>
+        <div class="of"><div class="total">รวม<b>฿175</b></div>
+          <div class="acts"><button class="btn btn-danger btn-sm">ปฏิเสธ</button><button class="btn btn-primary btn-sm">✓ กดรับ</button></div>
+        </div>
+      </article>
+
+      <!-- doing -->
+      <article class="order">
+        <div class="oh"><span class="no">#1039</span><span class="badge doing">กำลังทำ</span></div>
+        <div class="ob">
+          <div class="cust"><span class="av">ก</span><div><b>คุณกานต์</b><span>🏪 รับที่ร้าน · 8 นาทีที่แล้ว</span></div></div>
+          <ul class="items">
+            <li><span class="q">1×</span><span class="nm">ลาเต้ร้อน</span><span class="pr">60</span></li>
+            <li><span class="q">1×</span><span class="nm">มัทฉะลาเต้</span><span class="pr">70</span></li>
+            <li><span class="q">2×</span><span class="nm">คุกกี้</span><span class="pr">90</span></li>
+          </ul>
+        </div>
+        <div class="of"><div class="total">รวม<b>฿220</b></div>
+          <div class="acts"><button class="btn btn-primary btn-sm">เสร็จแล้ว →</button></div>
+        </div>
+      </article>
+
+      <!-- done -->
+      <article class="order">
+        <div class="oh"><span class="no">#1036</span><span class="badge done">เสร็จแล้ว</span></div>
+        <div class="ob">
+          <div class="cust"><span class="av">น</span><div><b>คุณนภา</b><span>🛵 เดลิเวอรี · 20 นาทีที่แล้ว</span></div></div>
+          <ul class="items">
+            <li><span class="q">3×</span><span class="nm">ชาเย็น</span><span class="pr">135</span></li>
+          </ul>
+        </div>
+        <div class="of"><div class="total">รวม<b>฿135</b></div>
+          <div class="acts"><button class="btn btn-soft btn-sm">ดูสลิป</button></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== 09 TABLE + STATS ===== -->
+  <section id="table">
+    <div class="sec-head">
+      <span class="no">09</span><h2>Order Table & Dashboard</h2>
+      <p>มุมมองรายการแบบตารางสำหรับดูออเดอร์จำนวนมาก + การ์ดสรุปยอดด้านบน</p>
+    </div>
+
+    <div class="stats" style="margin-bottom:var(--sp-4)">
+      <div class="stat"><div class="ic" style="background:var(--warning-soft);color:var(--warning-ink)">⏳</div>
+        <div class="lbl">รอรับ</div><div class="val">3</div><div class="trend up">+2 ใน 10 นาที</div></div>
+      <div class="stat"><div class="ic" style="background:var(--info-soft);color:var(--info-ink)">👩‍🍳</div>
+        <div class="lbl">กำลังทำ</div><div class="val">5</div><div class="trend up">กำลังดำเนินการ</div></div>
+      <div class="stat"><div class="ic" style="background:var(--success-soft);color:var(--success-ink)">✅</div>
+        <div class="lbl">เสร็จวันนี้</div><div class="val">48</div><div class="trend up">+12% จากเมื่อวาน</div></div>
+      <div class="stat"><div class="ic" style="background:var(--accent-soft);color:var(--accent-strong)">฿</div>
+        <div class="lbl">ยอดขายวันนี้</div><div class="val">8,420</div><div class="trend up">+18%</div></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>ออเดอร์</th><th>ลูกค้า</th><th>รายการ</th><th>ยอด</th><th>สถานะ</th><th>จัดการ</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">#1042</td><td>คุณอริสา</td><td>3 รายการ</td><td class="mono">฿175</td><td><span class="badge wait">รอรับ</span></td>
+            <td><div class="row-act"><button class="btn btn-primary btn-sm">รับ</button></div></td></tr>
+          <tr><td class="mono">#1039</td><td>คุณกานต์</td><td>4 รายการ</td><td class="mono">฿220</td><td><span class="badge doing">กำลังทำ</span></td>
+            <td><div class="row-act"><button class="btn btn-soft btn-sm">อัปเดต</button></div></td></tr>
+          <tr><td class="mono">#1036</td><td>คุณนภา</td><td>3 รายการ</td><td class="mono">฿135</td><td><span class="badge done">เสร็จแล้ว</span></td>
+            <td><div class="row-act"><button class="btn btn-ghost btn-sm">สลิป</button></div></td></tr>
+          <tr><td class="mono">#1035</td><td>คุณวิทย์</td><td>1 รายการ</td><td class="mono">฿60</td><td><span class="badge cancel">ยกเลิก</span></td>
+            <td><div class="row-act"><button class="btn btn-ghost btn-sm">ดู</button></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== 10 APP SHELL ===== -->
+  <section id="shell">
+    <div class="sec-head">
+      <span class="no">10</span><h2>App Shell</h2>
+      <p>โครงหน้าจอจริงของระบบหลังบ้าน — แถบนำทางซ้าย + พื้นที่ทำงาน ประกอบจากคอมโพเนนต์ทั้งหมดด้านบน</p>
+    </div>
+    <div class="shell">
+      <aside class="side">
+        <div class="lg"><span class="mark">🧾</span><b>SUMDAY</b></div>
+        <a href="#shell" class="on"><span class="ico">📥</span> ออเดอร์เข้า <span class="pin">3</span></a>
+        <a href="#shell"><span class="ico">👩‍🍳</span> กำลังทำ</a>
+        <a href="#shell"><span class="ico">✅</span> เสร็จแล้ว</a>
+        <a href="#shell"><span class="ico">📊</span> รายงานยอดขาย</a>
+        <a href="#shell"><span class="ico">🍽️</span> เมนู & ราคา</a>
+        <a href="#shell"><span class="ico">⚙️</span> ตั้งค่าร้าน</a>
+      </aside>
+      <main class="main">
+        <div class="mh">
+          <h3>ออเดอร์เข้า</h3>
+          <div class="who"><span class="badge doing">เปิดรับออเดอร์</span><span class="av">อ</span></div>
+        </div>
+        <div class="orders" style="grid-template-columns:1fr">
+          <article class="order">
+            <div class="oh"><span class="no">#1043</span><span class="badge wait">รอรับ</span></div>
+            <div class="ob">
+              <div class="cust"><span class="av">พ</span><div><b>คุณพิม</b><span>🛵 เดลิเวอรี · เมื่อสักครู่</span></div></div>
+              <ul class="items">
+                <li><span class="q">1×</span><span class="nm">คาปูชิโน่ร้อน</span><span class="pr">65</span></li>
+                <li><span class="q">1×</span><span class="nm">บราวนี่</span><span class="pr">75</span></li>
+              </ul>
+            </div>
+            <div class="of"><div class="total">รวม<b>฿140</b></div>
+              <div class="acts"><button class="btn btn-danger btn-sm">ปฏิเสธ</button><button class="btn btn-primary btn-sm">✓ กดรับ</button></div>
+            </div>
+          </article>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <!-- ===== 11 TOKENS EXPORT ===== -->
+  <section id="tokens">
+    <div class="sec-head">
+      <span class="no">11</span><h2>tokens.css</h2>
+      <p>คัดลอก <code>:root</code> นี้ไปวางในโปรเจกต์จริง แล้วเรียกใช้ผ่าน <code>var(--token)</code> — แก้ที่นี่ที่เดียวเปลี่ยนทั้งระบบ</p>
+    </div>
+    <div class="codebox">
+      <div class="ch"><span class="t">📦 SUMDAY · design tokens</span><button class="copy" id="copyCss">คัดลอก</button></div>
+      <pre><code id="cssOut"></code></pre>
+    </div>
+  </section>
+
+  <div class="foot">SUMDAY Back-office Design System · v1.0 · สร้างด้วย DevNest 🌿</div>
+</div>
+
+<div class="toast" id="toast">คัดลอกแล้ว ✓</div>
+
+<script>
+/* interactive toggles for the demo controls */
+document.querySelectorAll('[data-toggle]').forEach(t=>t.addEventListener('click',()=>t.classList.toggle('on')));
+document.querySelectorAll('[data-opt]').forEach(o=>o.addEventListener('click',()=>{
+  const cb=o.querySelector('.cb');
+  if(o.querySelector('.rd')){ // radio: clear siblings sharing the same prefix
+    document.querySelectorAll('[data-opt]').forEach(x=>{if(x.querySelector('.rd'))x.classList.remove('on');});
+    o.classList.add('on');
+  }else{
+    o.classList.toggle('on');
+    if(cb) cb.textContent=o.classList.contains('on')?'✓':'';
+  }
+}));
+
+/* tokens.css export */
+const css =
+`<span class="c">/* SUMDAY · Back-office design tokens */</span>
+<span class="p">:root</span> {
+  <span class="c">/* brand */</span>
+  <span class="p">--sandy</span>:   <span class="v">#FC9F5B</span>;
+  <span class="p">--apricot</span>: <span class="v">#FBD1A2</span>;
+  <span class="p">--vanilla</span>: <span class="v">#ECE4B7</span>;
+  <span class="p">--aqua</span>:    <span class="v">#7DCFB6</span>;
+  <span class="p">--emerald</span>: <span class="v">#33CA7F</span>;
+
+  <span class="c">/* roles */</span>
+  <span class="p">--primary</span>:        <span class="v">#33CA7F</span>;
+  <span class="p">--primary-strong</span>: <span class="v">#23A866</span>;
+  <span class="p">--primary-soft</span>:   <span class="v">#E4F7EE</span>;
+  <span class="p">--accent</span>:         <span class="v">#FC9F5B</span>;
+  <span class="p">--accent-strong</span>:  <span class="v">#F1812F</span>;
+  <span class="p">--accent-soft</span>:    <span class="v">#FFEEDD</span>;
+
+  <span class="c">/* status — orders */</span>
+  <span class="p">--warning</span>: <span class="v">#FC9F5B</span>; <span class="c">/* รอรับ */</span>
+  <span class="p">--info</span>:    <span class="v">#2BB39A</span>; <span class="c">/* กำลังทำ */</span>
+  <span class="p">--success</span>: <span class="v">#33CA7F</span>; <span class="c">/* เสร็จแล้ว */</span>
+  <span class="p">--muted</span>:   <span class="v">#8B978E</span>; <span class="c">/* ยกเลิก */</span>
+  <span class="p">--danger</span>:  <span class="v">#EC5B57</span>; <span class="c">/* ปฏิเสธ/ลบ */</span>
+
+  <span class="c">/* neutrals */</span>
+  <span class="p">--bg</span>:        <span class="v">#FBFAF5</span>;
+  <span class="p">--surface</span>:   <span class="v">#FFFFFF</span>;
+  <span class="p">--surface-2</span>: <span class="v">#F7F4EB</span>;
+  <span class="p">--ink</span>:       <span class="v">#23332B</span>;
+  <span class="p">--ink-soft</span>:  <span class="v">#5A675F</span>;
+  <span class="p">--border</span>:    <span class="v">#ECE6D8</span>;
+
+  <span class="c">/* radius & type */</span>
+  <span class="p">--r</span>: <span class="v">12px</span>; <span class="p">--r-lg</span>: <span class="v">18px</span>; <span class="p">--r-pill</span>: <span class="v">999px</span>;
+  <span class="p">--font</span>: <span class="v">'IBM Plex Sans Thai'</span>;
+  <span class="p">--mono</span>: <span class="v">'IBM Plex Mono'</span>;
+}`;
+document.getElementById('cssOut').innerHTML = css;
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1600);}
+document.getElementById('copyCss').addEventListener('click',()=>{
+  navigator.clipboard.writeText(document.getElementById('cssOut').textContent)
+    .then(()=>toast('คัดลอก tokens.css แล้ว ✓')).catch(()=>toast('คัดลอกไม่ได้'));
+});
+</script>
+</body>
+</html>
