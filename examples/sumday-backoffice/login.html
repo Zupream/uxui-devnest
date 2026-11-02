@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMDAY · เข้าสู่ระบบหลังบ้าน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<style>
+  body{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;}
+  @media(max-width:860px){body{grid-template-columns:1fr;}.brandside{display:none;}}
+
+  /* left brand panel */
+  .brandside{position:relative;overflow:hidden;background:linear-gradient(150deg,#2A3B33 0%,#1C2A23 60%,#16201A 100%);
+    color:#EAF3EE;padding:clamp(34px,5vw,64px);display:flex;flex-direction:column;}
+  .brandside::before{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;border-radius:50%;
+    background:radial-gradient(circle,rgba(51,202,127,.4),transparent 70%);}
+  .brandside::after{content:"";position:absolute;left:-70px;bottom:-70px;width:300px;height:300px;border-radius:50%;
+    background:radial-gradient(circle,rgba(252,159,91,.34),transparent 70%);}
+  .bs-top{display:flex;align-items:center;gap:12px;position:relative;z-index:1;}
+  .bs-top img{height:54px;width:auto;}
+  .bs-top b{font-family:var(--display);font-size:21px;color:#fff;}
+  .bs-top small{display:block;font-size:12px;color:#A9BBB1;letter-spacing:.04em;}
+  .bs-mid{margin-top:auto;position:relative;z-index:1;}
+  .bs-mid .k{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--aqua);}
+  .bs-mid h2{font-family:var(--display);font-size:clamp(28px,3.4vw,40px);font-weight:700;line-height:1.12;color:#fff;margin:12px 0 14px;}
+  .bs-mid p{font-size:15px;color:#B9C8BF;max-width:42ch;line-height:1.65;}
+  .bs-stats{display:flex;gap:26px;margin-top:30px;position:relative;z-index:1;}
+  .bs-stats div b{font-family:var(--mono);font-size:26px;font-weight:600;color:#fff;display:block;}
+  .bs-stats div span{font-size:12.5px;color:#9DACA2;}
+  .bs-foot{margin-top:30px;font-size:12.5px;color:#8B9C92;position:relative;z-index:1;}
+
+  /* right form panel */
+  .formside{display:flex;align-items:center;justify-content:center;padding:clamp(28px,5vw,60px);}
+  .login-card{width:100%;max-width:400px;}
+  .login-card .lead{margin-bottom:26px;}
+  .login-card .lead .mobile-logo{display:none;}
+  .login-card h1{font-size:27px;font-weight:700;}
+  .login-card .lead p{color:var(--ink-soft);font-size:14.5px;margin-top:6px;}
+  .helper{display:flex;justify-content:space-between;align-items:center;margin:-4px 0 16px;}
+  .remember{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink-soft);cursor:pointer;}
+  .remember .cb{width:19px;height:19px;border-radius:6px;border:1.5px solid var(--border-2);display:grid;place-items:center;color:#fff;font-size:12px;transition:all .15s;}
+  .remember.on .cb{background:var(--primary);border-color:var(--primary);}
+  .forgot{font-size:13.5px;font-weight:600;color:var(--primary-strong);}
+  .pw-wrap{position:relative;}
+  .pw-wrap .eye{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:17px;color:var(--muted);padding:5px;}
+  .note{margin-top:18px;font-size:12.5px;color:var(--muted);text-align:center;line-height:1.6;}
+  .note code{background:var(--surface-2);padding:1px 7px;border-radius:6px;font-size:11.5px;color:var(--ink-soft);}
+  @media(max-width:860px){.login-card .lead .mobile-logo{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+    .login-card .lead .mobile-logo img{height:46px;width:auto;}
+    .login-card .lead .mobile-logo b{font-family:var(--display);font-size:19px;}}
+</style>
+</head>
+<body>
+
+  <!-- ===== LEFT · brand ===== -->
+  <aside class="brandside">
+    <div class="bs-top">
+      <img src="../../img/logo/image%20copy.png" alt="SUMDAY">
+      <div><b>SUMDAY</b><small>Back-office · ระบบจัดการออเดอร์</small></div>
+    </div>
+    <div class="bs-mid">
+      <div class="k">Order Management</div>
+      <h2>รับออเดอร์ จัดการคิว<br>ส่งถึงมือลูกค้า ครบในที่เดียว</h2>
+      <p>ดูออเดอร์ที่ลูกค้าสั่งเข้ามาแบบเรียลไทม์ อัปเดตสถานะการทำ และโทรแจ้งลูกค้ามารับได้ทันที</p>
+      <div class="bs-stats">
+        <div><b>48</b><span>ออเดอร์วันนี้</span></div>
+        <div><b>฿8,420</b><span>ยอดขายวันนี้</span></div>
+        <div><b>~6 น.</b><span>เวลาเฉลี่ย/บิล</span></div>
+      </div>
+    </div>
+    <div class="bs-foot">© 2026 SUMDAY · DevNest 🌿</div>
+  </aside>
+
+  <!-- ===== RIGHT · form ===== -->
+  <main class="formside">
+    <form class="login-card" id="loginForm" novalidate>
+      <div class="lead">
+        <div class="mobile-logo"><img src="../../img/logo/image%20copy.png" alt="SUMDAY"><b>SUMDAY</b></div>
+        <h1>เข้าสู่ระบบ</h1>
+        <p>ลงชื่อเข้าใช้เพื่อจัดการออเดอร์ของร้าน</p>
+      </div>
+
+      <div class="field">
+        <label for="email">อีเมล หรือ ชื่อผู้ใช้</label>
+        <input class="input" id="email" type="text" placeholder="staff@sumday.co" value="staff@sumday.co" autocomplete="username">
+      </div>
+
+      <div class="field">
+        <label for="pw">รหัสผ่าน</label>
+        <div class="pw-wrap">
+          <input class="input" id="pw" type="password" placeholder="••••••••" value="sumday1234" autocomplete="current-password">
+          <button type="button" class="eye" id="eye" aria-label="แสดงรหัสผ่าน">👁️</button>
+        </div>
+      </div>
+
+      <div class="helper">
+        <span class="remember on" id="remember"><span class="cb">✓</span> จดจำฉันไว้</span>
+        <a class="forgot" href="#">ลืมรหัสผ่าน?</a>
+      </div>
+
+      <button class="btn btn-primary btn-lg btn-block" type="submit">เข้าสู่ระบบ →</button>
+
+      <p class="note">เดโม — กดเข้าสู่ระบบได้เลย · ตัวอย่าง <code>staff@sumday.co</code> / <code>sumday1234</code></p>
+    </form>
+  </main>
+
+<script>
+  document.getElementById('eye').addEventListener('click',function(){
+    const pw=document.getElementById('pw');
+    const show=pw.type==='password'; pw.type=show?'text':'password'; this.textContent=show?'🙈':'👁️';
+  });
+  document.getElementById('remember').addEventListener('click',function(){
+    this.classList.toggle('on'); this.querySelector('.cb').textContent=this.classList.contains('on')?'✓':'';
+  });
+  document.getElementById('loginForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    const btn=this.querySelector('button[type=submit]');
+    btn.textContent='กำลังเข้าสู่ระบบ…'; btn.disabled=true;
+    setTimeout(()=>{ window.location.href='orders.html'; }, 600);
+  });
+</script>
+</body>
+</html>

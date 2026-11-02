@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMDAY · ออเดอร์เข้า</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<style>
+  /* notifications dropdown */
+  .notif-pop{position:absolute;top:52px;right:0;width:320px;background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--r-lg);box-shadow:var(--sh-lg);overflow:hidden;z-index:40;opacity:0;pointer-events:none;transform:translateY(-6px);transition:all .18s;}
+  .notif-pop.show{opacity:1;pointer-events:auto;transform:none;}
+  .notif-pop .nh{padding:13px 16px;border-bottom:1px solid var(--border);font-weight:600;font-size:14px;display:flex;justify-content:space-between;align-items:center;}
+  .notif-pop .nh a{font-size:12.5px;color:var(--primary-strong);font-weight:600;}
+  .notif-list{max-height:330px;overflow:auto;}
+  .notif-list .ni{display:flex;gap:11px;padding:12px 16px;border-bottom:1px solid var(--border);font-size:13.5px;}
+  .notif-list .ni:last-child{border-bottom:none;}
+  .notif-list .ni .ic{width:34px;height:34px;border-radius:9px;background:var(--new-soft);color:var(--new-ink);display:grid;place-items:center;flex:0 0 auto;}
+  .notif-list .ni b{font-weight:600;} .notif-list .ni span{color:var(--muted);font-size:12px;}
+  .notif-list .empty-n{padding:30px 16px;text-align:center;color:var(--muted);font-size:13px;}
+  .bar-actions{display:flex;align-items:center;gap:10px;}
+  @media(max-width:560px){.store-toggle .lbl-txt{display:none;}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="side" id="side">
+    <div class="lg">
+      <img class="badge-logo" src="../../img/logo/image%20copy.png" alt="SUMDAY">
+      <div class="t"><b>SUMDAY</b><small>Back-office</small></div>
+    </div>
+    <div class="navlabel">ออเดอร์</div>
+    <a href="orders.html" class="on" data-filter="all"><span class="ico">📥</span> ออเดอร์เข้า <span class="pin" id="navNew">0</span></a>
+    <a href="#" data-filter="doing"><span class="ico">👩‍🍳</span> กำลังทำ</a>
+    <a href="#" data-filter="ready"><span class="ico">✅</span> พร้อมรับ</a>
+    <a href="#" data-filter="picked"><span class="ico">📦</span> รับแล้ว</a>
+    <div class="navlabel">จัดการร้าน</div>
+    <a href="reports.html"><span class="ico">📊</span> รายงานยอดขาย</a>
+    <a href="menu.html"><span class="ico">🍽️</span> เมนู &amp; ราคา</a>
+    <a href="settings.html"><span class="ico">⚙️</span> ตั้งค่าร้าน</a>
+    <div class="who">
+      <span class="av">อ</span>
+      <div class="t"><b>คุณอริสา</b><small>พนักงานหน้าร้าน</small></div>
+      <a href="login.html" class="out" title="ออกจากระบบ">⎋</a>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <!-- ===== MAIN ===== -->
+  <div class="main">
+    <div class="topbar">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div class="tb-title">
+        <h1>ออเดอร์เข้า</h1>
+        <div class="sub" id="clock">วันนี้ · อัปเดตเรียลไทม์</div>
+      </div>
+      <div class="spacer"></div>
+      <div class="bar-actions">
+        <button class="btn btn-accent btn-sm" id="simBtn">🔔 จำลองออเดอร์ใหม่</button>
+        <span class="store-toggle"><span class="toggle on" id="storeToggle"></span><span class="lbl-txt" id="storeLbl">เปิดรับออเดอร์</span></span>
+        <div style="position:relative">
+          <button class="bell" id="bell">🔔<span class="dot" id="bellDot"></span></button>
+          <div class="notif-pop" id="notifPop">
+            <div class="nh">การแจ้งเตือน <a href="#" id="clearNotif">ล้างทั้งหมด</a></div>
+            <div class="notif-list" id="notifList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- stats -->
+      <div class="stats" id="stats"></div>
+
+      <!-- filters -->
+      <div class="filters" id="filters"></div>
+
+      <!-- orders -->
+      <div class="orders" id="orders"></div>
+      <div id="emptyState"></div>
+    </div>
+  </div>
+</div>
+
+<!-- toast container -->
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="mini-toast" id="miniToast"></div>
+
+<!-- ===== DETAIL MODAL ===== -->
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+/* ============================================================
+   MENU CATALOG (อ้างอิงจาก coffee-landing.html)
+   ============================================================ */
+const MENU = {
+  35:{en:'Americano',th:'อเมริกาโน่',price:55,img:'35.png'},
+  36:{en:'Black Orange',th:'แบล็คออเรนจ์',price:65,img:'36.png'},
+  37:{en:'Latte',th:'ลาเต้',price:60,img:'37.png'},
+  38:{en:'Cappuccino',th:'คาปูชิโน่',price:60,img:'38.png'},
+  39:{en:'Banana Coffee',th:'กาแฟกล้วย',price:65,img:'39.png'},
+  40:{en:'Thai Tea',th:'ชาไทย',price:60,img:'40.png'},
+  43:{en:'Rose Milk Tea',th:'ชานมกุหลาบ',price:60,img:'43.png'},
+  44:{en:'Rose Tea',th:'ชากุหลาบ',price:60,img:'44.png'},
+  46:{en:'Banana Milk',th:'บานาน่ามิลค์',price:60,img:'46.png'},
+  47:{en:'Fresh Milk',th:'นมสด',price:60,img:'47.png'},
+  48:{en:'Melon Milk',th:'นมเมล่อน',price:60,img:'48.png'},
+  49:{en:'Taro Milk',th:'นมเผือก',price:60,img:'49.png'},
+  50:{en:'Green Tea Latte',th:'ชาเขียวนม',price:60,img:'50.png'},
+  52:{en:'Matcha Latte',th:'มัทฉะลาเต้',price:70,img:'52.png'},
+  33:{en:'Orange Juice',th:'น้ำส้มคั้นสด',price:65,img:'33.png'},
+  41:{en:'Lemon Tea',th:'ชามะนาว',price:60,img:'41.png'},
+  51:{en:'Pure Matcha',th:'มัทฉะเพียว',price:65,img:'51.png'},
+  53:{en:'Coconut Matcha',th:'มัทฉะมะพร้าว',price:65,img:'53.png'},
+};
+const IMG='../../img/menu/';
+
+/* ============================================================
+   STATUS FLOW
+   ============================================================ */
+const FLOW = ['new','doing','ready','coming','picked'];
+const STATUS = {
+  new:   {label:'ออเดอร์ใหม่', cls:'st-new'},
+  doing: {label:'กำลังทำ', cls:'st-doing'},
+  ready: {label:'ทำเสร็จแล้ว', cls:'st-ready'},
+  coming:{label:'โทรแจ้งแล้ว · กำลังมารับ', cls:'st-coming'},
+  picked:{label:'รับแล้ว', cls:'st-picked'},
+};
+const TIMELINE = [
+  {key:'new',   t:'รับออเดอร์', s:'ลูกค้าชำระเงินแล้ว'},
+  {key:'doing', t:'กำลังทำ', s:'บาริสต้ารับงาน'},
+  {key:'ready', t:'ทำเสร็จแล้ว', s:'พร้อมให้ลูกค้ามารับ'},
+  {key:'coming',t:'โทรแจ้งลูกค้า', s:'แจ้งแล้ว · กำลังมารับ'},
+  {key:'picked',t:'ลูกค้ารับแล้ว', s:'ปิดออเดอร์'},
+];
+
+/* ============================================================
+   SEED DATA
+   ============================================================ */
+let SEQ = 1048;
+let orders = [
+  mk(1043,'พิมพ์ชนก','088-204-1180','พิกัด: ป้ายรถเมล์หน้าซอย ฝากไว้ที่เคาน์เตอร์ได้เลย','delivery',[[40,1],[39,1]],'new',6),
+  mk(1042,'อริสา บุญมี','081-553-7720','หวานน้อยทุกแก้ว','pickup',[[35,2],[36,1]],'new',9),
+  mk(1041,'กานต์ ศรีสุข','089-771-2204','—','pickup',[[37,1],[52,1],[44,2]],'doing',16),
+  mk(1040,'ธนวัฒน์','062-889-0145','ขอช้อนเพิ่ม 2 อัน','delivery',[[50,2]],'doing',22),
+  mk(1039,'นภา วงศ์ทอง','085-330-9912','—','pickup',[[40,3]],'ready',28),
+  mk(1038,'วิทยา','091-446-7781','ไม่ใส่หลอด','pickup',[[51,1],[53,1]],'coming',35),
+  mk(1037,'ชนิดา','087-112-6650','—','delivery',[[46,1],[47,1],[48,1]],'picked',52),
+];
+function mk(code,name,phone,note,type,items,status,minsAgo){
+  return {id:code,code:'#'+code,cust:{name,phone,note,type},
+    items:items.map(([id,qty])=>({id,qty})),status,minsAgo,
+    flagNew:status==='new'&&minsAgo<12};
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+const $=s=>document.querySelector(s);
+const total=o=>o.items.reduce((s,i)=>s+MENU[i.id].price*i.qty,0);
+const qtyCount=o=>o.items.reduce((s,i)=>s+i.qty,0);
+const initial=n=>n.trim().charAt(0);
+const baht=n=>'฿'+n.toLocaleString();
+const typeLabel=t=>t==='delivery'?'🛵 เดลิเวอรี':'🏪 รับที่ร้าน';
+const ago=m=>m<1?'เมื่อสักครู่':m<60?m+' นาทีที่แล้ว':Math.floor(m/60)+' ชม.ที่แล้ว';
+
+let activeFilter='all';
+
+/* ============================================================
+   RENDER · stats
+   ============================================================ */
+function renderStats(){
+  const c=k=>orders.filter(o=>o.status===k).length;
+  const salesToday=8420 + orders.filter(o=>o.status==='picked').reduce((s,o)=>s+total(o),0);
+  $('#stats').innerHTML=`
+    <div class="stat"><div class="ic" style="background:var(--new-soft);color:var(--new-ink)">📥</div>
+      <div class="lbl">ออเดอร์ใหม่</div><div class="val">${c('new')}</div><div class="trend">รอเริ่มทำ</div></div>
+    <div class="stat"><div class="ic" style="background:var(--doing-soft);color:var(--doing-ink)">👩‍🍳</div>
+      <div class="lbl">กำลังทำ</div><div class="val">${c('doing')}</div><div class="trend">กำลังดำเนินการ</div></div>
+    <div class="stat"><div class="ic" style="background:var(--ready-soft);color:var(--ready-ink)">✅</div>
+      <div class="lbl">พร้อมรับ / มารับ</div><div class="val">${c('ready')+c('coming')}</div><div class="trend">รอลูกค้ามารับ</div></div>
+    <div class="stat"><div class="ic" style="background:var(--accent-soft);color:var(--accent-strong)">฿</div>
+      <div class="lbl">ยอดขายวันนี้</div><div class="val">${salesToday.toLocaleString()}</div><div class="trend">ช่องทางออนไลน์</div></div>`;
+  $('#navNew').textContent=c('new');
+}
+
+/* RENDER · filters */
+function renderFilters(){
+  const defs=[['all','ทั้งหมด'],['new','ใหม่'],['doing','กำลังทำ'],['ready','พร้อมรับ'],['coming','กำลังมารับ'],['picked','รับแล้ว']];
+  $('#filters').innerHTML=defs.map(([k,l])=>{
+    const n=k==='all'?orders.length:orders.filter(o=>o.status===k).length;
+    return `<button class="tab ${activeFilter===k?'active':''}" data-f="${k}">${l} <span class="ct">${n}</span></button>`;
+  }).join('');
+}
+
+/* RENDER · order card */
+function cardActions(o){
+  const detail=`<button class="btn btn-ghost btn-sm" onclick="openDetail(${o.id})">รายละเอียด</button>`;
+  if(o.status==='new')   return detail+`<button class="btn btn-primary btn-sm" onclick="advance(${o.id})">เริ่มทำ →</button>`;
+  if(o.status==='doing') return detail+`<button class="btn btn-primary btn-sm" onclick="advance(${o.id})">ทำเสร็จแล้ว →</button>`;
+  if(o.status==='ready') return detail+`<button class="btn btn-coming btn-sm" onclick="openDetail(${o.id})">📞 โทรแจ้งลูกค้า</button>`;
+  if(o.status==='coming')return detail+`<button class="btn btn-primary btn-sm" onclick="advance(${o.id})">ลูกค้ารับแล้ว ✓</button>`;
+  return detail;
+}
+function orderCard(o){
+  const items=o.items.slice(0,3).map(i=>{
+    const m=MENU[i.id];
+    return `<li><span class="th"><img src="${IMG}${m.img}" alt="${m.th}" loading="lazy"></span>
+      <span class="q">${i.qty}×</span><span class="nm">${m.th}</span><span class="pr">${m.price*i.qty}</span></li>`;
+  }).join('');
+  const more=o.items.length>3?`<div class="more">+ อีก ${o.items.length-3} รายการ</div>`:'';
+  const st=STATUS[o.status];
+  return `<article class="order ${o.status==='new'?'is-new':''}">
+    <div class="oh"><span class="no">${o.code}<span class="ch">${typeLabel(o.cust.type)} · ${ago(o.minsAgo)}</span></span>
+      <span class="badge ${st.cls}">${st.label}</span></div>
+    <div class="ob">
+      <div class="cust"><span class="av">${initial(o.cust.name)}</span>
+        <div><b>${o.cust.name}</b><span>${qtyCount(o)} แก้ว · ${o.items.length} รายการ</span></div></div>
+      <ul class="items">${items}${more}</ul>
+    </div>
+    <div class="of"><div class="total">ยอดชำระ<b>${baht(total(o))}</b></div>
+      <div class="acts">${cardActions(o)}</div></div>
+  </article>`;
+}
+function renderOrders(){
+  const list=activeFilter==='all'?orders:orders.filter(o=>o.status===activeFilter);
+  const sorted=[...list].sort((a,b)=>FLOW.indexOf(a.status)-FLOW.indexOf(b.status)||a.minsAgo-b.minsAgo);
+  $('#orders').innerHTML=sorted.map(orderCard).join('');
+  $('#emptyState').innerHTML=sorted.length?'':
+    `<div class="empty"><div class="e-ic">📭</div><b>ยังไม่มีออเดอร์ในหมวดนี้</b>ลองเลือกตัวกรองอื่น หรือกด “จำลองออเดอร์ใหม่”</div>`;
+}
+function renderAll(){renderStats();renderFilters();renderOrders();}
+
+/* ============================================================
+   STATUS TRANSITION
+   ============================================================ */
+function advance(id){
+  const o=orders.find(x=>x.id===id); if(!o)return;
+  const i=FLOW.indexOf(o.status);
+  if(i<FLOW.length-1){o.status=FLOW[i+1];o.flagNew=false;o.minsAgo=0;}
+  const msg={doing:'เริ่มทำออเดอร์',ready:'ทำเสร็จแล้ว · พร้อมให้ลูกค้ามารับ',coming:'แจ้งลูกค้าแล้ว · กำลังมารับ',picked:'ปิดออเดอร์ · ลูกค้ารับแล้ว'};
+  mini(`${o.code} → ${msg[o.status]||STATUS[o.status].label} ✓`);
+  renderAll();
+  if($('#overlay').classList.contains('show'))openDetail(id);
+}
+
+/* ============================================================
+   DETAIL MODAL
+   ============================================================ */
+function openDetail(id){
+  const o=orders.find(x=>x.id===id); if(!o)return;
+  const st=STATUS[o.status], cur=FLOW.indexOf(o.status);
+  const items=o.items.map(i=>{const m=MENU[i.id];
+    return `<li><span class="th"><img src="${IMG}${m.img}" alt="${m.th}"></span>
+      <span class="q">${i.qty}×</span><span class="nm">${m.th}<br><span style="font-size:12px;color:var(--muted)">${m.en} · ฿${m.price}</span></span>
+      <span class="pr">฿${m.price*i.qty}</span></li>`;}).join('');
+  const tl=TIMELINE.map((s,idx)=>{
+    const cls=idx<cur?'done':idx===cur?'active done':'pending';
+    return `<li class="${cls}"><span class="pt">${idx<cur?'✓':''}</span>
+      <div class="tx"><b>${s.t}</b><span>${s.s}</span></div></li>`;}).join('');
+
+  /* footer actions by status */
+  let foot='';
+  const callBtn=`<a class="btn btn-coming" href="tel:${o.cust.phone.replace(/-/g,'')}">📞 โทรหาลูกค้า</a>`;
+  if(o.status==='new')   foot=`<button class="btn btn-primary btn-block" onclick="advance(${o.id})">เริ่มทำออเดอร์ →</button>`;
+  else if(o.status==='doing') foot=`<button class="btn btn-primary btn-block" onclick="advance(${o.id})">ทำเสร็จแล้ว →</button>`;
+  else if(o.status==='ready') foot=`${callBtn}<button class="btn btn-primary" style="flex:1" onclick="advance(${o.id})">โทรแจ้งแล้ว · กำลังมารับ →</button>`;
+  else if(o.status==='coming')foot=`${callBtn}<button class="btn btn-primary" style="flex:1" onclick="advance(${o.id})">ลูกค้ารับแล้ว ✓</button>`;
+  else foot=`<button class="btn btn-ghost btn-block" onclick="closeModal()">ปิด</button>`;
+
+  $('#modal').innerHTML=`
+    <div class="mh"><h3>ออเดอร์ ${o.code}</h3>
+      <div style="display:flex;align-items:center;gap:10px"><span class="badge ${st.cls}">${st.label}</span>
+      <button class="x" onclick="closeModal()">✕</button></div></div>
+    <div class="mb">
+      <div style="font-size:12.5px;color:var(--muted);margin-bottom:4px">${typeLabel(o.cust.type)} · เข้ามา ${ago(o.minsAgo)}</div>
+
+      <div class="sec-head" style="margin:14px 0 8px"><h2 style="font-size:15px">รายการ (${qtyCount(o)} แก้ว)</h2></div>
+      <ul class="items" style="list-style:none;display:flex;flex-direction:column;gap:11px">${items}</ul>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:13px;border-top:1px dashed var(--border)">
+        <span style="color:var(--ink-soft)">ยอดชำระ (ชำระแล้ว)</span>
+        <b style="font-family:var(--mono);font-size:21px">${baht(total(o))}</b></div>
+
+      <div class="sec-head" style="margin:20px 0 8px"><h2 style="font-size:15px">ข้อมูลลูกค้า</h2><span class="sub">สำหรับติดต่อ / โทรแจ้ง</span></div>
+      <div class="cust-block">
+        <div class="row"><span class="k">ชื่อ</span><span class="v">${o.cust.name}</span></div>
+        <div class="row"><span class="k">เบอร์โทร</span><span class="v tel">${o.cust.phone}</span></div>
+        <div class="row"><span class="k">ช่องทาง</span><span class="v">${typeLabel(o.cust.type)}</span></div>
+        <div class="row"><span class="k">หมายเหตุ</span><span class="v" style="color:${o.cust.note==='—'?'var(--muted)':'var(--ink)'}">${o.cust.note}</span></div>
+      </div>
+
+      <div class="sec-head" style="margin:20px 0 8px"><h2 style="font-size:15px">สถานะออเดอร์</h2></div>
+      <ul class="timeline">${tl}</ul>
+    </div>
+    <div class="mf">${foot}</div>`;
+  $('#overlay').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){$('#overlay').classList.remove('show');document.body.style.overflow='';}
+$('#overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+/* ============================================================
+   NOTIFICATIONS · new order simulation
+   ============================================================ */
+let notifs=[], bellCount=0;
+const NAMES=['ปรียา','สมชาย','เมธาวี','ภูริ','ดวงใจ','กิตติ','อรปรียา','ศุภชัย','ฟ้าใส','ณัฐพล'];
+const PHONES=['080','081','082','085','088','089','091','062'];
+const IDS=Object.keys(MENU).map(Number);
+function randPhone(){const r=()=>Math.floor(Math.random()*9000+1000);return PHONES[Math.floor(Math.random()*PHONES.length)]+'-'+String(r()).slice(0,3)+'-'+r();}
+function simulateOrder(){
+  const name=NAMES[Math.floor(Math.random()*NAMES.length)];
+  const n=Math.floor(Math.random()*3)+1, items=[];
+  for(let i=0;i<n;i++){const id=IDS[Math.floor(Math.random()*IDS.length)];items.push([id,Math.floor(Math.random()*2)+1]);}
+  const o=mk(++SEQ,name,randPhone(),'—',Math.random()>.5?'pickup':'delivery',items,'new',0);
+  o.flagNew=true; orders.unshift(o);
+  beep();
+  toast(o);
+  bellCount++; $('#bellDot').textContent=bellCount;
+  notifs.unshift({code:o.code,name,total:total(o),time:'เมื่อสักครู่'});
+  renderNotifs();
+  if(activeFilter!=='all'&&activeFilter!=='new')activeFilter='all';
+  renderAll();
+}
+function toast(o){
+  const el=document.createElement('div');
+  el.className='toast';
+  el.innerHTML=`<span class="ic">🛎️</span><div class="tx"><b>ออเดอร์ใหม่ ${o.code}</b>
+    <p>${o.cust.name} · ${qtyCount(o)} แก้ว · ${baht(total(o))}</p></div>`;
+  el.onclick=()=>{openDetail(o.id);el.remove();};
+  $('#toastWrap').appendChild(el);
+  requestAnimationFrame(()=>el.classList.add('show'));
+  setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),320);},5200);
+}
+function renderNotifs(){
+  $('#notifList').innerHTML=notifs.length?notifs.slice(0,12).map(n=>`
+    <div class="ni"><span class="ic">🛎️</span><div><b>ออเดอร์ใหม่ ${n.code}</b><br>
+      <span>${n.name} · ${baht(n.total)} · ${n.time}</span></div></div>`).join('')
+    :`<div class="empty-n">ยังไม่มีการแจ้งเตือนใหม่</div>`;
+}
+function mini(msg){const t=$('#miniToast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1900);}
+/* subtle beep via Web Audio */
+let actx;
+function beep(){
+  try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+    const o=actx.createOscillator(),g=actx.createGain();
+    o.connect(g);g.connect(actx.destination);o.type='sine';o.frequency.value=880;
+    g.gain.setValueAtTime(.0001,actx.currentTime);g.gain.exponentialRampToValueAtTime(.16,actx.currentTime+.02);
+    g.gain.exponentialRampToValueAtTime(.0001,actx.currentTime+.32);
+    o.start();o.stop(actx.currentTime+.34);
+  }catch(e){}
+}
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+$('#filters').addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b)return;activeFilter=b.dataset.f;renderFilters();renderOrders();});
+document.querySelectorAll('.side a[data-filter]').forEach(a=>a.addEventListener('click',e=>{
+  e.preventDefault();activeFilter=a.dataset.filter;renderFilters();renderOrders();closeSide();
+  document.querySelector('.content').scrollIntoView({behavior:'smooth'});
+}));
+$('#simBtn').addEventListener('click',simulateOrder);
+$('#storeToggle').addEventListener('click',function(){this.classList.toggle('on');
+  $('#storeLbl').textContent=this.classList.contains('on')?'เปิดรับออเดอร์':'ปิดรับชั่วคราว';});
+$('#bell').addEventListener('click',e=>{e.stopPropagation();$('#notifPop').classList.toggle('show');bellCount=0;$('#bellDot').textContent='';});
+document.addEventListener('click',e=>{if(!e.target.closest('#notifPop')&&!e.target.closest('#bell'))$('#notifPop').classList.remove('show');});
+$('#clearNotif').addEventListener('click',e=>{e.preventDefault();notifs=[];renderNotifs();});
+
+/* mobile sidebar */
+function closeSide(){$('#side').classList.remove('open');$('#scrim').classList.remove('show');}
+$('#menuBtn').addEventListener('click',()=>{$('#side').classList.add('open');$('#scrim').classList.add('show');});
+$('#scrim').addEventListener('click',closeSide);
+
+/* clock */
+function tick(){const d=new Date();$('#clock').textContent='วันนี้ '+d.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' · อัปเดตเรียลไทม์';}
+tick();setInterval(tick,1000*30);
+
+/* boot — รับ filter จาก URL hash (เช่น orders.html#doing จากหน้าอื่น) */
+(function(){const h=location.hash.slice(1);
+  if(['all','new','doing','ready','coming','picked'].includes(h))activeFilter=h;})();
+renderAll();renderNotifs();
+/* demo: ออเดอร์ใหม่เด้งเข้าหลังเปิดหน้า 4 วินาที */
+setTimeout(simulateOrder,4000);
+</script>
+</body>
+</html>

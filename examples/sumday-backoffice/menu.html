@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMDAY · เมนู &amp; ราคา</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<style>
+  .search{position:relative;max-width:300px;width:100%;}
+  .search .ic{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:16px;}
+  .search .input{padding-left:38px;}
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;}
+  .mcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-sm);
+    display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s;}
+  .mcard:hover{transform:translateY(-3px);box-shadow:var(--sh);}
+  .mcard.off{opacity:.62;}
+  .mcard .thumb{position:relative;aspect-ratio:1/1;background:var(--surface-2);display:grid;place-items:center;overflow:hidden;}
+  .mcard .thumb img{width:80%;height:88%;object-fit:contain;mix-blend-mode:multiply;transition:transform .25s;}
+  .mcard:hover .thumb img{transform:scale(1.06);}
+  .mcard.off .thumb img{filter:grayscale(.7);}
+  .mcard .tag{position:absolute;top:10px;left:10px;font-family:var(--display);font-weight:600;font-size:11px;padding:3px 10px;border-radius:var(--r-pill);color:#fff;}
+  .mcard .tag.hot{background:var(--accent);} .mcard .tag.new{background:var(--doing);}
+  .mcard .soldout{position:absolute;inset:0;display:none;place-items:center;background:rgba(35,51,43,.32);}
+  .mcard.off .soldout{display:grid;}
+  .mcard .soldout span{background:var(--ink);color:#fff;font-weight:700;font-size:13px;padding:6px 16px;border-radius:var(--r-pill);transform:rotate(-6deg);}
+  .mcard .body{padding:13px 14px 15px;display:flex;flex-direction:column;gap:3px;flex:1;}
+  .mcard .body h3{font-size:15.5px;font-weight:600;line-height:1.2;}
+  .mcard .body .en{font-size:12px;color:var(--muted);}
+  .mcard .body .price{margin-top:6px;font-family:var(--display);font-weight:700;font-size:19px;color:var(--primary-strong);}
+  .mcard .foot{border-top:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);}
+  .avail{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--ink-soft);}
+  .mcard.off .avail{color:var(--muted);}
+  .mcard .edit{font-size:13px;font-weight:600;color:var(--primary-strong);padding:5px 10px;border-radius:8px;}
+  .mcard .edit:hover{background:var(--primary-soft);}
+  .cat-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:18px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="side" id="side">
+    <div class="lg">
+      <img class="badge-logo" src="../../img/logo/image%20copy.png" alt="SUMDAY">
+      <div class="t"><b>SUMDAY</b><small>Back-office</small></div>
+    </div>
+    <div class="navlabel">ออเดอร์</div>
+    <a href="orders.html"><span class="ico">📥</span> ออเดอร์เข้า</a>
+    <a href="orders.html#doing"><span class="ico">👩‍🍳</span> กำลังทำ</a>
+    <a href="orders.html#ready"><span class="ico">✅</span> พร้อมรับ</a>
+    <a href="orders.html#picked"><span class="ico">📦</span> รับแล้ว</a>
+    <div class="navlabel">จัดการร้าน</div>
+    <a href="reports.html"><span class="ico">📊</span> รายงานยอดขาย</a>
+    <a href="menu.html" class="on"><span class="ico">🍽️</span> เมนู &amp; ราคา</a>
+    <a href="settings.html"><span class="ico">⚙️</span> ตั้งค่าร้าน</a>
+    <div class="who">
+      <span class="av">อ</span>
+      <div class="t"><b>คุณอริสา</b><small>พนักงานหน้าร้าน</small></div>
+      <a href="login.html" class="out" title="ออกจากระบบ">⎋</a>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <!-- ===== MAIN ===== -->
+  <div class="main">
+    <div class="topbar">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div class="tb-title">
+        <h1>เมนู &amp; ราคา</h1>
+        <div class="sub">เปิด–ปิดการขาย และจัดการราคาเมนู</div>
+      </div>
+      <div class="spacer"></div>
+      <div class="bar-actions">
+        <div class="search"><span class="ic">🔍</span><input class="input" id="search" placeholder="ค้นหาเมนู…"></div>
+        <button class="btn btn-primary btn-sm" id="addBtn">＋ เพิ่มเมนู</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="stats" id="stats"></div>
+
+      <div class="cat-row">
+        <div class="filters" id="cats" style="margin:0"></div>
+      </div>
+
+      <div class="menu-grid" id="grid"></div>
+      <div id="emptyState"></div>
+    </div>
+  </div>
+</div>
+
+<div class="mini-toast" id="miniToast"></div>
+
+<script>
+const IMG='../../img/menu/';
+const CATS={all:'ทั้งหมด',coffee:'☕ กาแฟ',milk:'🥛 นม',tea:'🍵 ชา & น้ำผลไม้'};
+let MENU=[
+  {id:35,en:'Americano',th:'อเมริกาโน่',price:55,cat:'coffee',tag:'hot',on:true},
+  {id:36,en:'Black Orange',th:'แบล็คออเรนจ์',price:65,cat:'coffee',on:true},
+  {id:37,en:'Latte',th:'ลาเต้',price:60,cat:'coffee',on:true},
+  {id:38,en:'Cappuccino',th:'คาปูชิโน่',price:60,cat:'coffee',on:true},
+  {id:39,en:'Banana Coffee',th:'กาแฟกล้วย',price:65,cat:'coffee',on:true},
+  {id:40,en:'Thai Tea',th:'ชาไทย',price:60,cat:'milk',tag:'hot',on:true},
+  {id:43,en:'Rose Milk Tea',th:'ชานมกุหลาบ',price:60,cat:'milk',on:true},
+  {id:44,en:'Rose Tea',th:'ชากุหลาบ',price:60,cat:'milk',tag:'new',on:true},
+  {id:46,en:'Banana Milk',th:'บานาน่ามิลค์',price:60,cat:'milk',on:true},
+  {id:47,en:'Fresh Milk',th:'นมสด',price:60,cat:'milk',on:true},
+  {id:48,en:'Melon Milk',th:'นมเมล่อน',price:60,cat:'milk',tag:'new',on:false},
+  {id:49,en:'Taro Milk',th:'นมเผือก',price:60,cat:'milk',on:true},
+  {id:50,en:'Green Tea Latte',th:'ชาเขียวนม',price:60,cat:'milk',on:true},
+  {id:52,en:'Matcha Latte',th:'มัทฉะลาเต้',price:70,cat:'milk',tag:'hot',on:true},
+  {id:33,en:'Orange Juice',th:'น้ำส้มคั้นสด',price:65,cat:'tea',tag:'new',on:true},
+  {id:34,en:'Punch',th:'น้ำพั้นซ์',price:65,cat:'tea',on:true},
+  {id:41,en:'Lemon Tea',th:'ชามะนาว',price:60,cat:'tea',on:true},
+  {id:42,en:'Jasmine Tea',th:'ชามะลิ',price:60,cat:'tea',on:true},
+  {id:45,en:'Lemon Honey',th:'น้ำผึ้งมะนาว',price:60,cat:'tea',on:false},
+  {id:51,en:'Pure Matcha',th:'มัทฉะเพียว',price:65,cat:'tea',on:true},
+  {id:53,en:'Coconut Matcha',th:'มัทฉะมะพร้าว',price:65,cat:'tea',on:true},
+];
+const $=s=>document.querySelector(s);
+let activeCat='all',q='';
+
+function renderStats(){
+  const total=MENU.length, on=MENU.filter(m=>m.on).length;
+  $('#stats').innerHTML=`
+    <div class="stat"><div class="ic" style="background:var(--ready-soft);color:var(--ready-ink)">🍽️</div>
+      <div class="lbl">เมนูทั้งหมด</div><div class="val">${total}</div><div class="trend">3 หมวด</div></div>
+    <div class="stat"><div class="ic" style="background:var(--doing-soft);color:var(--doing-ink)">✅</div>
+      <div class="lbl">พร้อมขาย</div><div class="val">${on}</div><div class="trend">กำลังเปิดขาย</div></div>
+    <div class="stat"><div class="ic" style="background:var(--new-soft);color:var(--new-ink)">⛔</div>
+      <div class="lbl">ของหมด</div><div class="val">${total-on}</div><div class="trend" style="color:var(--new-ink)">ปิดการขายชั่วคราว</div></div>
+    <div class="stat"><div class="ic" style="background:var(--accent-soft);color:var(--accent-strong)">฿</div>
+      <div class="lbl">ราคาเฉลี่ย</div><div class="val">฿${Math.round(MENU.reduce((s,m)=>s+m.price,0)/total)}</div><div class="trend">฿55–70</div></div>`;
+}
+function renderCats(){
+  $('#cats').innerHTML=Object.entries(CATS).map(([k,l])=>{
+    const n=k==='all'?MENU.length:MENU.filter(m=>m.cat===k).length;
+    return `<button class="tab ${activeCat===k?'active':''}" data-c="${k}">${l} <span class="ct">${n}</span></button>`;
+  }).join('');
+}
+function card(m){
+  const tag=m.tag?`<span class="tag ${m.tag}">${m.tag==='hot'?'ขายดี':'ใหม่'}</span>`:'';
+  return `<div class="mcard ${m.on?'':'off'}" data-id="${m.id}">
+    <div class="thumb">${tag}<img src="${IMG}${m.id}.png" alt="${m.th}" loading="lazy">
+      <div class="soldout"><span>ของหมด</span></div></div>
+    <div class="body"><h3>${m.th}</h3><span class="en">${m.en}</span><span class="price">฿${m.price}</span></div>
+    <div class="foot">
+      <span class="avail"><span class="toggle ${m.on?'on':''}" data-toggle="${m.id}"></span>${m.on?'พร้อมขาย':'ของหมด'}</span>
+      <button class="edit" data-edit="${m.id}">แก้ไข</button>
+    </div></div>`;
+}
+function renderGrid(){
+  let list=MENU.filter(m=>activeCat==='all'||m.cat===activeCat);
+  if(q)list=list.filter(m=>(m.th+m.en).toLowerCase().includes(q));
+  $('#grid').innerHTML=list.map(card).join('');
+  $('#emptyState').innerHTML=list.length?'':`<div class="empty"><div class="e-ic">🔍</div><b>ไม่พบเมนูที่ค้นหา</b>ลองค้นด้วยคำอื่น</div>`;
+}
+function renderAll(){renderStats();renderCats();renderGrid();}
+
+function mini(msg){const t=$('#miniToast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1800);}
+
+$('#cats').addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b)return;activeCat=b.dataset.c;renderCats();renderGrid();});
+$('#grid').addEventListener('click',e=>{
+  const tg=e.target.closest('[data-toggle]');
+  if(tg){const m=MENU.find(x=>x.id==tg.dataset.toggle);m.on=!m.on;renderAll();
+    mini(`${m.th} · ${m.on?'เปิดขายแล้ว ✓':'ตั้งเป็นของหมด'}`);return;}
+  const ed=e.target.closest('[data-edit]');
+  if(ed){const m=MENU.find(x=>x.id==ed.dataset.edit);
+    const p=prompt(`แก้ไขราคา "${m.th}" (บาท)`,m.price);
+    if(p!==null&&!isNaN(+p)&&+p>0){m.price=+p;renderAll();mini(`อัปเดตราคา ${m.th} → ฿${m.price}`);}return;}
+});
+$('#search').addEventListener('input',e=>{q=e.target.value.trim().toLowerCase();renderGrid();});
+$('#addBtn').addEventListener('click',()=>mini('เดโม — ฟอร์มเพิ่มเมนูจะเชื่อมกับระบบจริงภายหลัง'));
+
+$('#menuBtn').addEventListener('click',()=>{$('#side').classList.add('open');$('#scrim').classList.add('show');});
+$('#scrim').addEventListener('click',()=>{$('#side').classList.remove('open');$('#scrim').classList.remove('show');});
+
+renderAll();
+</script>
+</body>
+</html>

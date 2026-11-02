@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMDAY · ตั้งค่าร้าน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<style>
+  .set-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;align-items:start;}
+  .set-card .ch{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .set-card .ch .ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:19px;flex:0 0 auto;}
+  .set-card .ch b{font-family:var(--display);font-size:16px;}
+  .set-card .ch span{display:block;font-size:12.5px;color:var(--muted);}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media(max-width:460px){.row2{grid-template-columns:1fr;}}
+  .switch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px dashed var(--border);}
+  .switch:last-child{border-bottom:none;}
+  .switch .t b{font-size:14px;font-weight:600;} .switch .t span{display:block;font-size:12px;color:var(--muted);}
+  .save-bar{position:sticky;bottom:0;background:rgba(251,250,245,.92);backdrop-filter:blur(10px);border-top:1px solid var(--border);
+    margin:20px -30px -30px;padding:14px clamp(16px,3vw,30px);display:flex;justify-content:flex-end;gap:10px;}
+  @media(max-width:900px){.save-bar{margin:20px -16px -16px;}}
+  .hours{display:flex;flex-direction:column;gap:8px;}
+  .hours .hr{display:flex;align-items:center;gap:10px;font-size:13.5px;}
+  .hours .hr .day{width:42px;font-weight:600;color:var(--ink-soft);}
+  .hours .hr input{width:78px;padding:7px 9px;border:1.5px solid var(--border-2);border-radius:8px;font-size:13px;text-align:center;}
+  .hours .hr .to{color:var(--muted);}
+  .pay{display:flex;align-items:center;gap:11px;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--r);margin-bottom:9px;cursor:pointer;transition:all .15s;}
+  .pay.on{border-color:var(--primary);background:var(--primary-soft);}
+  .pay .pic{width:38px;height:38px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;font-size:18px;flex:0 0 auto;}
+  .pay .t{flex:1;} .pay .t b{font-size:14px;} .pay .t span{display:block;font-size:12px;color:var(--muted);}
+  .pay .chk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border-2);display:grid;place-items:center;color:#fff;font-size:12px;}
+  .pay.on .chk{background:var(--primary);border-color:var(--primary);}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="side" id="side">
+    <div class="lg">
+      <img class="badge-logo" src="../../img/logo/image%20copy.png" alt="SUMDAY">
+      <div class="t"><b>SUMDAY</b><small>Back-office</small></div>
+    </div>
+    <div class="navlabel">ออเดอร์</div>
+    <a href="orders.html"><span class="ico">📥</span> ออเดอร์เข้า</a>
+    <a href="orders.html#doing"><span class="ico">👩‍🍳</span> กำลังทำ</a>
+    <a href="orders.html#ready"><span class="ico">✅</span> พร้อมรับ</a>
+    <a href="orders.html#picked"><span class="ico">📦</span> รับแล้ว</a>
+    <div class="navlabel">จัดการร้าน</div>
+    <a href="reports.html"><span class="ico">📊</span> รายงานยอดขาย</a>
+    <a href="menu.html"><span class="ico">🍽️</span> เมนู &amp; ราคา</a>
+    <a href="settings.html" class="on"><span class="ico">⚙️</span> ตั้งค่าร้าน</a>
+    <div class="who">
+      <span class="av">อ</span>
+      <div class="t"><b>คุณอริสา</b><small>พนักงานหน้าร้าน</small></div>
+      <a href="login.html" class="out" title="ออกจากระบบ">⎋</a>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <!-- ===== MAIN ===== -->
+  <div class="main">
+    <div class="topbar">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div class="tb-title">
+        <h1>ตั้งค่าร้าน</h1>
+        <div class="sub">ข้อมูลร้าน เวลาทำการ และการรับออเดอร์</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="set-grid">
+
+        <!-- ข้อมูลร้าน -->
+        <div class="card-box set-card">
+          <div class="ch"><span class="ic" style="background:var(--ready-soft)">🏪</span>
+            <div><b>ข้อมูลร้าน</b><span>แสดงบนเว็บสั่งซื้อและใบเสร็จ</span></div></div>
+          <div class="field"><label>ชื่อร้าน</label><input class="input" value="SUMDAY Coffee"></div>
+          <div class="row2">
+            <div class="field"><label>เบอร์โทรร้าน</label><input class="input" value="02-123-4567"></div>
+            <div class="field"><label>สาขา</label><input class="input" value="สีลม"></div>
+          </div>
+          <div class="field" style="margin-bottom:0"><label>ที่อยู่</label>
+            <textarea class="textarea" style="min-height:70px">123 ถนนสีลม แขวงสุริยวงศ์ เขตบางรัก กรุงเทพฯ 10500</textarea></div>
+        </div>
+
+        <!-- เวลาทำการ -->
+        <div class="card-box set-card">
+          <div class="ch"><span class="ic" style="background:var(--doing-soft)">🕒</span>
+            <div><b>เวลาทำการ</b><span>กำหนดช่วงเวลาที่เปิดรับออเดอร์</span></div></div>
+          <div class="switch"><div class="t"><b>เปิดรับออเดอร์วันนี้</b><span>ปิดเพื่อหยุดรับชั่วคราว</span></div>
+            <span class="toggle on" data-toggle></span></div>
+          <div class="hours" style="margin-top:12px">
+            <div class="hr"><span class="day">จ–ศ</span><input value="07:00"><span class="to">ถึง</span><input value="18:00"></div>
+            <div class="hr"><span class="day">ส–อา</span><input value="08:00"><span class="to">ถึง</span><input value="17:00"></div>
+          </div>
+        </div>
+
+        <!-- การรับออเดอร์ -->
+        <div class="card-box set-card">
+          <div class="ch"><span class="ic" style="background:var(--new-soft)">📥</span>
+            <div><b>การรับออเดอร์</b><span>พฤติกรรมเมื่อมีออเดอร์เข้า</span></div></div>
+          <div class="switch"><div class="t"><b>รับออเดอร์อัตโนมัติ</b><span>ข้ามขั้น “กดรับ” ไปกำลังทำเลย</span></div>
+            <span class="toggle" data-toggle></span></div>
+          <div class="switch"><div class="t"><b>เสียงแจ้งเตือนออเดอร์ใหม่</b><span>เด้งเสียงเมื่อมีออเดอร์เข้า</span></div>
+            <span class="toggle on" data-toggle></span></div>
+          <div class="switch"><div class="t"><b>รับเดลิเวอรี</b><span>เปิดให้สั่งแบบจัดส่ง</span></div>
+            <span class="toggle on" data-toggle></span></div>
+          <div class="switch"><div class="t"><b>รับแบบมารับที่ร้าน</b><span>เปิดให้สั่งแบบนัดรับ</span></div>
+            <span class="toggle on" data-toggle></span></div>
+        </div>
+
+        <!-- การแจ้งเตือน -->
+        <div class="card-box set-card">
+          <div class="ch"><span class="ic" style="background:var(--coming-soft)">🔔</span>
+            <div><b>การแจ้งเตือน</b><span>ช่องทางรับการแจ้งเตือน</span></div></div>
+          <div class="switch"><div class="t"><b>แจ้งเตือนบนหน้าจอ</b><span>Pop-up เมื่อมีออเดอร์ใหม่</span></div>
+            <span class="toggle on" data-toggle></span></div>
+          <div class="switch"><div class="t"><b>อีเมลสรุปยอดรายวัน</b><span>ส่งทุก 21:00 น.</span></div>
+            <span class="toggle on" data-toggle></span></div>
+          <div class="switch"><div class="t"><b>แจ้งเตือนสต็อกใกล้หมด</b><span>เมื่อวัตถุดิบเหลือน้อย</span></div>
+            <span class="toggle" data-toggle></span></div>
+        </div>
+
+        <!-- ช่องทางชำระเงิน -->
+        <div class="card-box set-card" style="grid-column:1/-1">
+          <div class="ch"><span class="ic" style="background:var(--accent-soft)">💳</span>
+            <div><b>ช่องทางชำระเงิน</b><span>เลือกช่องทางที่เปิดให้ลูกค้าจ่าย</span></div></div>
+          <div class="row2" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+            <div class="pay on" data-pay><span class="pic">📱</span><div class="t"><b>พร้อมเพย์ (PromptPay)</b><span>โอน/สแกน QR</span></div><span class="chk">✓</span></div>
+            <div class="pay on" data-pay><span class="pic">💵</span><div class="t"><b>เงินสด</b><span>ชำระที่ร้าน</span></div><span class="chk">✓</span></div>
+            <div class="pay" data-pay><span class="pic">💳</span><div class="t"><b>บัตรเครดิต/เดบิต</b><span>Visa · Mastercard</span></div><span class="chk">✓</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="save-bar">
+        <button class="btn btn-ghost" id="resetBtn">ยกเลิก</button>
+        <button class="btn btn-primary" id="saveBtn">💾 บันทึกการตั้งค่า</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mini-toast" id="miniToast"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+function mini(msg){const t=$('#miniToast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1900);}
+
+document.querySelectorAll('[data-toggle]').forEach(t=>t.addEventListener('click',()=>t.classList.toggle('on')));
+document.querySelectorAll('[data-pay]').forEach(p=>p.addEventListener('click',()=>p.classList.toggle('on')));
+
+$('#saveBtn').addEventListener('click',()=>{
+  const btn=$('#saveBtn');btn.textContent='กำลังบันทึก…';btn.disabled=true;
+  setTimeout(()=>{btn.textContent='💾 บันทึกการตั้งค่า';btn.disabled=false;mini('บันทึกการตั้งค่าร้านแล้ว ✓');},600);
+});
+$('#resetBtn').addEventListener('click',()=>mini('ยกเลิกการแก้ไข'));
+
+$('#menuBtn').addEventListener('click',()=>{$('#side').classList.add('open');$('#scrim').classList.add('show');});
+$('#scrim').addEventListener('click',()=>{$('#side').classList.remove('open');$('#scrim').classList.remove('show');});
+</script>
+</body>
+</html>
