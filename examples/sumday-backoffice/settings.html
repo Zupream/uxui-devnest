@@ -17,152 +17,198 @@
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   @media(max-width:460px){.row2{grid-template-columns:1fr;}}
   .switch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px dashed var(--border);}
-  .switch:last-child{border-bottom:none;}
+  .switch:last-of-type{border-bottom:none;}
   .switch .t b{font-size:14px;font-weight:600;} .switch .t span{display:block;font-size:12px;color:var(--muted);}
-  .save-bar{position:sticky;bottom:0;background:rgba(251,250,245,.92);backdrop-filter:blur(10px);border-top:1px solid var(--border);
-    margin:20px -30px -30px;padding:14px clamp(16px,3vw,30px);display:flex;justify-content:flex-end;gap:10px;}
+  .save-bar{position:sticky;bottom:0;background:rgba(250,244,234,.92);backdrop-filter:blur(10px);border-top:1px solid var(--border);
+    margin:20px -30px -30px;padding:14px clamp(16px,3vw,30px);display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;}
+  .save-bar .state{margin-right:auto;font-size:13px;color:var(--muted);font-weight:500;}
+  .save-bar .state.dirty{color:var(--verify-ink);}
   @media(max-width:900px){.save-bar{margin:20px -16px -16px;}}
   .hours{display:flex;flex-direction:column;gap:8px;}
-  .hours .hr{display:flex;align-items:center;gap:10px;font-size:13.5px;}
-  .hours .hr .day{width:42px;font-weight:600;color:var(--ink-soft);}
-  .hours .hr input{width:78px;padding:7px 9px;border:1.5px solid var(--border-2);border-radius:8px;font-size:13px;text-align:center;}
+  .hours .hr{display:flex;align-items:center;gap:10px;font-size:13.5px;flex-wrap:wrap;}
+  .hours .hr .day{width:48px;font-weight:600;color:var(--ink-soft);}
+  .hours .hr input{width:112px;padding:8px 10px;border:1.5px solid var(--border-2);border-radius:8px;font-size:13.5px;background:var(--surface);color:var(--ink);}
+  .hours .hr input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft);}
   .hours .hr .to{color:var(--muted);}
-  .pay{display:flex;align-items:center;gap:11px;padding:11px 13px;border:1.5px solid var(--border);border-radius:var(--r);margin-bottom:9px;cursor:pointer;transition:all .15s;}
-  .pay.on{border-color:var(--primary);background:var(--primary-soft);}
-  .pay .pic{width:38px;height:38px;border-radius:10px;background:var(--surface-2);display:grid;place-items:center;font-size:18px;flex:0 0 auto;}
-  .pay .t{flex:1;} .pay .t b{font-size:14px;} .pay .t span{display:block;font-size:12px;color:var(--muted);}
-  .pay .chk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border-2);display:grid;place-items:center;color:#fff;font-size:12px;}
-  .pay.on .chk{background:var(--primary);border-color:var(--primary);}
+  .pp{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:start;}
+  @media(max-width:560px){.pp{grid-template-columns:1fr;}}
+  .pp .qr{width:150px;border-radius:var(--r);border:1px solid var(--border);background:#fff;padding:8px;box-shadow:var(--sh-sm);}
+  .pp .qr img{width:100%;border-radius:8px;}
+  .pp .qr small{display:block;text-align:center;font-size:11.5px;color:var(--muted);margin-top:6px;}
+  .pp-badge{display:flex;align-items:center;gap:11px;padding:11px 13px;border:1.5px solid var(--primary);background:var(--primary-soft);border-radius:var(--r);margin-bottom:14px;}
+  .pp-badge .pic{width:38px;height:38px;border-radius:10px;background:var(--surface);display:grid;place-items:center;font-size:18px;flex:0 0 auto;}
+  .pp-badge b{font-size:14px;} .pp-badge span{display:block;font-size:12px;color:var(--ink-soft);}
+  .hint{font-size:12.5px;color:var(--ink-soft);background:var(--verify-soft);border-radius:10px;padding:9px 12px;line-height:1.55;}
+  .hint a{color:var(--primary);font-weight:600;}
+  .demo-card p{font-size:13.5px;color:var(--ink-soft);margin-bottom:14px;line-height:1.6;}
 </style>
 </head>
 <body>
 <div class="app">
-
-  <!-- ===== SIDEBAR ===== -->
-  <aside class="side" id="side">
-    <div class="lg">
-      <img class="badge-logo" src="../../img/logo/image%20copy.png" alt="SUMDAY">
-      <div class="t"><b>SUMDAY</b><small>Back-office</small></div>
-    </div>
-    <div class="navlabel">ออเดอร์</div>
-    <a href="orders.html"><span class="ico">📥</span> ออเดอร์เข้า</a>
-    <a href="orders.html#doing"><span class="ico">👩‍🍳</span> กำลังทำ</a>
-    <a href="orders.html#ready"><span class="ico">✅</span> พร้อมรับ</a>
-    <a href="orders.html#picked"><span class="ico">📦</span> รับแล้ว</a>
-    <div class="navlabel">จัดการร้าน</div>
-    <a href="reports.html"><span class="ico">📊</span> รายงานยอดขาย</a>
-    <a href="menu.html"><span class="ico">🍽️</span> เมนู &amp; ราคา</a>
-    <a href="settings.html" class="on"><span class="ico">⚙️</span> ตั้งค่าร้าน</a>
-    <div class="who">
-      <span class="av">อ</span>
-      <div class="t"><b>คุณอริสา</b><small>พนักงานหน้าร้าน</small></div>
-      <a href="login.html" class="out" title="ออกจากระบบ">⎋</a>
-    </div>
-  </aside>
+  <aside class="side" id="side"></aside>
   <div class="scrim" id="scrim"></div>
 
-  <!-- ===== MAIN ===== -->
   <div class="main">
     <div class="topbar">
       <button class="menu-btn" id="menuBtn">☰</button>
       <div class="tb-title">
         <h1>ตั้งค่าร้าน</h1>
-        <div class="sub">ข้อมูลร้าน เวลาทำการ และการรับออเดอร์</div>
+        <div class="sub">ข้อมูลร้าน เวลาทำการ และการรับออเดอร์ · มีผลกับหน้าร้านทันทีหลังบันทึก</div>
       </div>
     </div>
 
     <div class="content">
-      <div class="set-grid">
+      <div id="closedBanner"></div>
+      <form class="set-grid" id="form" autocomplete="off" onsubmit="return false">
 
         <!-- ข้อมูลร้าน -->
         <div class="card-box set-card">
-          <div class="ch"><span class="ic" style="background:var(--ready-soft)">🏪</span>
+          <div class="ch"><span class="ic" style="background:var(--primary-soft)">🏪</span>
             <div><b>ข้อมูลร้าน</b><span>แสดงบนเว็บสั่งซื้อและใบเสร็จ</span></div></div>
-          <div class="field"><label>ชื่อร้าน</label><input class="input" value="SUMDAY Coffee"></div>
+          <div class="field"><label for="shopName">ชื่อร้าน</label><input class="input" id="shopName" data-k="shop.name"></div>
           <div class="row2">
-            <div class="field"><label>เบอร์โทรร้าน</label><input class="input" value="02-123-4567"></div>
-            <div class="field"><label>สาขา</label><input class="input" value="สีลม"></div>
+            <div class="field"><label for="shopPhone">เบอร์โทรร้าน</label><input class="input" id="shopPhone" data-k="shop.phone" inputmode="tel"></div>
+            <div class="field"><label for="shopBranch">สาขา</label><input class="input" id="shopBranch" data-k="shop.branch"></div>
           </div>
-          <div class="field" style="margin-bottom:0"><label>ที่อยู่</label>
-            <textarea class="textarea" style="min-height:70px">123 ถนนสีลม แขวงสุริยวงศ์ เขตบางรัก กรุงเทพฯ 10500</textarea></div>
+          <div class="field" style="margin-bottom:0"><label for="shopAddr">ที่อยู่</label>
+            <textarea class="textarea" id="shopAddr" data-k="shop.address" style="min-height:70px"></textarea></div>
         </div>
 
         <!-- เวลาทำการ -->
         <div class="card-box set-card">
-          <div class="ch"><span class="ic" style="background:var(--doing-soft)">🕒</span>
-            <div><b>เวลาทำการ</b><span>กำหนดช่วงเวลาที่เปิดรับออเดอร์</span></div></div>
-          <div class="switch"><div class="t"><b>เปิดรับออเดอร์วันนี้</b><span>ปิดเพื่อหยุดรับชั่วคราว</span></div>
-            <span class="toggle on" data-toggle></span></div>
+          <div class="ch"><span class="ic" style="background:var(--verify-soft)">🕒</span>
+            <div><b>เวลาทำการ</b><span>ช่วงเวลาที่เปิดรับออเดอร์</span></div></div>
+          <div class="switch"><div class="t"><b>เปิดรับออเดอร์ตอนนี้</b><span>ปิด = ลูกค้ากดชำระเงินที่หน้าร้านไม่ได้</span></div>
+            <span class="toggle" data-t="storeOpen" role="switch" tabindex="0"></span></div>
           <div class="hours" style="margin-top:12px">
-            <div class="hr"><span class="day">จ–ศ</span><input value="07:00"><span class="to">ถึง</span><input value="18:00"></div>
-            <div class="hr"><span class="day">ส–อา</span><input value="08:00"><span class="to">ถึง</span><input value="17:00"></div>
+            <div class="hr"><span class="day">จ–ศ</span><input type="time" data-k="hours.wk.0"><span class="to">ถึง</span><input type="time" data-k="hours.wk.1"></div>
+            <div class="hr"><span class="day">ส–อา</span><input type="time" data-k="hours.we.0"><span class="to">ถึง</span><input type="time" data-k="hours.we.1"></div>
           </div>
+          <div class="err" id="errHours">เวลาปิดต้องหลังเวลาเปิด</div>
         </div>
 
         <!-- การรับออเดอร์ -->
         <div class="card-box set-card">
-          <div class="ch"><span class="ic" style="background:var(--new-soft)">📥</span>
-            <div><b>การรับออเดอร์</b><span>พฤติกรรมเมื่อมีออเดอร์เข้า</span></div></div>
-          <div class="switch"><div class="t"><b>รับออเดอร์อัตโนมัติ</b><span>ข้ามขั้น “กดรับ” ไปกำลังทำเลย</span></div>
-            <span class="toggle" data-toggle></span></div>
-          <div class="switch"><div class="t"><b>เสียงแจ้งเตือนออเดอร์ใหม่</b><span>เด้งเสียงเมื่อมีออเดอร์เข้า</span></div>
-            <span class="toggle on" data-toggle></span></div>
-          <div class="switch"><div class="t"><b>รับเดลิเวอรี</b><span>เปิดให้สั่งแบบจัดส่ง</span></div>
-            <span class="toggle on" data-toggle></span></div>
-          <div class="switch"><div class="t"><b>รับแบบมารับที่ร้าน</b><span>เปิดให้สั่งแบบนัดรับ</span></div>
-            <span class="toggle on" data-toggle></span></div>
+          <div class="ch"><span class="ic" style="background:var(--accent-soft)">📥</span>
+            <div><b>การรับออเดอร์</b><span>รูปแบบรับที่ลูกค้าเลือกได้ในหน้าร้าน</span></div></div>
+          <div class="switch"><div class="t"><b>🏃 รับเองที่ร้าน</b><span>ลูกค้ามารับที่เคาน์เตอร์ แสดงใบเสร็จ</span></div>
+            <span class="toggle" data-t="pickup" role="switch" tabindex="0"></span></div>
+          <div class="switch"><div class="t"><b>📞 ให้ติดต่อกลับ</b><span>ร้านโทรแจ้งลูกค้าเมื่อเครื่องดื่มพร้อม</span></div>
+            <span class="toggle" data-t="callback" role="switch" tabindex="0"></span></div>
+          <div class="err" id="errType">ต้องเปิดอย่างน้อย 1 รูปแบบ ไม่งั้นลูกค้าสั่งไม่ได้</div>
+          <div class="switch"><div class="t"><b>ยืนยันสลิปอัตโนมัติ</b><span>ข้ามขั้นตรวจสลิป เข้า “กำลังทำ” ทันที</span></div>
+            <span class="toggle" data-t="autoAccept" role="switch" tabindex="0"></span></div>
         </div>
 
         <!-- การแจ้งเตือน -->
         <div class="card-box set-card">
           <div class="ch"><span class="ic" style="background:var(--coming-soft)">🔔</span>
-            <div><b>การแจ้งเตือน</b><span>ช่องทางรับการแจ้งเตือน</span></div></div>
-          <div class="switch"><div class="t"><b>แจ้งเตือนบนหน้าจอ</b><span>Pop-up เมื่อมีออเดอร์ใหม่</span></div>
-            <span class="toggle on" data-toggle></span></div>
-          <div class="switch"><div class="t"><b>อีเมลสรุปยอดรายวัน</b><span>ส่งทุก 21:00 น.</span></div>
-            <span class="toggle on" data-toggle></span></div>
-          <div class="switch"><div class="t"><b>แจ้งเตือนสต็อกใกล้หมด</b><span>เมื่อวัตถุดิบเหลือน้อย</span></div>
-            <span class="toggle" data-toggle></span></div>
+            <div><b>การแจ้งเตือน</b><span>เมื่อมีออเดอร์ใหม่จากหน้าร้าน</span></div></div>
+          <div class="switch"><div class="t"><b>เสียงแจ้งเตือน</b><span>เด้งเสียงเมื่อมีออเดอร์เข้า</span></div>
+            <span class="toggle" data-t="sound" role="switch" tabindex="0"></span></div>
+          <div class="switch"><div class="t"><b>Pop-up บนหน้าจอ</b><span>การ์ดแจ้งเตือนมุมขวาบน แตะเพื่อเปิดออเดอร์</span></div>
+            <span class="toggle" data-t="popup" role="switch" tabindex="0"></span></div>
+          <div style="margin-top:10px"><button type="button" class="btn btn-ghost btn-sm" id="testBeep">🔊 ทดสอบเสียง</button></div>
         </div>
 
         <!-- ช่องทางชำระเงิน -->
         <div class="card-box set-card" style="grid-column:1/-1">
-          <div class="ch"><span class="ic" style="background:var(--accent-soft)">💳</span>
-            <div><b>ช่องทางชำระเงิน</b><span>เลือกช่องทางที่เปิดให้ลูกค้าจ่าย</span></div></div>
-          <div class="row2" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
-            <div class="pay on" data-pay><span class="pic">📱</span><div class="t"><b>พร้อมเพย์ (PromptPay)</b><span>โอน/สแกน QR</span></div><span class="chk">✓</span></div>
-            <div class="pay on" data-pay><span class="pic">💵</span><div class="t"><b>เงินสด</b><span>ชำระที่ร้าน</span></div><span class="chk">✓</span></div>
-            <div class="pay" data-pay><span class="pic">💳</span><div class="t"><b>บัตรเครดิต/เดบิต</b><span>Visa · Mastercard</span></div><span class="chk">✓</span></div>
+          <div class="ch"><span class="ic" style="background:var(--ready-soft)">💳</span>
+            <div><b>ช่องทางชำระเงิน</b><span>หน้าร้านรับชำระผ่านพร้อมเพย์อย่างเดียว</span></div></div>
+          <div class="pp">
+            <div>
+              <div class="pp-badge"><span class="pic">📱</span><div><b>พร้อมเพย์ (PromptPay) · เปิดใช้งาน</b><span>ลูกค้าสแกน QR แล้วแนบสลิปก่อนยืนยันออเดอร์</span></div></div>
+              <div class="row2">
+                <div class="field"><label for="ppName">ชื่อบัญชี</label><input class="input" id="ppName" data-k="promptpay.name"></div>
+                <div class="field"><label for="ppId">หมายเลขพร้อมเพย์</label><input class="input" id="ppId" data-k="promptpay.id" inputmode="numeric" style="font-family:var(--mono)"></div>
+              </div>
+              <div class="hint">🧾 ลูกค้าแนบสลิปทุกออเดอร์ → ตรวจที่หน้า <a href="orders.html">ออเดอร์เข้า</a> (สถานะ “รอตรวจสลิป”) ก่อนเริ่มทำ</div>
+            </div>
+            <div class="qr"><img src="../../img/logo/S__3964954.jpg" alt="QR พร้อมเพย์ของร้าน"><small>QR ที่แสดงในหน้าร้าน</small></div>
           </div>
         </div>
 
-      </div>
+        <!-- ข้อมูลเดโม -->
+        <div class="card-box set-card demo-card" style="grid-column:1/-1">
+          <div class="ch"><span class="ic" style="background:var(--surface-2)">🧪</span>
+            <div><b>ข้อมูลเดโม</b><span>ข้อมูลทั้งหมดเก็บในเบราว์เซอร์นี้ (localStorage)</span></div></div>
+          <p>รีเซ็ตเพื่อคืนออเดอร์ตัวอย่าง เมนู และการตั้งค่าทั้งหมดกลับเป็นค่าเริ่มต้น — ออเดอร์ที่สั่งจากหน้าร้านและการแก้ไขเมนูจะถูกลบ (ยังล็อกอินอยู่เหมือนเดิม)</p>
+          <button type="button" class="btn btn-danger" id="resetDemo">↺ รีเซ็ตข้อมูลเดโม</button>
+        </div>
+      </form>
 
       <div class="save-bar">
-        <button class="btn btn-ghost" id="resetBtn">ยกเลิก</button>
-        <button class="btn btn-primary" id="saveBtn">💾 บันทึกการตั้งค่า</button>
+        <span class="state" id="saveState">บันทึกล่าสุดแล้ว</span>
+        <button class="btn btn-ghost" id="resetBtn" disabled>ยกเลิก</button>
+        <button class="btn btn-primary" id="saveBtn" disabled>💾 บันทึกการตั้งค่า</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="mini-toast" id="miniToast"></div>
-
+<script src="store.js"></script>
+<script src="shell.js"></script>
 <script>
-const $=s=>document.querySelector(s);
-function mini(msg){const t=$('#miniToast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1900);}
+Shell.init('settings');
+const {$,mini}=Shell;
+const S=SUMDAY;
+let draft, saved, dirty=false;
 
-document.querySelectorAll('[data-toggle]').forEach(t=>t.addEventListener('click',()=>t.classList.toggle('on')));
-document.querySelectorAll('[data-pay]').forEach(p=>p.addEventListener('click',()=>p.classList.toggle('on')));
+const get=(o,path)=>path.split('.').reduce((a,k)=>a==null?a:a[k],o);
+function set(o,path,v){const ks=path.split('.'),last=ks.pop();ks.reduce((a,k)=>a[k],o)[last]=v;}
+const clone=o=>JSON.parse(JSON.stringify(o));
+
+function load(){saved=S.getSettings();draft=clone(saved);fill();setDirty(false);}
+function fill(){
+  document.querySelectorAll('[data-k]').forEach(el=>el.value=get(draft,el.dataset.k)??'');
+  document.querySelectorAll('[data-t]').forEach(el=>{const on=!!draft[el.dataset.t];el.classList.toggle('on',on);el.setAttribute('aria-checked',on);});
+  validate();
+}
+function setDirty(d){
+  dirty=d;
+  $('#saveBtn').disabled=!d; $('#resetBtn').disabled=!d;
+  $('#saveState').textContent=d?'● มีการแก้ไขที่ยังไม่บันทึก':'บันทึกล่าสุดแล้ว';
+  $('#saveState').classList.toggle('dirty',d);
+}
+function changed(){setDirty(JSON.stringify(draft)!==JSON.stringify(saved));validate();}
+function validate(){
+  const typeOk=draft.pickup||draft.callback;
+  const hOk=['wk','we'].every(k=>!draft.hours[k][0]||!draft.hours[k][1]||draft.hours[k][0]<draft.hours[k][1]);
+  $('#errType').classList.toggle('show',!typeOk);
+  $('#errHours').classList.toggle('show',!hOk);
+  return typeOk&&hOk;
+}
+
+$('#form').addEventListener('input',e=>{const el=e.target.closest('[data-k]');if(!el)return;set(draft,el.dataset.k,el.value);changed();});
+function flip(el){
+  const k=el.dataset.t;
+  if((k==='pickup'||k==='callback')&&draft[k]&&!draft[k==='pickup'?'callback':'pickup']){
+    $('#errType').classList.add('show');mini('ต้องเปิดอย่างน้อย 1 รูปแบบการรับ');return;
+  }
+  draft[k]=!draft[k];fill();changed();
+}
+document.querySelectorAll('[data-t]').forEach(el=>{
+  el.addEventListener('click',()=>flip(el));
+  el.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();flip(el);}});
+});
 
 $('#saveBtn').addEventListener('click',()=>{
-  const btn=$('#saveBtn');btn.textContent='กำลังบันทึก…';btn.disabled=true;
-  setTimeout(()=>{btn.textContent='💾 บันทึกการตั้งค่า';btn.disabled=false;mini('บันทึกการตั้งค่าร้านแล้ว ✓');},600);
+  if(!validate()){mini('กรุณาแก้ข้อมูลที่ไม่ถูกต้องก่อนบันทึก');return;}
+  ['name','phone','branch','address'].forEach(k=>draft.shop[k]=String(draft.shop[k]).trim());
+  S.saveSettings(draft); saved=clone(draft); setDirty(false); Shell.refresh();
+  mini(saved.storeOpen?'บันทึกแล้ว ✓ หน้าร้านใช้ค่าใหม่ทันที':'บันทึกแล้ว ✓ หน้าร้านปิดรับออเดอร์');
 });
-$('#resetBtn').addEventListener('click',()=>mini('ยกเลิกการแก้ไข'));
+$('#resetBtn').addEventListener('click',()=>{load();mini('ยกเลิกการแก้ไข');});
+$('#testBeep').addEventListener('click',()=>Shell.beep());
+$('#resetDemo').addEventListener('click',()=>{
+  if(!confirm('รีเซ็ตข้อมูลเดโมทั้งหมด?\nออเดอร์ เมนู และการตั้งค่าจะกลับเป็นค่าเริ่มต้น'))return;
+  S.resetDemo(); location.reload();
+});
+window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
 
-$('#menuBtn').addEventListener('click',()=>{$('#side').classList.add('open');$('#scrim').classList.add('show');});
-$('#scrim').addEventListener('click',()=>{$('#side').classList.remove('open');$('#scrim').classList.remove('show');});
+/* แท็บอื่น (หรือแบนเนอร์ "เปิดรับออเดอร์") เปลี่ยนค่า → โหลดใหม่ถ้ายังไม่ได้แก้ค้างไว้ */
+Shell.onChange(k=>{if(k==='settings'&&!dirty)load();});
+load();
 </script>
 </body>
 </html>

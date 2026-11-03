@@ -12,25 +12,22 @@
   body{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;}
   @media(max-width:860px){body{grid-template-columns:1fr;}.brandside{display:none;}}
 
-  /* left brand panel */
-  .brandside{position:relative;overflow:hidden;background:linear-gradient(150deg,#2A3B33 0%,#1C2A23 60%,#16201A 100%);
-    color:#EAF3EE;padding:clamp(34px,5vw,64px);display:flex;flex-direction:column;}
-  .brandside::before{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;border-radius:50%;
-    background:radial-gradient(circle,rgba(51,202,127,.4),transparent 70%);}
-  .brandside::after{content:"";position:absolute;left:-70px;bottom:-70px;width:300px;height:300px;border-radius:50%;
-    background:radial-gradient(circle,rgba(252,159,91,.34),transparent 70%);}
+  /* left brand panel — สีเหลืองเดียวกับแถบบนของหน้าร้าน */
+  .brandside{position:relative;overflow:hidden;background:var(--yellow);color:var(--ink);padding:clamp(34px,5vw,64px);display:flex;flex-direction:column;}
+  .brandside::before{content:"";position:absolute;right:-110px;top:-110px;width:360px;height:360px;border-radius:50%;background:rgba(46,66,201,.12);}
+  .brandside::after{content:"";position:absolute;left:-80px;bottom:-80px;width:300px;height:300px;border-radius:50%;background:rgba(236,100,80,.16);}
   .bs-top{display:flex;align-items:center;gap:12px;position:relative;z-index:1;}
-  .bs-top img{height:54px;width:auto;}
-  .bs-top b{font-family:var(--display);font-size:21px;color:#fff;}
-  .bs-top small{display:block;font-size:12px;color:#A9BBB1;letter-spacing:.04em;}
+  .bs-top b{font-family:var(--display);font-size:19px;}
+  .bs-top small{display:block;font-size:12px;color:#6B4F12;letter-spacing:.04em;}
+  .bs-logo{width:min(320px,70%);margin:clamp(20px,4vh,40px) 0 0;position:relative;z-index:1;}
   .bs-mid{margin-top:auto;position:relative;z-index:1;}
-  .bs-mid .k{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--aqua);}
-  .bs-mid h2{font-family:var(--display);font-size:clamp(28px,3.4vw,40px);font-weight:700;line-height:1.12;color:#fff;margin:12px 0 14px;}
-  .bs-mid p{font-size:15px;color:#B9C8BF;max-width:42ch;line-height:1.65;}
-  .bs-stats{display:flex;gap:26px;margin-top:30px;position:relative;z-index:1;}
-  .bs-stats div b{font-family:var(--mono);font-size:26px;font-weight:600;color:#fff;display:block;}
-  .bs-stats div span{font-size:12.5px;color:#9DACA2;}
-  .bs-foot{margin-top:30px;font-size:12.5px;color:#8B9C92;position:relative;z-index:1;}
+  .bs-mid .k{font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);}
+  .bs-mid h2{font-family:var(--display);font-size:clamp(28px,3.4vw,40px);font-weight:700;line-height:1.12;margin:12px 0 14px;}
+  .bs-mid p{font-size:15px;color:#5a4630;max-width:44ch;line-height:1.65;}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;position:relative;z-index:1;}
+  .flow span{background:rgba(255,255,255,.7);border:1px solid rgba(62,49,39,.12);border-radius:var(--r-pill);padding:6px 13px;font-size:13px;font-weight:600;}
+  .flow i{font-style:normal;color:#8a6a1c;align-self:center;}
+  .bs-foot{margin-top:30px;font-size:12.5px;color:#6B4F12;position:relative;z-index:1;}
 
   /* right form panel */
   .formside{display:flex;align-items:center;justify-content:center;padding:clamp(28px,5vw,60px);}
@@ -43,49 +40,52 @@
   .remember{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink-soft);cursor:pointer;}
   .remember .cb{width:19px;height:19px;border-radius:6px;border:1.5px solid var(--border-2);display:grid;place-items:center;color:#fff;font-size:12px;transition:all .15s;}
   .remember.on .cb{background:var(--primary);border-color:var(--primary);}
-  .forgot{font-size:13.5px;font-weight:600;color:var(--primary-strong);}
+  .forgot{font-size:13.5px;font-weight:600;color:var(--primary);}
   .pw-wrap{position:relative;}
   .pw-wrap .eye{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:17px;color:var(--muted);padding:5px;}
+  .form-err{display:none;background:var(--danger-soft);color:var(--danger-ink);border-radius:var(--r);padding:10px 13px;font-size:13.5px;margin-bottom:14px;}
+  .form-err.show{display:block;}
+  .info{display:none;background:var(--primary-soft);color:var(--primary-strong);border-radius:var(--r);padding:10px 13px;font-size:13.5px;margin-bottom:14px;}
+  .info.show{display:block;}
   .note{margin-top:18px;font-size:12.5px;color:var(--muted);text-align:center;line-height:1.6;}
-  .note code{background:var(--surface-2);padding:1px 7px;border-radius:6px;font-size:11.5px;color:var(--ink-soft);}
-  @media(max-width:860px){.login-card .lead .mobile-logo{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
-    .login-card .lead .mobile-logo img{height:46px;width:auto;}
-    .login-card .lead .mobile-logo b{font-family:var(--display);font-size:19px;}}
+  .note code{background:var(--surface);border:1px solid var(--border);padding:1px 7px;border-radius:6px;font-size:11.5px;color:var(--ink-soft);}
+  .shop{display:block;text-align:center;margin-top:12px;font-size:13.5px;font-weight:600;color:var(--accent-strong);}
+  @media(max-width:860px){.login-card .lead .mobile-logo{display:flex;align-items:center;gap:10px;margin-bottom:18px;background:var(--yellow);border-radius:16px;padding:8px 14px;width:max-content;}
+    .login-card .lead .mobile-logo img{height:50px;width:auto;}
+    .login-card .lead .mobile-logo b{font-family:var(--display);font-size:17px;}}
 </style>
 </head>
 <body>
 
   <!-- ===== LEFT · brand ===== -->
   <aside class="brandside">
-    <div class="bs-top">
-      <img src="../../img/logo/image%20copy.png" alt="SUMDAY">
-      <div><b>SUMDAY</b><small>Back-office · ระบบจัดการออเดอร์</small></div>
-    </div>
+    <div class="bs-top"><div><b>Back-office</b><small>ระบบหลังร้าน · SUMDAY Coffee</small></div></div>
+    <img class="bs-logo" src="../../img/logo/logo-transparent.png" alt="SUMDAY">
     <div class="bs-mid">
       <div class="k">Order Management</div>
-      <h2>รับออเดอร์ จัดการคิว<br>ส่งถึงมือลูกค้า ครบในที่เดียว</h2>
-      <p>ดูออเดอร์ที่ลูกค้าสั่งเข้ามาแบบเรียลไทม์ อัปเดตสถานะการทำ และโทรแจ้งลูกค้ามารับได้ทันที</p>
-      <div class="bs-stats">
-        <div><b>48</b><span>ออเดอร์วันนี้</span></div>
-        <div><b>฿8,420</b><span>ยอดขายวันนี้</span></div>
-        <div><b>~6 น.</b><span>เวลาเฉลี่ย/บิล</span></div>
-      </div>
+      <h2>ลูกค้าสั่งจากหน้าเว็บ<br>ร้านจัดการต่อได้ครบที่นี่</h2>
+      <p>ตรวจสลิป PromptPay → ทำเครื่องดื่ม → แจ้งลูกค้ามารับ ทุกออเดอร์จากหน้าร้านเด้งเข้ามาทันที</p>
+      <div class="flow"><span>🧾 ตรวจสลิป</span><i>→</i><span>👩‍🍳 กำลังทำ</span><i>→</i><span>✅ พร้อมรับ</span><i>→</i><span>📦 รับแล้ว</span></div>
     </div>
-    <div class="bs-foot">© 2026 SUMDAY · DevNest 🌿</div>
+    <div class="bs-foot">© 2026 SUMDAY · DevNest</div>
   </aside>
 
   <!-- ===== RIGHT · form ===== -->
   <main class="formside">
     <form class="login-card" id="loginForm" novalidate>
       <div class="lead">
-        <div class="mobile-logo"><img src="../../img/logo/image%20copy.png" alt="SUMDAY"><b>SUMDAY</b></div>
+        <div class="mobile-logo"><img src="../../img/logo/logo-transparent.png" alt="SUMDAY"><b>Back-office</b></div>
         <h1>เข้าสู่ระบบ</h1>
         <p>ลงชื่อเข้าใช้เพื่อจัดการออเดอร์ของร้าน</p>
       </div>
 
+      <div class="form-err" id="formErr">อีเมลหรือรหัสผ่านไม่ถูกต้อง</div>
+      <div class="info" id="info">เดโมนี้ไม่มีระบบส่งอีเมล — ใช้บัญชีตัวอย่างด้านล่างได้เลย</div>
+
       <div class="field">
         <label for="email">อีเมล หรือ ชื่อผู้ใช้</label>
         <input class="input" id="email" type="text" placeholder="staff@sumday.co" value="staff@sumday.co" autocomplete="username">
+        <div class="err" id="errEmail">กรุณากรอกอีเมลหรือชื่อผู้ใช้</div>
       </div>
 
       <div class="field">
@@ -94,32 +94,56 @@
           <input class="input" id="pw" type="password" placeholder="••••••••" value="sumday1234" autocomplete="current-password">
           <button type="button" class="eye" id="eye" aria-label="แสดงรหัสผ่าน">👁️</button>
         </div>
+        <div class="err" id="errPw">กรุณากรอกรหัสผ่าน</div>
       </div>
 
       <div class="helper">
         <span class="remember on" id="remember"><span class="cb">✓</span> จดจำฉันไว้</span>
-        <a class="forgot" href="#">ลืมรหัสผ่าน?</a>
+        <a class="forgot" href="#" id="forgot">ลืมรหัสผ่าน?</a>
       </div>
 
-      <button class="btn btn-primary btn-lg btn-block" type="submit">เข้าสู่ระบบ →</button>
+      <button class="btn btn-primary btn-lg btn-block" type="submit" id="submitBtn">เข้าสู่ระบบ →</button>
 
-      <p class="note">เดโม — กดเข้าสู่ระบบได้เลย · ตัวอย่าง <code>staff@sumday.co</code> / <code>sumday1234</code></p>
+      <p class="note">บัญชีเดโม <code>staff@sumday.co</code> / <code>sumday1234</code><br>หรือผู้จัดการ <code>manager@sumday.co</code> / <code>sumday1234</code></p>
+      <a class="shop" href="../coffee-landing.html" target="_blank" rel="noopener">🛒 เปิดหน้าร้าน (ฝั่งลูกค้า) ↗</a>
     </form>
   </main>
 
+<script src="store.js"></script>
 <script>
-  document.getElementById('eye').addEventListener('click',function(){
-    const pw=document.getElementById('pw');
-    const show=pw.type==='password'; pw.type=show?'text':'password'; this.textContent=show?'🙈':'👁️';
+  const USERS={
+    'staff@sumday.co':{name:'คุณอริสา',role:'พนักงานหน้าร้าน'},
+    'staff':{name:'คุณอริสา',role:'พนักงานหน้าร้าน'},
+    'manager@sumday.co':{name:'คุณภูริ',role:'ผู้จัดการร้าน'},
+  };
+  const $=s=>document.querySelector(s);
+  if(SUMDAY.getSession())location.replace('orders.html'); // ล็อกอินค้างไว้แล้ว
+
+  $('#eye').addEventListener('click',function(){
+    const pw=$('#pw'), show=pw.type==='password'; pw.type=show?'text':'password'; this.textContent=show?'🙈':'👁️';
   });
-  document.getElementById('remember').addEventListener('click',function(){
+  $('#remember').addEventListener('click',function(){
     this.classList.toggle('on'); this.querySelector('.cb').textContent=this.classList.contains('on')?'✓':'';
   });
-  document.getElementById('loginForm').addEventListener('submit',function(e){
+  $('#forgot').addEventListener('click',e=>{e.preventDefault();$('#info').classList.add('show');});
+  ['email','pw'].forEach(id=>$('#'+id).addEventListener('input',()=>{$('#formErr').classList.remove('show');$('#'+id).classList.remove('invalid');}));
+
+  $('#loginForm').addEventListener('submit',function(e){
     e.preventDefault();
-    const btn=this.querySelector('button[type=submit]');
-    btn.textContent='กำลังเข้าสู่ระบบ…'; btn.disabled=true;
-    setTimeout(()=>{ window.location.href='orders.html'; }, 600);
+    const email=$('#email').value.trim().toLowerCase(), pw=$('#pw').value;
+    $('#errEmail').classList.toggle('show',!email); $('#email').classList.toggle('invalid',!email);
+    $('#errPw').classList.toggle('show',!pw); $('#pw').classList.toggle('invalid',!pw);
+    if(!email||!pw)return;
+    const btn=$('#submitBtn'); btn.textContent='กำลังเข้าสู่ระบบ…'; btn.disabled=true;
+    setTimeout(()=>{
+      const user=USERS[email];
+      if(!user||pw!=='sumday1234'){
+        btn.textContent='เข้าสู่ระบบ →'; btn.disabled=false;
+        $('#formErr').classList.add('show'); $('#pw').classList.add('invalid'); $('#pw').select(); return;
+      }
+      SUMDAY.login({email,...user});
+      location.href='orders.html';
+    },500);
   });
 </script>
 </body>

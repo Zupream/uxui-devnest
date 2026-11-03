@@ -16,79 +16,69 @@
   @media(max-width:920px){.grid2{grid-template-columns:1fr;}}
 
   /* channel highlight */
-  .channel{background:linear-gradient(135deg,#FFF7EE,#EAF8F1);border:1px solid var(--border);border-radius:var(--r-lg);
+  .channel{background:linear-gradient(135deg,#FFF6D6,var(--primary-soft));border:1px solid var(--border);border-radius:var(--r-lg);
     padding:20px 22px;box-shadow:var(--sh-sm);display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:20px;}
-  .channel .ic{width:54px;height:54px;border-radius:15px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:26px;box-shadow:0 8px 18px rgba(51,202,127,.3);}
+  .channel .ic{width:54px;height:54px;border-radius:15px;background:var(--primary);color:#fff;display:grid;place-items:center;font-size:26px;box-shadow:0 8px 18px rgba(46,66,201,.28);}
   .channel .t b{font-family:var(--display);font-size:18px;}
-  .channel .t span{font-size:13.5px;color:var(--ink-soft);}
+  .channel .t span{display:block;font-size:13.5px;color:var(--ink-soft);}
   .channel .big{margin-left:auto;text-align:right;}
   .channel .big b{font-family:var(--mono);font-size:30px;font-weight:600;display:block;line-height:1;}
-  .channel .big span{font-size:12.5px;color:var(--ready-ink);font-weight:600;}
+  .channel .big span{font-size:12.5px;font-weight:600;}
+  .up{color:var(--ready-ink)!important;} .down{color:var(--danger-ink)!important;} .flat{color:var(--muted)!important;}
+  .live-note{font-size:12.5px;color:var(--muted);margin:-8px 0 18px;}
 
   /* bar chart */
-  .chart{display:flex;align-items:flex-end;gap:clamp(8px,2vw,18px);height:200px;padding-top:10px;}
-  .chart .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end;}
-  .chart .bar{width:100%;max-width:46px;background:linear-gradient(180deg,var(--aqua),var(--primary));border-radius:8px 8px 4px 4px;
-    position:relative;transition:height .6s cubic-bezier(.2,1,.3,1);min-height:4px;}
-  .chart .col.peak .bar{background:linear-gradient(180deg,var(--accent),var(--accent-strong));}
-  .chart .bar .v{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ink-soft);white-space:nowrap;}
-  .chart .d{font-size:12px;color:var(--muted);font-weight:500;}
+  .chart{display:flex;align-items:flex-end;gap:clamp(4px,1.4vw,14px);height:210px;padding-top:22px;}
+  .chart.thin{gap:3px;}
+  .chart .col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end;}
+  .chart .bar{width:100%;max-width:46px;background:linear-gradient(180deg,#6F80E8,var(--primary));border-radius:8px 8px 4px 4px;
+    position:relative;transition:height .6s cubic-bezier(.2,1,.3,1);min-height:3px;}
+  .chart.thin .bar{border-radius:4px 4px 2px 2px;}
+  .chart .col.peak .bar{background:linear-gradient(180deg,#F38B7B,var(--accent));}
+  .chart .col.today .bar{background:linear-gradient(180deg,#FFDD66,var(--gold));}
+  .chart .bar .v{position:absolute;top:-19px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:11px;font-weight:600;color:var(--ink-soft);white-space:nowrap;}
+  .chart.thin .bar .v{display:none;}
+  .chart.thin .col.peak .bar .v{display:block;}
+  .chart .d{font-size:11.5px;color:var(--muted);font-weight:500;white-space:nowrap;height:16px;}
+  .chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:12.5px;color:var(--ink-soft);}
+  .chart-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;}
 
   /* best sellers */
   .rank{display:flex;flex-direction:column;gap:6px;}
   .rank .ri{display:flex;align-items:center;gap:13px;padding:10px 8px;border-radius:var(--r);transition:background .15s;}
   .rank .ri:hover{background:var(--surface-2);}
   .rank .no{font-family:var(--display);font-weight:700;font-size:17px;width:26px;text-align:center;color:var(--muted);flex:0 0 auto;}
-  .rank .ri.top1 .no{color:#E8A317;} .rank .ri.top2 .no{color:#9AA6B0;} .rank .ri.top3 .no{color:#C8855A;}
-  .rank .th{width:46px;height:46px;border-radius:11px;background:var(--surface-2);display:grid;place-items:center;flex:0 0 auto;overflow:hidden;}
+  .rank .ri.top1 .no{color:var(--gold);} .rank .ri.top2 .no{color:#9AA6B0;} .rank .ri.top3 .no{color:#C8855A;}
+  .rank .th{width:46px;height:46px;border-radius:11px;background:var(--surface-2);display:grid;place-items:center;flex:0 0 auto;overflow:hidden;font-size:20px;}
   .rank .th img{width:84%;height:84%;object-fit:contain;mix-blend-mode:multiply;}
   .rank .info{flex:1;min-width:0;}
   .rank .info b{font-size:14.5px;} .rank .info .en{font-size:12px;color:var(--muted);}
   .rank .info .meter{height:6px;background:var(--surface-2);border-radius:4px;margin-top:6px;overflow:hidden;}
-  .rank .info .meter i{display:block;height:100%;background:linear-gradient(90deg,var(--aqua),var(--primary));border-radius:4px;}
+  .rank .info .meter i{display:block;height:100%;background:linear-gradient(90deg,#6F80E8,var(--primary));border-radius:4px;}
+  .rank .ri.top1 .info .meter i{background:linear-gradient(90deg,#F38B7B,var(--accent));}
   .rank .num{text-align:right;flex:0 0 auto;}
   .rank .num b{font-family:var(--mono);font-size:15px;} .rank .num span{display:block;font-size:11.5px;color:var(--muted);}
 
   /* donut */
   .donut-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap;}
-  .donut{width:150px;height:150px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;position:relative;}
+  .donut{width:150px;height:150px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;position:relative;background:var(--surface-2);}
   .donut::after{content:"";position:absolute;width:92px;height:92px;border-radius:50%;background:var(--surface);}
   .donut .c{position:relative;z-index:1;text-align:center;}
   .donut .c b{font-family:var(--mono);font-size:22px;font-weight:600;display:block;line-height:1;}
   .donut .c span{font-size:11px;color:var(--muted);}
-  .legend{display:flex;flex-direction:column;gap:9px;}
-  .legend div{display:flex;align-items:center;gap:9px;font-size:13.5px;}
+  .legend{display:flex;flex-direction:column;gap:9px;flex:1;min-width:160px;}
+  .legend div{display:flex;align-items:center;gap:9px;font-size:13.5px;white-space:nowrap;}
   .legend i{width:12px;height:12px;border-radius:4px;flex:0 0 auto;}
   .legend b{font-family:var(--mono);margin-left:auto;}
+  .legend small{color:var(--muted);font-family:var(--mono);font-size:11.5px;min-width:24px;text-align:right;}
+  .empty.sm{padding:30px 10px;}
 </style>
 </head>
 <body>
 <div class="app">
-
-  <!-- ===== SIDEBAR ===== -->
-  <aside class="side" id="side">
-    <div class="lg">
-      <img class="badge-logo" src="../../img/logo/image%20copy.png" alt="SUMDAY">
-      <div class="t"><b>SUMDAY</b><small>Back-office</small></div>
-    </div>
-    <div class="navlabel">ออเดอร์</div>
-    <a href="orders.html"><span class="ico">📥</span> ออเดอร์เข้า</a>
-    <a href="orders.html#doing"><span class="ico">👩‍🍳</span> กำลังทำ</a>
-    <a href="orders.html#ready"><span class="ico">✅</span> พร้อมรับ</a>
-    <a href="orders.html#picked"><span class="ico">📦</span> รับแล้ว</a>
-    <div class="navlabel">จัดการร้าน</div>
-    <a href="reports.html" class="on"><span class="ico">📊</span> รายงานยอดขาย</a>
-    <a href="menu.html"><span class="ico">🍽️</span> เมนู &amp; ราคา</a>
-    <a href="settings.html"><span class="ico">⚙️</span> ตั้งค่าร้าน</a>
-    <div class="who">
-      <span class="av">อ</span>
-      <div class="t"><b>คุณอริสา</b><small>พนักงานหน้าร้าน</small></div>
-      <a href="login.html" class="out" title="ออกจากระบบ">⎋</a>
-    </div>
-  </aside>
+  <aside class="side" id="side"></aside>
   <div class="scrim" id="scrim"></div>
 
-  <!-- ===== MAIN ===== -->
   <div class="main">
     <div class="topbar">
       <button class="menu-btn" id="menuBtn">☰</button>
@@ -98,34 +88,33 @@
       </div>
       <div class="spacer"></div>
       <div class="range" id="range">
-        <button data-r="today" class="on">วันนี้</button>
-        <button data-r="week">7 วัน</button>
-        <button data-r="month">เดือนนี้</button>
+        <button data-r="1" class="on">วันนี้</button>
+        <button data-r="7">7 วัน</button>
+        <button data-r="30">30 วัน</button>
       </div>
     </div>
 
     <div class="content">
+      <div id="closedBanner"></div>
 
-      <!-- channel highlight -->
       <div class="channel">
         <div class="ic">🌐</div>
-        <div class="t"><b>ช่องทางออนไลน์ (เว็บสั่งซื้อ)</b><span>ยอดขายที่มาจากหน้าเว็บ coffee-landing · ชำระเงินออนไลน์</span></div>
-        <div class="big"><b id="chSales">฿8,420</b><span id="chTrend">▲ 18% จากเมื่อวาน</span></div>
+        <div class="t"><b>ช่องทางออนไลน์ · เว็บสั่งซื้อ SUMDAY</b><span>ยอดจากหน้าเว็บ coffee-landing · ชำระผ่านพร้อมเพย์ + แนบสลิป</span></div>
+        <div class="big"><b id="chSales">฿0</b><span id="chTrend"></span></div>
       </div>
+      <div class="live-note" id="liveNote"></div>
 
-      <!-- KPI -->
       <div class="stats" id="kpi"></div>
 
       <div class="grid2">
-        <!-- left: sales chart -->
         <div class="card-box">
-          <div class="sec-head"><h2>ยอดขายรายวัน</h2><span class="sub" id="chartSub">7 วันล่าสุด · ช่องทางออนไลน์</span></div>
+          <div class="sec-head"><h2 id="chartTitle">ยอดขายรายวัน</h2><span class="sub" id="chartSub"></span></div>
           <div class="chart" id="chart"></div>
+          <div class="chart-legend" id="chartLegend"></div>
         </div>
 
-        <!-- right: category donut -->
         <div class="card-box">
-          <div class="sec-head"><h2>สัดส่วนหมวดเมนู</h2></div>
+          <div class="sec-head"><h2>สัดส่วนหมวดเมนู</h2><span class="sub">ตามจำนวนแก้ว</span></div>
           <div class="donut-wrap">
             <div class="donut" id="donut"><div class="c"><b id="donutTotal">0</b><span>แก้ว</span></div></div>
             <div class="legend" id="legend"></div>
@@ -133,99 +122,136 @@
         </div>
       </div>
 
-      <!-- best sellers -->
       <div class="card-box" style="margin-top:16px">
-        <div class="sec-head"><h2>เมนูขายดี 🔥</h2><span class="sub">จัดอันดับตามจำนวนแก้วที่ขายได้ · ช่องทางออนไลน์</span></div>
+        <div class="sec-head"><h2>เมนูขายดี 🔥</h2><span class="sub" id="rankSub">จัดอันดับตามจำนวนแก้ว</span></div>
         <div class="rank" id="rank"></div>
       </div>
-
     </div>
   </div>
 </div>
 
+<script src="store.js"></script>
+<script src="shell.js"></script>
 <script>
+Shell.init('reports');
+const {$,esc,baht}=Shell;
+const S=SUMDAY;
 const IMG='../../img/menu/';
-/* เมนู + ยอดขาย (จำลองจากออเดอร์ช่องทางออนไลน์) */
-const SALES=[
-  {id:40,en:'Thai Tea',th:'ชาไทย',cat:'milk',price:60,sold:86},
-  {id:52,en:'Matcha Latte',th:'มัทฉะลาเต้',cat:'milk',price:70,sold:74},
-  {id:37,en:'Latte',th:'ลาเต้',cat:'coffee',price:60,sold:68},
-  {id:35,en:'Americano',th:'อเมริกาโน่',cat:'coffee',price:55,sold:61},
-  {id:39,en:'Banana Coffee',th:'กาแฟกล้วย',cat:'coffee',price:65,sold:52},
-  {id:41,en:'Lemon Tea',th:'ชามะนาว',cat:'tea',price:60,sold:44},
-  {id:44,en:'Rose Tea',th:'ชากุหลาบ',cat:'tea',price:60,sold:38},
-  {id:50,en:'Green Tea Latte',th:'ชาเขียวนม',cat:'milk',price:60,sold:33},
-  {id:33,en:'Orange Juice',th:'น้ำส้มคั้นสด',cat:'tea',price:65,sold:27},
-  {id:36,en:'Black Orange',th:'แบล็คออเรนจ์',cat:'coffee',price:65,sold:21},
-];
-const CAT={coffee:{l:'กาแฟ',c:'#33CA7F'},milk:{l:'นม',c:'#FC9F5B'},tea:{l:'ชา & น้ำผลไม้',c:'#2BB39A'}};
-const baht=n=>'฿'+n.toLocaleString();
+const CAT_COLOR={coffee:'var(--blue)',milk:'var(--coral)',tea:'var(--green)',custom:'var(--gold)'};
+const RANGE_LABEL={1:'วันนี้',7:'7 วันล่าสุด',30:'30 วันล่าสุด'};
+const PREV_LABEL={1:'เมื่อวาน',7:'7 วันก่อนหน้า',30:'30 วันก่อนหน้า'};
+let range=1;
 
-/* ---- KPI ---- */
-const totalCups=SALES.reduce((s,x)=>s+x.sold,0);
-const totalRevenue=SALES.reduce((s,x)=>s+x.sold*x.price,0);
-function renderKPI(){
-  document.getElementById('kpi').innerHTML=`
-    <div class="stat"><div class="ic" style="background:var(--ready-soft);color:var(--ready-ink)">💰</div>
-      <div class="lbl">ยอดขายรวม (7 วัน)</div><div class="val">${baht(totalRevenue)}</div><div class="trend">▲ 12% สัปดาห์ก่อน</div></div>
-    <div class="stat"><div class="ic" style="background:var(--doing-soft);color:var(--doing-ink)">🧾</div>
-      <div class="lbl">จำนวนออเดอร์</div><div class="val">312</div><div class="trend">▲ 9%</div></div>
-    <div class="stat"><div class="ic" style="background:var(--new-soft);color:var(--new-ink)">🥤</div>
-      <div class="lbl">แก้วที่ขายได้</div><div class="val">${totalCups}</div><div class="trend">เฉลี่ย ${(totalCups/312).toFixed(1)} แก้ว/บิล</div></div>
-    <div class="stat"><div class="ic" style="background:var(--accent-soft);color:var(--accent-strong)">📈</div>
-      <div class="lbl">ยอดเฉลี่ย/บิล</div><div class="val">฿${Math.round(totalRevenue/312)}</div><div class="trend">▲ 4%</div></div>`;
+function sum(days){
+  const r={revenue:0,orders:0,cups:0,sold:{},customQty:0};
+  days.forEach(d=>{r.revenue+=d.revenue;r.orders+=d.orders;r.cups+=d.cups;r.customQty+=d.customQty;
+    Object.entries(d.sold).forEach(([id,q])=>r.sold[id]=(r.sold[id]||0)+q);});
+  return r;
+}
+function trend(cur,prev){
+  if(!prev)return cur?{t:'ใหม่',c:'flat'}:{t:'—',c:'flat'};
+  const p=Math.round((cur-prev)/prev*100);
+  return p>0?{t:`▲ ${p}%`,c:'up'}:p<0?{t:`▼ ${Math.abs(p)}%`,c:'down'}:{t:'เท่าเดิม',c:'flat'};
 }
 
-/* ---- daily chart ---- */
-const DAILY=[{d:'จ.',v:6240},{d:'อ.',v:7180},{d:'พ.',v:5920},{d:'พฤ.',v:8050},{d:'ศ.',v:9460},{d:'ส.',v:11240},{d:'อา.',v:8420}];
-function renderChart(){
-  const max=Math.max(...DAILY.map(x=>x.v));
-  document.getElementById('chart').innerHTML=DAILY.map(x=>`
-    <div class="col ${x.v===max?'peak':''}">
-      <div class="bar" style="height:0" data-h="${Math.round(x.v/max*100)}"><span class="v">฿${(x.v/1000).toFixed(1)}k</span></div>
-      <div class="d">${x.d}</div></div>`).join('');
-  requestAnimationFrame(()=>document.querySelectorAll('.chart .bar').forEach(b=>b.style.height=b.dataset.h+'%'));
+function renderKPI(cur,prev){
+  const avg=x=>x.orders?Math.round(x.revenue/x.orders):0;
+  const pl=PREV_LABEL[range];
+  const tr=trend(cur.revenue,prev.revenue);
+  $('#chSales').textContent=baht(cur.revenue);
+  $('#chTrend').className=tr.c; $('#chTrend').textContent=`${tr.t} จาก${pl}`;
+  const card=(ic,bg,col,lbl,val,t)=>`<div class="stat"><div class="ic" style="background:${bg};color:${col}">${ic}</div>
+    <div class="lbl">${lbl}</div><div class="val">${val}</div><div class="trend ${t.c}">${t.t} <span style="color:var(--muted);font-weight:500">vs ${pl}</span></div></div>`;
+  $('#kpi').innerHTML=
+    card('💰','var(--primary-soft)','var(--primary-strong)',`ยอดขาย (${RANGE_LABEL[range]})`,baht(cur.revenue),tr)+
+    card('🧾','var(--accent-soft)','var(--accent-strong)','จำนวนออเดอร์',cur.orders.toLocaleString(),trend(cur.orders,prev.orders))+
+    card('🥤','var(--verify-soft)','var(--verify-ink)','แก้วที่ขายได้',cur.cups.toLocaleString(),trend(cur.cups,prev.cups))+
+    card('📈','var(--ready-soft)','var(--ready-ink)','ยอดเฉลี่ย/บิล',baht(avg(cur)),trend(avg(cur),avg(prev)));
 }
 
-/* ---- best sellers ---- */
-function renderRank(){
-  const max=SALES[0].sold;
-  document.getElementById('rank').innerHTML=SALES.map((x,i)=>`
+function renderChart(days){
+  const chart=$('#chart');
+  let cols;
+  if(range===1){
+    $('#chartTitle').textContent='ยอดขายรายชั่วโมง';
+    $('#chartSub').textContent='วันนี้ 07–18 น. · จากออเดอร์จริง';
+    const start=new Date();start.setHours(0,0,0,0);
+    const list=S.getOrders().filter(o=>o.createdAt>=start.getTime()&&o.status!=='verify'&&o.status!=='cancel');
+    cols=[];
+    for(let h=7;h<=18;h++){
+      const v=list.filter(o=>new Date(o.createdAt).getHours()===h).reduce((s,o)=>s+S.orderTotal(o),0);
+      cols.push({v,d:String(h).padStart(2,'0'),label:true});
+    }
+    $('#chartLegend').innerHTML=`<span><i style="background:var(--primary)"></i>ยอดขายต่อชั่วโมง</span><span><i style="background:var(--accent)"></i>ชั่วโมงที่ขายดีสุด</span>`;
+  }else{
+    $('#chartTitle').textContent='ยอดขายรายวัน';
+    $('#chartSub').textContent=RANGE_LABEL[range]+' · ช่องทางออนไลน์';
+    cols=days.map((d,i)=>({v:d.revenue,today:!!d.live,
+      d:range===7?d.date.toLocaleDateString('th-TH',{weekday:'short'}):(i%5===0||d.live?d.date.getDate()+'':''),label:true,
+      title:d.date.toLocaleDateString('th-TH',{day:'numeric',month:'short'})+' · '+baht(d.revenue)}));
+    $('#chartLegend').innerHTML=`<span><i style="background:var(--primary)"></i>ยอดขายรายวัน</span><span><i style="background:var(--accent)"></i>วันที่ขายดีสุด</span><span><i style="background:var(--gold)"></i>วันนี้ (สด)</span>`;
+  }
+  chart.classList.toggle('thin',range===30);
+  const max=Math.max(...cols.map(c=>c.v));
+  if(!max){
+    chart.innerHTML=`<div class="empty sm" style="width:100%;align-self:center"><div class="e-ic">🌱</div><b>ยังไม่มียอดขายวันนี้</b>เมื่อยืนยันสลิปออเดอร์แรก ยอดจะขึ้นที่นี่</div>`;
+    return;
+  }
+  const fmt=v=>v>=1000?'฿'+(v/1000).toFixed(1)+'k':'฿'+v;
+  chart.innerHTML=cols.map(c=>`
+    <div class="col ${c.v===max?'peak':''} ${c.today&&c.v!==max?'today':''}" title="${esc(c.title||c.d+':00 น. · '+baht(c.v))}">
+      <div class="bar" style="height:0" data-h="${Math.max(1.5,c.v/max*100)}">${c.v?`<span class="v">${fmt(c.v)}</span>`:''}</div>
+      <div class="d">${c.d}</div></div>`).join('');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>chart.querySelectorAll('.bar').forEach(b=>b.style.height=b.dataset.h+'%')));
+}
+
+function renderDonut(cur){
+  const menu=S.getMenu(), catOf=id=>(menu.find(m=>m.id===+id)||S.BASE_MENU.find(m=>m.id===+id)||{}).cat;
+  const tot={}; S.CATS.forEach(c=>tot[c.k]=0);
+  Object.entries(cur.sold).forEach(([id,q])=>{const c=catOf(id);if(c in tot)tot[c]+=q;});
+  const rows=S.CATS.map(c=>({k:c.k,l:c.n,v:tot[c.k]}));
+  if(cur.customQty)rows.push({k:'custom',l:'✨ เมนูพิเศษ',v:cur.customQty});
+  const all=rows.reduce((s,r)=>s+r.v,0);
+  $('#donutTotal').textContent=all.toLocaleString();
+  if(!all){$('#donut').style.background='var(--surface-2)';
+    $('#legend').innerHTML=`<div style="color:var(--muted)">ยังไม่มีข้อมูลในช่วงนี้</div>`;return;}
+  let acc=0;const stops=rows.map(r=>{const p=r.v/all*100,s=`${CAT_COLOR[r.k]} ${acc}% ${acc+p}%`;acc+=p;return s;});
+  $('#donut').style.background=`conic-gradient(${stops.join(',')})`;
+  $('#legend').innerHTML=rows.map(r=>`<div><i style="background:${CAT_COLOR[r.k]}"></i>${r.l}<b>${Math.round(r.v/all*100)}%</b><small>${r.v}</small></div>`).join('');
+}
+
+function renderRank(cur){
+  const menu=S.getMenu();
+  const list=Object.entries(cur.sold).map(([id,q])=>{const m=menu.find(x=>x.id===+id)||S.BASE_MENU.find(x=>x.id===+id);return m?{m,q}:null;})
+    .filter(Boolean).sort((a,b)=>b.q-a.q).slice(0,10);
+  $('#rankSub').textContent=`${RANGE_LABEL[range]} · จัดอันดับตามจำนวนแก้ว · ราคาตามเมนูปัจจุบัน`;
+  if(!list.length){$('#rank').innerHTML=`<div class="empty sm"><div class="e-ic">☕</div><b>ยังไม่มีเมนูที่ขายได้ในช่วงนี้</b>ลองเลือกช่วง 7 วัน หรือ 30 วัน</div>`;return;}
+  const max=list[0].q;
+  $('#rank').innerHTML=list.map(({m,q},i)=>`
     <div class="ri ${i<3?'top'+(i+1):''}">
       <span class="no">${i+1}</span>
-      <span class="th"><img src="${IMG}${x.id}.png" alt="${x.th}" loading="lazy"></span>
-      <div class="info"><b>${x.th}</b> <span class="en">${x.en} · ฿${x.price}</span>
-        <div class="meter"><i style="width:${x.sold/max*100}%"></i></div></div>
-      <div class="num"><b>${x.sold}</b><span>แก้ว · ${baht(x.sold*x.price)}</span></div>
+      <span class="th">${m.img?`<img src="${IMG}${esc(m.img)}" alt="${esc(m.th)}" loading="lazy">`:'🥤'}</span>
+      <div class="info"><b>${esc(m.th)}</b> <span class="en">${esc(m.en)} · ฿${m.price}</span>
+        <div class="meter"><i style="width:${q/max*100}%"></i></div></div>
+      <div class="num"><b>${q}</b><span>แก้ว · ${baht(q*m.price)}</span></div>
     </div>`).join('');
 }
 
-/* ---- category donut ---- */
-function renderDonut(){
-  const sum={};SALES.forEach(x=>sum[x.cat]=(sum[x.cat]||0)+x.sold);
-  const cats=Object.keys(CAT);
-  let acc=0,stops=[];
-  cats.forEach(c=>{const pct=(sum[c]/totalCups)*100;stops.push(`${CAT[c].c} ${acc}% ${acc+pct}%`);acc+=pct;});
-  document.getElementById('donut').style.background=`conic-gradient(${stops.join(',')})`;
-  document.getElementById('donutTotal').textContent=totalCups;
-  document.getElementById('legend').innerHTML=cats.map(c=>`
-    <div><i style="background:${CAT[c].c}"></i>${CAT[c].l}<b>${Math.round(sum[c]/totalCups*100)}%</b></div>`).join('');
+function render(){
+  const all=S.salesByDay(range*2), cur=all.slice(range), prev=all.slice(0,range);
+  const c=sum(cur),p=sum(prev);
+  const pending=S.getOrders().filter(o=>o.status==='verify').length;
+  $('#liveNote').innerHTML=`🟢 ยอด “วันนี้” คำนวณสดจากออเดอร์จริง · ไม่นับออเดอร์ที่ยกเลิก และที่ยัง<b>รอตรวจสลิป</b>${pending?` (ตอนนี้มี ${pending} ออเดอร์ — <a href="orders.html" style="color:var(--primary);font-weight:600">ไปตรวจ →</a>)`:''}`;
+  renderKPI(c,p); renderChart(cur); renderDonut(c); renderRank(c);
 }
 
-/* range buttons (เดโม — ปรับ label) */
-document.getElementById('range').addEventListener('click',e=>{
+$('#range').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
-  document.querySelectorAll('#range button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-  const map={today:'วันนี้ · ช่องทางออนไลน์',week:'7 วันล่าสุด · ช่องทางออนไลน์',month:'เดือนนี้ · ช่องทางออนไลน์'};
-  document.getElementById('chartSub').textContent=map[b.dataset.r];
+  document.querySelectorAll('#range button').forEach(x=>x.classList.toggle('on',x===b));
+  range=+b.dataset.r; render();
 });
-
-/* mobile sidebar */
-const $=s=>document.querySelector(s);
-$('#menuBtn').addEventListener('click',()=>{$('#side').classList.add('open');$('#scrim').classList.add('show');});
-$('#scrim').addEventListener('click',()=>{$('#side').classList.remove('open');$('#scrim').classList.remove('show');});
-
-renderKPI();renderChart();renderRank();renderDonut();
+Shell.onChange(k=>{if(k==='orders'||k==='menu'||k==='tick')render();});
+render();
 </script>
 </body>
 </html>

@@ -1347,7 +1347,6 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
           <span class="hero-chip">🤝 export ส่งเดฟ/AI</span>
         </div>
         <a class="hero-link" href="examples/coffee-design-system.html" target="_blank">เปิด Token Playground →</a>
-        <a class="hero-link" href="examples/sumday-backoffice/login.html" target="_blank" style="margin-left:clamp(6px,0.8vw,12px)">เปิด SUMDAY Backoffice →</a>
       </div>
     </div>
   </div>
@@ -1424,16 +1423,32 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
         </div>
         <div class="anim-item" style="display:flex;flex-direction:column">
           <div class="section-label">✳️ Output จาก Claude</div>
-          <div onclick="window.open('examples/coffee-landing.html','_blank','noopener')" title="คลิกเพื่อเปิดหน้าเว็บจริงในแท็บใหม่" style="border-radius:14px;border:1px solid var(--border-color);overflow:hidden;box-shadow:0 14px 36px rgba(30,27,46,0.16);background:#fff;flex:1;display:flex;flex-direction:column;cursor:pointer;transition:transform 0.2s ease,box-shadow 0.2s ease" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 20px 46px rgba(30,27,46,0.24)'" onmouseout="this.style.transform='';this.style.boxShadow='0 14px 36px rgba(30,27,46,0.16)'">
-            <div style="display:flex;gap:6px;align-items:center;padding:9px 13px;background:#F1EEF9;border-bottom:1px solid var(--border-color)">
-              <span style="width:10px;height:10px;border-radius:50%;background:#FF5F57"></span>
-              <span style="width:10px;height:10px;border-radius:50%;background:#FEBC2E"></span>
-              <span style="width:10px;height:10px;border-radius:50%;background:#28C840"></span>
-              <span style="margin-left:8px;font-size:11px;color:var(--text-muted)">coffee-landing.html</span>
-              <span style="margin-left:auto;font-size:11px;font-weight:700;color:var(--primary)">↗ คลิกเปิดจริง</span>
+          <div style="flex:1;display:flex;flex-direction:column;gap:clamp(10px,1.2vw,16px)">
+            <div onclick="window.open('examples/coffee-landing.html','_blank','noopener')" title="คลิกเพื่อเปิดหน้าร้าน (ฝั่งลูกค้า) ในแท็บใหม่" style="border-radius:14px;border:1px solid var(--border-color);overflow:hidden;box-shadow:0 14px 36px rgba(30,27,46,0.16);background:#fff;flex:1;display:flex;flex-direction:column;cursor:pointer;transition:transform 0.2s ease,box-shadow 0.2s ease" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 20px 46px rgba(30,27,46,0.24)'" onmouseout="this.style.transform='';this.style.boxShadow='0 14px 36px rgba(30,27,46,0.16)'">
+              <div style="display:flex;gap:6px;align-items:center;padding:8px 13px;background:#F1EEF9;border-bottom:1px solid var(--border-color)">
+                <span style="width:9px;height:9px;border-radius:50%;background:#FF5F57"></span>
+                <span style="width:9px;height:9px;border-radius:50%;background:#FEBC2E"></span>
+                <span style="width:9px;height:9px;border-radius:50%;background:#28C840"></span>
+                <span style="margin-left:8px;font-size:11px;font-weight:700;color:var(--text-primary)">🛒 หน้าร้าน</span>
+                <span style="font-size:11px;color:var(--text-muted)">coffee-landing.html</span>
+                <span style="margin-left:auto;font-size:11px;font-weight:700;color:var(--primary)">↗ คลิกเปิดจริง</span>
+              </div>
+              <div style="position:relative;flex:1;min-height:clamp(120px,19vh,200px);overflow:hidden;background:#fff">
+                <iframe src="examples/coffee-landing.html" title="coffee-landing.html preview" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" style="position:absolute;top:0;left:0;width:200%;height:200%;border:0;transform:scale(0.5);transform-origin:top left;pointer-events:none"></iframe>
+              </div>
             </div>
-            <div style="position:relative;flex:1;min-height:clamp(260px,40vh,420px);overflow:hidden;background:#fff">
-              <iframe src="examples/coffee-landing.html" title="coffee-landing.html preview" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" style="position:absolute;top:0;left:0;width:200%;height:200%;border:0;transform:scale(0.5);transform-origin:top left;pointer-events:none"></iframe>
+            <div onclick="window.open('examples/sumday-backoffice/login.html','_blank','noopener')" title="คลิกเพื่อเปิดระบบหลังร้าน — ออเดอร์จากหน้าร้านเด้งเข้ามาที่นี่" style="border-radius:14px;border:1px solid var(--border-color);overflow:hidden;box-shadow:0 14px 36px rgba(30,27,46,0.16);background:#fff;flex:1;display:flex;flex-direction:column;cursor:pointer;transition:transform 0.2s ease,box-shadow 0.2s ease" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 20px 46px rgba(30,27,46,0.24)'" onmouseout="this.style.transform='';this.style.boxShadow='0 14px 36px rgba(30,27,46,0.16)'">
+              <div style="display:flex;gap:6px;align-items:center;padding:8px 13px;background:#F1EEF9;border-bottom:1px solid var(--border-color)">
+                <span style="width:9px;height:9px;border-radius:50%;background:#FF5F57"></span>
+                <span style="width:9px;height:9px;border-radius:50%;background:#FEBC2E"></span>
+                <span style="width:9px;height:9px;border-radius:50%;background:#28C840"></span>
+                <span style="margin-left:8px;font-size:11px;font-weight:700;color:var(--text-primary)">🧾 หลังร้าน</span>
+                <span style="font-size:11px;color:var(--text-muted)">sumday-backoffice/</span>
+                <span style="margin-left:auto;font-size:11px;font-weight:700;color:var(--primary)">↗ คลิกเปิดจริง</span>
+              </div>
+              <div style="position:relative;flex:1;min-height:clamp(120px,19vh,200px);overflow:hidden;background:#fff">
+                <iframe src="examples/sumday-backoffice/login.html" title="sumday-backoffice/ preview" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" style="position:absolute;top:0;left:0;width:200%;height:200%;border:0;transform:scale(0.5);transform-origin:top left;pointer-events:none"></iframe>
+              </div>
             </div>
           </div>
         </div>
