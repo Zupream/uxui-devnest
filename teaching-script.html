@@ -41,6 +41,8 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
 .sb-item{display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:clamp(10.5px,0.9vw,13px);color:var(--text-secondary);line-height:1.3;transition:background 0.15s,color 0.15s;}
 .sb-item:hover{background:var(--bg-card-hover);color:var(--text-primary);}
 .sb-item.active{background:linear-gradient(135deg,rgba(124,58,237,0.13),rgba(236,72,153,0.10));color:var(--primary);font-weight:700;}
+.sb-item.ws{font-weight:800;}
+.sb-item.ws:not(.active){color:var(--text-primary);}
 .sb-item .ix{font-size:9.5px;font-family:'Inter',monospace;color:var(--text-muted);min-width:16px;text-align:right;flex-shrink:0;}
 .sb-item.active .ix{color:var(--primary);}
 .sb-item .ic{font-size:1.05em;flex-shrink:0;}
@@ -182,12 +184,12 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
     'Workshop: Bad UX รอบตัว','Challenge: User Inyerface',
     'User Persona คืออะไร','องค์ประกอบของ Persona','ตัวอย่าง: ลูกค้า SUMDAY',
     'MoSCoW Method',
-    'Workshop A: FigJam','— Figma จากศูนย์ —','ทัวร์ Figma','Figma = โค้ดที่คุณรู้','Wireframe Lo-fi/Hi-fi',
-    'Workshop 1: Wireframe','สรุป Day 1',
+    'Workshop: FigJam','— Figma จากศูนย์ —','ทัวร์ Figma','Figma = โค้ดที่คุณรู้','Wireframe Lo-fi/Hi-fi',
+    'Workshop: Wireframe','สรุป Day 1',
     '— Day 2: AI → HTML —','AI Landscape','เครื่องมือ AI','Pipeline','Hands-on: Stitch','Hands-on: Figma Make',
     'Hands-on: Claude → HTML','อ่านงาน AI ออก','Prompt ให้ดี','ตัวอย่าง: Prompt → Output','Claude: Skills & Commands','สร้าง Command (ให้ Claude ทำ)','ติดตั้ง Command (.md)','ส่งมอบให้เดฟ','Capstone','เรียนต่อ','Now Go Build!'
   ];
-  // index space สุดท้าย (0–50) ตรงกับ index.html หลังเพิ่ม Design System — ไม่ถูก IIFE splice แก้
+  // index space สุดท้าย (0–57) ตรงกับ index.html หลังเพิ่ม Design System — ไม่ถูก IIFE splice แก้
   const sbGroups=[
     {label:'บทนำ',items:[0,1,2,3,4,5]},
     {label:'UX vs UI',items:[6,7,8,9,10,11,12]},
@@ -199,9 +201,9 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
     {label:'Wireframe & สรุป Day 1',items:[33,34,35]},
     {label:'Day 2 · AI → HTML',items:[36,37,38,39]},
     {label:'ลองใช้ AI Tools',items:[40,41,42]},
-    {label:'Design System',items:[43,44,45]},
-    {label:'วิจารณ์งาน & Prompt',items:[46,47,48]},
-    {label:'ส่งมอบ & ปิดคอร์ส',items:[49,50,51,52]}
+    {label:'Design System',items:[43,44,45,46,47,48,49,50]},
+    {label:'วิจารณ์งาน & Prompt',items:[51,52,53]},
+    {label:'ส่งมอบ & ปิดคอร์ส',items:[54,55,56,57]}
   ];
   const sbIcons=['🏠','🗺️','🎯','🧠','⬇️','🔗','⚔️','🧭','🎨','🔀','👥','🧩','💬','👁️','♿','🚧','🍵','🍅','🔍','🎮','🧑‍💼','🧬','☕','📊','🧠','🧰','🗂️','💻','✏️','🛠️','✅','🚀','🌐','🤖','🔁','🧵','🪄','✳️','👀','✍️','🖥️','⚙️','🗣️','📥','🤝','🏁','📚','🎉'];
 
@@ -381,7 +383,7 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
   ]);
 
   // 25 workshop A
-  scripts[25]=head(WK,26,'15-20 นาที')+title('Workshop A: คิด Product + จัด MoSCoW')+goal('กำหนด product ที่จะใช้ยาวทั้งคอร์ส')+wrap([
+  scripts[25]=head(WK,26,'15-20 นาที')+title('Workshop: คิด Product + จัด MoSCoW')+goal('กำหนด product ที่จะใช้ยาวทั้งคอร์ส')+wrap([
     say('<p>"แบ่งกลุ่ม ช่วยกันคิดเว็บหรือแอปที่กลุ่มอยากทำ ลิสต์ฟีเจอร์ลง FigJam แล้วจัด MoSCoW"</p>','โจทย์'),
     tip('<p>"product ที่คิดวันนี้ จะอยู่กับน้องไปจนจบคอร์สเลยนะคะ — บ่ายเอาไปทำ wireframe พรุ่งนี้เอาไป generate เป็นเว็บจริงใน Capstone เพราะงั้น <b>เลือกเรื่องที่กลุ่มสนใจจริง ๆ</b>"</p>','⚠️ ย้ำให้หนัก'),
     tip('<p>เดินคุมเวลา — กลุ่มที่ลิสต์ฟีเจอร์ 30 อัน เตือนให้รีบจัด MoSCoW ตัดเหลือ Must 3-5 อันพอ</p>','คุมห้อง')
@@ -411,7 +413,7 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
   ]);
 
   // 30 workshop 1
-  scripts[30]=head(WK,31,'20-25 นาที')+title('Workshop 1: สร้าง Wireframe หน้าแรก')+goal('ทำ wireframe ของ product กลุ่ม')+wrap([
+  scripts[30]=head(WK,31,'20-25 นาที')+title('Workshop: สร้าง Wireframe หน้าแรก')+goal('ทำ wireframe ของ product กลุ่ม')+wrap([
     say('<p>"เอา product ที่กลุ่มคิดใน FigJam มาวางเป็น wireframe ใน Figma — ทำหน้าแรกพอ ใช้แค่ Frame + Shape + Text ยังไม่ต้องสวย เน้น <b>Hierarchy</b> กับ <b>Flow</b>"</p>','โจทย์'),
     tip('<p>"ใครคิด content ไม่ออก ลองให้ AI ช่วยร่าง flow และข้อความก่อนได้ — นี่คือ teaser ของพรุ่งนี้"</p>','ทริคเชื่อม AI'),
     tip('<p>เดินช่วยเรื่อง Auto Layout · คุมเวลาดี ๆ อันนี้กินเวลาสุดของวัน · ทำ Mobile ก่อน ถ้าทันค่อย Desktop</p>','คุมห้อง')
@@ -584,31 +586,62 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
 
   // ===== เพิ่มสคริปต์ Design System 3 หน้า (ซิงก์ index.html: หลัง Claude → HTML, ก่อน 'อ่านงาน AI ออก') =====
   (function(at){
-    const dsTitles=['Design System คืออะไร','จาก Token สู่ทั้งเว็บ','Hands-on: Token Playground'];
-    const dsIcons=['🎨','🧱','🎛️'];
+    const dsTitles=['Design System คืออะไร','Component vs Design System','ตัวอย่าง: ปุ่ม 2 ระดับ','โครงสร้าง Design System','สรุป: Component vs DS','Hands-on: Token Playground','Workshop: Design System กลาง','Prompt: สร้าง Design System'];
+    const dsIcons=['🎨','⚖️','🔘','🧱','📌','🎛️','🏗️','📝'];
     const dsScripts=[
       head(D2,'','3-4 นาที')+title('Design System คืออะไร')+goal('ทำไมยุค Claude ยิ่งต้องมี Design System')+wrap([
         hook('<p class="q">"Claude สร้างหน้าสวยได้ใน 1 prompt... แต่ถ้าสั่งทำ 10 หน้าโดยไม่มีกติกา จะได้ปุ่ม <b>10 แบบใน 10 หน้า</b> สีเพี้ยน ขนาดมั่ว"</p>'),
         say('<p>"Design System คือ <b>ชุดกติกาดีไซน์ที่ใช้ซ้ำทั้งงาน</b> — สี ตัวอักษร ระยะ ปุ่ม การ์ด กำหนดครั้งเดียว หยิบใช้ได้ทั้งเว็บ 3 ข้อที่ได้:"</p><ul><li><b>ใช้ซ้ำได้</b> — ไม่ต้องคิดใหม่ทุกหน้า</li><li><b>แก้ที่เดียว เปลี่ยนทั้งระบบ</b> — เปลี่ยนสีหลักจุดเดียว ทั้งเว็บเปลี่ยนตาม</li><li><b>ภาษากลางกับ AI &amp; เดฟ</b> — ส่ง token ให้ Claude/เดฟ ได้งานกลมกลืน</li></ul>'),
         bridge('<p>"ยุค AI สิ่งนี้ยิ่งสำคัญ — มันคือ <b>ภาษาที่เราใช้สั่ง Claude</b> ให้สร้างของที่เป็นระบบเดียวกัน"</p>')
       ]),
-      head(D2,'','3 นาที')+title('จาก Token สู่ทั้งเว็บ')+goal('เห็นโครงเป็นชั้น Tokens → Pages')+wrap([
-        say('<p><span class="stage">(ชี้ flow)</span> "ประกอบกันเป็นชั้น ๆ จากเล็กไปใหญ่ — <b>Tokens → Components → Patterns → Pages</b>"</p>'),
-        say('<ul><li><b>Tokens</b> = DNA ค่าพื้นฐาน เช่น <code>--primary #2E42C9</code>, <code>--r 18px</code> ของ SUMDAY</li><li><b>Components</b> = ปุ่ม การ์ดเมนู badge ประกอบจาก token ชุดเดียวกัน</li><li><b>Patterns &amp; Pages</b> = เอา component มาเรียงเป็นหน้าเมนู SUMDAY ทั้งหน้า</li></ul>','อธิบายแต่ละชั้น'),
-        tip('<p>เปรียบเทียบให้เห็นภาพ: token เหมือนเม็ดสี/อิฐ · component เหมือนกำแพง · page เหมือนบ้านทั้งหลัง — เปลี่ยนเม็ดสีที่เดียว บ้านทั้งหลังเปลี่ยน</p>')
+      head(D2,'','3-4 นาที')+title('Component ≠ Design System')+goal('แยกให้ออก: ชิ้นส่วน vs ระบบมาตรฐาน')+wrap([
+        hook('<p class="q">"ใครเคยทำ Component ใน Figma แล้ว... อันนั้นเรียกว่ามี Design System แล้วหรือยัง?"</p><p><span class="ans">→ "ยังครับ/ค่ะ — Component เป็นแค่ส่วนหนึ่ง"</span></p>'),
+        say('<p>"<b>Component</b> คือชิ้นส่วน UI ที่ใช้ซ้ำได้ — Button, Input, Card, Modal · <b>Design System</b> คือระบบที่กำหนดว่าชิ้นส่วนพวกนั้น <b>ควรออกแบบและใช้งานยังไงให้เป็นมาตรฐานเดียวกัน</b>"</p><p><span class="stage">(ไล่ตาราง)</span> "เป้าหมายต่างกัน — อันหนึ่งใช้ซ้ำ อีกอันสร้างมาตรฐานทั้ง Product · ขอบเขตต่างกัน — ชิ้นเดียว vs ทั้งระบบ · คนใช้ก็ต่าง — Design System มี Product Team มาเกี่ยวด้วย"</p>'),
+        bridge('<p>"ทำ Component อย่างเดียว ยังไม่ใช่ Design System ที่สมบูรณ์ — ไปดูตัวอย่างปุ่มเดียวกันให้เห็นภาพ"</p>')
+      ]),
+      head(D2,'','3-4 นาที')+title('ปุ่มเดียวกัน แต่คนละระดับ')+goal('เห็นว่า Design System บอก "ทำไม" และ "ใช้เมื่อไหร่"')+wrap([
+        say('<p><span class="stage">(ชี้ฝั่งซ้าย)</span> "สมมติทำ Backoffice ของ SUMDAY — มีปุ่ม บันทึก / ยกเลิก / Disabled ที่ใช้ซ้ำได้ทุกหน้า แค่นี้ <b>เรียกว่าทำ Component แล้ว</b>"</p>'),
+        say('<p><span class="stage">(ชี้ฝั่งขวา ไล่ทีละบรรทัด)</span> "แต่ถ้าจะเป็น Design System ต้องตอบเพิ่ม — สีอะไร ตัวอักษรขนาดไหน มีกี่ไซซ์ใช้ตอนไหน padding เท่าไหร่ มีสถานะอะไรบ้าง <b>เมื่อไหร่ใช้ Primary เมื่อไหร่ใช้ Destructive</b> และ contrast/keyboard ผ่านไหม"</p>','อธิบาย 7 ข้อ'),
+        tip('<p>ชวนนึกถึงหลังร้าน SUMDAY ที่เพิ่งเห็น: ปุ่ม "ยอดถูกต้อง · เริ่มทำ" เป็น Primary ส่วน "สลิปไม่ผ่าน" เป็น Destructive — นี่แหละ Usage Guideline</p>'),
+        bridge('<p>"Design System ไม่ได้บอกแค่หน้าตา แต่บอก <b>ทำไม</b> และ <b>เมื่อไหร่</b> — แล้วโครงทั้งระบบหน้าตาเป็นยังไง?"</p>')
+      ]),
+      head(D2,'','3 นาที')+title('โครงสร้าง Design System ที่ดี')+goal('เห็นโครง 4 ชั้น Foundations → Patterns & Guidelines')+wrap([
+        say('<p><span class="stage">(ชี้ flow)</span> "ประกอบกันเป็นชั้น จากรากถึงกฎการใช้ — <b>Foundations → Design Tokens → Components → Patterns &amp; Guidelines</b>"</p>'),
+        say('<ul><li><b>Foundations</b> = สี ตัวอักษร ระยะ grid ของแบรนด์</li><li><b>Tokens</b> = ตั้งชื่อให้ค่าพวกนั้น เช่น <code>--primary #2E42C9</code>, <code>--r 18px</code> ของ SUMDAY</li><li><b>Components</b> = ปุ่ม input modal ที่ประกอบจาก token</li><li><b>Patterns &amp; Guidelines</b> = form table navigation + กฎว่าใช้อะไรเมื่อไหร่</li></ul>','อธิบายแต่ละชั้น'),
+        tip('<p>เปรียบเทียบ: foundations/token เหมือนเม็ดสีและอิฐ · component เหมือนกำแพง · pattern เหมือนห้อง · guideline คือแบบบ้านที่ทุกคนสร้างตาม</p>')
+      ]),
+      head(D2,'','2 นาที')+title('สรุป: Component vs Design System')+goal('ปิดหัวข้อด้วย 2 ประโยคที่จำง่าย')+wrap([
+        say('<p>"จำแค่นี้ — <b>Component = สิ่งที่เราสร้างมาใช้ซ้ำ</b> · <b>Design System = มาตรฐานที่ทำให้ทุกคนสร้างและใช้สิ่งเหล่านั้นอย่างสอดคล้องกัน</b>"</p>'),
+        say('<p>"อีกเรื่อง — <b>UI Kit, Component Library, Design System เป็นคนละระดับ</b> UI Kit เน้นหน้าตาสำเร็จรูป · Library คือ component ที่ใช้ซ้ำได้จริง · Design System คือ library + token + กฎ + ทีมใช้ตรงกัน และ<b>ไม่จำเป็นต้องมีครบทั้งสามทุกโปรเจกต์</b>"</p>','UI Kit / Library / DS'),
+        bridge('<p>"พอเข้าใจแล้ว มาลองเล่นของจริงกัน — แก้ token ที่เดียว แล้วดูทั้งหน้าเปลี่ยนตาม"</p>')
       ]),
       head(WK,'','5-10 นาที')+title('Hands-on: Live Token Playground')+goal('เห็นพลัง "แก้ที่เดียว เปลี่ยนทั้งระบบ" สด ๆ')+wrap([
         tip('<p><b>เปิดของจริงให้ดูสด ๆ</b> — คลิก preview ในสไลด์ เปิด <code>examples/coffee-design-system.html</code> ในแท็บใหม่</p>','สำคัญ'),
         say('<p><span class="stage">(ลากสไลเดอร์ --primary)</span> "ดูสิ — เปลี่ยนสีหลักจุดเดียว ปุ่ม การ์ด ราคา tab <b>เปลี่ยนพร้อมกันทั้งหน้า</b> นี่แหละพลังของ token"</p><p><span class="stage">(กด preset Dark Roast / Matcha)</span> "หรือสลับทั้งธีมแบรนด์ใน 1 คลิก"</p>'),
         say('<p>"ด้านล่างมีกล่อง <b>tokens.css</b> กับ <b>prompt สำหรับเดฟ/AI</b> ที่อัปเดตตามสด — คัดลอกไปวางใน Claude สั่ง \'สร้าง component ใหม่โดยใช้ token เหล่านี้\' ได้เลย"</p>','ปิดด้วยการเชื่อม AI'),
-        bridge('<p>"นี่คือวิธีคุยกับ AI ในยุคนี้ — <b>ส่ง token ไม่ใช่ส่งคำว่า \'ทำให้สวย ๆ\'</b>"</p>')
+        bridge('<p>"นี่คือวิธีคุยกับ AI ในยุคนี้ — <b>ส่ง token ไม่ใช่ส่งคำว่า \'ทำให้สวย ๆ\'</b> แล้วต่อไปถึงตาพวกเราทำของกลุ่มตัวเองบ้าง"</p>')
+      ]),
+      head(WK,'','30-40 นาที')+title('Workshop: สร้าง Design System กลางของกลุ่ม')+goal('ทุกกลุ่มได้ design-system.html ไว้ใช้ร่วมกันใน Capstone')+wrap([
+        hook('<p class="q">"ถ้ากลุ่มเรามี 3 คนแบ่งกันทำหน้า แล้วต่างคนต่างสั่ง Claude \'ทำปุ่มสวย ๆ\' — จะได้ปุ่มกี่แบบ?"</p><p><span class="ans">→ "3 แบบ — สีคนละเฉด ขนาดคนละไซซ์"</span></p>'),
+        say('<p><span class="stage">(ชี้ฝั่งซ้าย)</span> "งานจริงมี <b>คนทำหน้า UI/Frontend หลายคน</b> เลยต้องมี <b>Design System กลาง</b> ไว้ที่เดียว — ทุกคนหยิบ token กับ component จากไฟล์เดียวกัน หน้าที่ออกมาก็เป็นระบบเดียวกัน แก้สีที่เดียว ทุกหน้าเปลี่ยนตาม"</p>'),
+        say('<ol><li><b>เลือกสีของระบบเอง</b> — ใช้ระบบที่กลุ่มคิดและจัด MoSCoW ไว้ตอน brainstorm</li><li><b>ใช้ prompt หน้าถัดไป</b> สร้าง <code>design-system.html</code></li><li><b>ตรวจด้วยตาดีไซน์</b> — contrast, state ครบไหม แล้วสั่งแก้ต่อ</li><li><b>แบ่งกันทำหน้า</b> แต่ละคนแนบไฟล์นี้ให้ Claude ทุกครั้ง</li></ol>','อธิบายภารกิจ'),
+        tip('<p>เดินดูแต่ละกลุ่ม — ถ้าเห็นกลุ่มไหนพิมพ์ว่า "สีน้ำเงินสวย ๆ" ให้ชวนเปลี่ยนเป็น <b>hex จริง</b> เช่น <code>#5B5EE8</code> · ใครยังไม่มีสี ให้เปิด coolors.co หรือหยิบจากโลโก้/แบรนด์อ้างอิง</p>'),
+        bridge('<p>"ไปดู prompt ตัวอย่างกัน — จุดสำคัญคือ <b>ระบุสีเอง</b>"</p>')
+      ]),
+      head(WK,'','5-7 นาที (อธิบาย) + ลงมือ')+title('ตัวอย่าง Prompt: สร้าง Design System เป็น HTML')+goal('รู้ว่า prompt ที่ดีต้องระบุอะไรบ้าง')+wrap([
+        say('<p><span class="stage">(ชี้ prompt ฝั่งขวา ไล่จากบนลงล่าง)</span> "prompt นี้มี 4 ส่วน — <b>สีที่ระบุเอง</b> พร้อมบอกว่าแต่ละสีใช้ทำอะไร · <b>ฟอนต์/ระยะ/มุมโค้ง</b> · <b>สิ่งที่ต้องมีในหน้า</b> tokens components guidelines · และ <b>กติกา</b> ห้าม hardcode สี contrast ต้องผ่าน"</p>'),
+        say('<p><span class="stage">(ชี้แถบสีเหนือ prompt)</span> "ตรงสีนี่แหละที่ต้องแก้เป็นของกลุ่มตัวเอง — Primary, Secondary ไล่ไปจนถึง Success/Danger"</p><p><span class="stage">(คลิกกล่อง Output เปิด <code>examples/design-system-example.html</code>)</span> "นี่คือสิ่งที่ได้จาก prompt นี้ — ระบบจองห้องประชุม MeetSpace: swatch สีกดคัดลอกได้ · ตัวอักษร · ปุ่มครบทุก state · ฟอร์ม · badge · card · modal กดเปิดได้จริง · และใต้ทุก component มี <b>ใช้เมื่อไหร่ / ไม่ควรใช้เมื่อไหร่</b>"</p><p><span class="stage">(เลื่อนลงล่างสุด)</span> "มีปุ่มคัดลอก <b>tokens.css</b> ไว้ส่งให้เพื่อนในทีม"</p>','สีที่ต้องแก้ + ดู Output จริง'),
+        tip('<p>ชี้ให้ดูในหน้า Output: ปุ่ม Secondary ใช้<b>พื้นอ่อน + ตัวอักษรเข้ม</b> เพราะตัวอักษรขาวบน #B9A8F5 contrast ไม่ผ่าน AA — นี่คือตัวอย่างที่ Design System ต้อง "ให้เหตุผล" ไม่ใช่แค่กำหนดสี</p>'),
+        say('<p><span class="stage">(ชี้กล่องล่างขวา)</span> "พอได้ไฟล์แล้ว ตอนแต่ละคนทำหน้าของตัวเอง ใช้ prompt สั้น ๆ นี้ <b>แนบ design-system.html ไปด้วย</b> แล้วบอกว่าห้ามสร้างสไตล์ใหม่"</p>','prompt ตอนใช้งาน'),
+        tip('<p>ทั้งสองกล่องมีปุ่ม <b>📋 คัดลอก</b> — ให้นักเรียนเปิดสไลด์นี้บนเครื่องตัวเองแล้วกดคัดลอกได้เลย</p>','สำคัญ'),
+        bridge('<p>"ได้ Design System กลางแล้ว — ต่อไปมาฝึกอ่านงานที่ AI สร้างให้ออก ว่าตรงตามระบบไหม"</p>')
       ])
     ];
     slideTitles.splice(at,0,...dsTitles); sbIcons.splice(at,0,...dsIcons); scripts.splice(at,0,...dsScripts);
   })(43);
 
-  // ===== เอาหมวด "Claude Skills & Commands" ออก 3 หน้า (idx 49-51: Skills, สร้าง Command, ติดตั้ง Command) — ไม่ได้สอนทันเวลา =====
-  slideTitles.splice(49,3); sbIcons.splice(49,3); scripts.splice(49,3);
+  // ===== เอาหมวด "Claude Skills & Commands" ออก 3 หน้า (idx 54-56: Skills, สร้าง Command, ติดตั้ง Command) — ไม่ได้สอนทันเวลา =====
+  slideTitles.splice(54,3); sbIcons.splice(54,3); scripts.splice(54,3);
 
   // ===== render & nav =====
   const total=scripts.length;
@@ -628,6 +661,7 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
     g.items.forEach(i=>{
       const it=document.createElement('div');it.className='sb-item'+(i===0?' active':'');it.dataset.idx=i;
       it.innerHTML='<span class="ix">'+String(i+1).padStart(2,'0')+'</span><span class="ic">'+(sbIcons[i]||'•')+'</span><span>'+cleanT(slideTitles[i])+'</span>';
+      if(/^Workshop/.test(slideTitles[i]))it.classList.add('ws');
       it.addEventListener('click',()=>{go(i);if(window.innerWidth<=860)sidebar.classList.add('hidden');});
       sbNav.appendChild(it);
     });

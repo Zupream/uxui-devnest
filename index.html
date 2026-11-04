@@ -52,6 +52,8 @@ body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg-dar
 .sb-item{display:flex;align-items:center;gap:9px;padding:6px 10px;border-radius:8px;cursor:pointer;font-size:clamp(10.5px,0.9vw,13px);color:var(--text-secondary);line-height:1.3;transition:background 0.15s,color 0.15s;}
 .sb-item:hover{background:var(--bg-card-hover);color:var(--text-primary);}
 .sb-item.active{background:linear-gradient(135deg,rgba(124,58,237,0.13),rgba(236,72,153,0.10));color:var(--primary);font-weight:700;}
+.sb-item.ws{font-weight:800;}
+.sb-item.ws:not(.active){color:var(--text-primary);}
 .sb-item .ix{font-size:9.5px;font-family:'Inter',monospace;color:var(--text-muted);min-width:16px;text-align:right;flex-shrink:0;}
 .sb-item.active .ix{color:var(--primary);}
 .sb-item .ic{font-size:1.05em;flex-shrink:0;}
@@ -448,6 +450,61 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
 .step-title{font-weight:700;font-size:clamp(13px,1.35vw,18px);margin-bottom:3px;}
 .step-sub{font-size:clamp(11px,1.05vw,14px);color:var(--text-secondary);margin-bottom:9px;line-height:1.55;}
 .tip-box{background:rgba(251,191,36,0.14);border:1px solid rgba(251,191,36,0.42);border-radius:10px;padding:9px 14px;font-size:clamp(11px,1.05vw,14px);color:#92560B;text-align:left;line-height:1.55;}
+
+/* ===== Component vs Design System ===== */
+.cmp-table{width:100%;max-width:1040px;margin:0 auto;border-collapse:separate;border-spacing:0;background:rgba(255,255,255,0.7);border:1px solid var(--border-color);border-radius:16px;overflow:hidden;box-shadow:0 10px 28px rgba(124,58,237,0.08);font-size:clamp(11.5px,1.1vw,15px);}
+.cmp-table th,.cmp-table td{padding:clamp(8px,0.9vw,13px) clamp(10px,1.2vw,18px);text-align:left;vertical-align:top;line-height:1.45;border-bottom:1px solid var(--border-color);}
+.cmp-table tr:last-child td{border-bottom:0;}
+.cmp-table thead th{background:rgba(124,58,237,0.06);font-size:clamp(13px,1.3vw,18px);font-weight:800;}
+.cmp-table thead th small{display:block;font-size:clamp(10.5px,0.95vw,13px);font-weight:500;color:var(--text-secondary);margin-top:3px;line-height:1.4;}
+.cmp-table thead th.ds{background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(236,72,153,0.12));color:var(--primary-dark);}
+.cmp-table td:first-child{font-weight:700;color:var(--text-primary);width:18%;white-space:nowrap;}
+.cmp-table td{color:var(--text-secondary);}
+.ds-demo{background:#fff;border:1px solid var(--border-color);border-radius:16px;padding:clamp(14px,1.6vw,22px);box-shadow:0 10px 28px rgba(30,27,46,0.08);}
+.ds-demo .lbl{font-size:clamp(10px,0.9vw,12px);font-weight:800;letter-spacing:0.12em;color:var(--text-muted);margin-bottom:clamp(10px,1.2vw,16px);}
+.ds-demo .row{display:flex;gap:10px;flex-wrap:wrap;}
+.ds-btn{font-family:inherit;border:0;border-radius:12px;padding:clamp(8px,0.9vw,12px) clamp(16px,1.6vw,24px);font-weight:700;font-size:clamp(12px,1.15vw,15px);cursor:pointer;transition:all .15s ease;}
+.ds-btn.pri{background:#2E42C9;color:#fff;box-shadow:0 6px 16px rgba(46,66,201,0.28);}
+.ds-btn.pri:hover{background:#2234A8;transform:translateY(-1px);}
+.ds-btn.sec{background:#fff;color:#3E3127;border:1.5px solid #E0D1B8;}
+.ds-btn.sec:hover{background:#FBF5EB;}
+.ds-btn[disabled]{background:#ECE0CD;color:#A1907A;box-shadow:none;cursor:not-allowed;}
+.ds-rules{list-style:none;display:flex;flex-direction:column;gap:clamp(6px,0.7vw,10px);}
+.ds-rules li{display:grid;grid-template-columns:clamp(104px,10vw,140px) 1fr;gap:10px;font-size:clamp(11.5px,1.08vw,14.5px);line-height:1.45;color:var(--text-secondary);padding-bottom:clamp(6px,0.7vw,10px);border-bottom:1px dashed var(--border-color);}
+.ds-rules li:last-child{border-bottom:0;padding-bottom:0;}
+.ds-rules li b{color:var(--primary-dark);font-weight:800;}
+.big-eq{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,1.6vw,24px);max-width:1040px;margin:0 auto;}
+.big-eq .be{border-radius:18px;padding:clamp(16px,2vw,28px);border:1px solid var(--border-color);background:rgba(255,255,255,0.7);text-align:center;}
+.big-eq .be .k{font-size:clamp(18px,2.1vw,30px);font-weight:900;}
+.big-eq .be .v{font-size:clamp(12.5px,1.25vw,17px);color:var(--text-secondary);margin-top:6px;line-height:1.5;}
+.big-eq .be.c .k{color:var(--accent-orange);}
+.big-eq .be.d{background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(236,72,153,0.1));}
+.big-eq .be.d .k{color:var(--primary);}
+@media(max-width:768px){.dsw2-grid{grid-template-columns:1fr !important;}.sw-list{grid-template-columns:1fr 1fr;}.big-eq{grid-template-columns:1fr;}.cmp-table td:first-child{white-space:normal;}}
+
+/* ===== Workshop: Design System กลาง ===== */
+.hub{display:flex;flex-direction:column;align-items:center;gap:clamp(4px,0.6vw,8px);}
+.hub .core{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;border-radius:16px;padding:clamp(10px,1.2vw,16px) clamp(16px,1.8vw,24px);font-weight:800;font-size:clamp(13px,1.3vw,18px);text-align:center;box-shadow:0 12px 28px rgba(124,58,237,0.28);}
+.hub .core small{display:block;font-weight:500;opacity:.85;font-size:clamp(10.5px,0.95vw,13px);margin-top:2px;font-family:ui-monospace,Menlo,monospace;}
+.hub .arrows{color:var(--secondary);font-weight:900;font-size:clamp(12px,1.2vw,17px);letter-spacing:0.6em;line-height:1;}
+.hub .devs{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,1vw,12px);width:100%;}
+.hub .dev{background:rgba(255,255,255,0.75);border:1px solid var(--border-color);border-radius:12px;padding:clamp(8px,0.9vw,12px);text-align:center;font-size:clamp(11px,1vw,13.5px);color:var(--text-secondary);line-height:1.4;}
+.hub .dev b{display:block;color:var(--text-primary);font-size:clamp(12px,1.1vw,15px);}
+.hub .dev .mini{display:flex;justify-content:center;gap:4px;margin-top:6px;}
+.hub .dev .mini i{display:block;width:clamp(16px,1.6vw,22px);height:8px;border-radius:4px;}
+.sw-list{display:grid;grid-template-columns:1fr 1fr;gap:clamp(5px,0.6vw,8px);}
+.sw{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.75);border:1px solid var(--border-color);border-radius:10px;padding:clamp(4px,0.5vw,7px) clamp(7px,0.8vw,10px);font-size:clamp(11px,1vw,13.5px);}
+.sw i{width:clamp(18px,1.6vw,22px);height:clamp(18px,1.6vw,22px);border-radius:6px;flex-shrink:0;border:1px solid rgba(0,0,0,0.08);}
+.sw div{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;}
+.sw b{font-size:clamp(11.5px,1.05vw,14px);color:var(--text-primary);}
+.sw code{font-size:clamp(10px,0.9vw,12px);color:var(--text-muted);}
+.prompt-box{position:relative;background:#1E1B2E;color:#EDE9FB;border-radius:14px;padding:44px clamp(12px,1.4vw,18px) clamp(12px,1.4vw,18px);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:clamp(10.5px,0.95vw,12.8px);line-height:1.7;white-space:pre-wrap;overflow-y:auto;text-align:left;}
+.sw-strip{display:flex;flex-wrap:wrap;gap:clamp(4px,0.5vw,7px);}
+.sw-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.8);border:1px solid var(--border-color);border-radius:999px;padding:2px 9px 2px 3px;font-size:clamp(10.5px,0.92vw,12.5px);font-weight:700;color:var(--text-primary);}
+.sw-pill i{width:clamp(13px,1.2vw,16px);height:clamp(13px,1.2vw,16px);border-radius:50%;border:1px solid rgba(0,0,0,0.1);}
+.sw-pill code{font-size:0.92em;font-weight:500;color:var(--text-muted);background:none;padding:0;}
+.copy-btn{position:absolute;top:10px;right:10px;font-family:inherit;border:0;border-radius:9px;padding:6px 12px;font-weight:700;font-size:12px;background:rgba(255,255,255,0.14);color:#fff;cursor:pointer;transition:background .15s;}
+.copy-btn:hover{background:rgba(255,255,255,0.26);}
 </style>
 </head>
 <body>
@@ -968,7 +1025,7 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
 
   <!-- 18 WORKSHOP A FigJam -->
   <div class="slide" data-slide="22">
-    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Workshop A · FigJam</div><div class="slide-number">23</div></div>
+    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Workshop · FigJam</div><div class="slide-number">23</div></div>
     <div class="slide-content">
       <div class="hero-box pink anim-item">
         <div class="hero-mission">🧠 Group Brainstorm</div>
@@ -1147,7 +1204,7 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
 
   <!-- 24 WORKSHOP 1 -->
   <div class="slide" data-slide="27">
-    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Workshop 1 · Figma</div><div class="slide-number">28</div></div>
+    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Workshop · Figma</div><div class="slide-number">28</div></div>
     <div class="slide-content">
       <div class="hero-box anim-item">
         <div class="hero-mission">🛠️ Mission</div>
@@ -1311,25 +1368,102 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
     </div>
   </div>
 
+  <!-- DSA · Component vs Design System -->
+  <div class="slide" data-slide="DSA">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Component vs Design System</div><div class="slide-number">38</div></div>
+    <div class="slide-title">Component ≠ Design System</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">Component เป็น<b>ส่วนหนึ่ง</b>ของ Design System — แต่ทำ Component อย่างเดียว <b>ยังไม่ถือว่ามี Design System ที่สมบูรณ์</b></div>
+    <div class="slide-content">
+      <table class="cmp-table anim-item">
+        <thead><tr>
+          <th>หัวข้อ</th>
+          <th>🧩 Component<small>ชิ้นส่วน UI ที่นำกลับมาใช้ซ้ำได้ เช่น Button, Input, Card, Modal</small></th>
+          <th class="ds">📘 Design System<small>มาตรฐานทั้งสี ตัวอักษร ระยะห่าง Component และกฎการใช้งานให้สอดคล้องกัน</small></th>
+        </tr></thead>
+        <tbody>
+          <tr><td>🎯 เป้าหมาย</td><td>นำ UI กลับมาใช้ซ้ำ</td><td>สร้างมาตรฐานทั้ง Product</td></tr>
+          <tr><td>📐 ขอบเขต</td><td>UI แต่ละชิ้น</td><td>ระบบการออกแบบทั้งหมด</td></tr>
+          <tr><td>🧪 ตัวอย่าง</td><td>Button, Input, Modal</td><td>Colors, Typography, Tokens, Components, Guidelines</td></tr>
+          <tr><td>⚙️ การใช้งาน</td><td>ลดงานออกแบบและพัฒนาซ้ำ</td><td>ทำให้ทีมออกแบบและพัฒนาไปในทิศทางเดียวกัน</td></tr>
+          <tr><td>👥 ผู้ใช้งาน</td><td>UX/UI, Developer</td><td>UX/UI, Developer, Product Team</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DSB · ตัวอย่าง Button เดียวกัน 2 ระดับ -->
+  <div class="slide" data-slide="DSB">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Example · Backoffice</div><div class="slide-number">39</div></div>
+    <div class="slide-title">ปุ่มเดียวกัน แต่คนละระดับ</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">สมมติเรากำลังออกแบบระบบ <b>Backoffice</b> ของร้าน SUMDAY</div>
+    <div class="slide-content">
+      <div class="two-col" style="max-width:1080px;gap:clamp(16px,2.2vw,34px);align-items:stretch">
+        <div class="anim-item" style="display:flex;flex-direction:column;gap:clamp(10px,1.2vw,16px)">
+          <div class="section-label">🧩 ระดับ Component</div>
+          <div class="ds-demo">
+            <div class="lbl">BUTTON COMPONENTS</div>
+            <div class="row"><button class="ds-btn pri" type="button">บันทึก</button><button class="ds-btn sec" type="button">ยกเลิก</button><button class="ds-btn pri" type="button" disabled>Disabled</button></div>
+          </div>
+          <div style="font-size:clamp(12px,1.15vw,15.5px);color:var(--text-secondary);line-height:1.6">มีปุ่มที่นำกลับมาใช้ซ้ำได้ พร้อมรูปแบบและสถานะต่าง ๆ<br>→ แค่นี้ <b style="color:var(--text-primary)">เรียกว่าทำ Component แล้ว</b> เพราะเอาปุ่มเดียวกันไปใช้ได้หลายหน้าจอ</div>
+          <div class="tip-box" style="margin-top:auto">💡 Design System ไม่ได้บอกแค่ <b>"ปุ่มหน้าตาอย่างไร"</b> แต่บอกด้วยว่า <b>"ทำไมถึงออกแบบแบบนี้"</b> และ <b>"ควรใช้เมื่อไหร่"</b></div>
+        </div>
+        <div class="anim-item" style="display:flex;flex-direction:column">
+          <div class="section-label">📘 ระดับ Design System — ต้องกำหนดเพิ่ม</div>
+          <div class="ds-demo" style="flex:1">
+            <ul class="ds-rules">
+              <li><b>Color Tokens</b><span>Primary เป็นสีอะไร และตัวอักษรบนปุ่มต้องเป็นสีอะไร</span></li>
+              <li><b>Typography</b><span>ขนาดตัวอักษร น้ำหนัก และ Line Height</span></li>
+              <li><b>Sizing</b><span>Small / Medium / Large ใช้ขนาดไหนในสถานการณ์ใด</span></li>
+              <li><b>Spacing</b><span>Padding และ Gap ภายในปุ่ม</span></li>
+              <li><b>States</b><span>Default · Hover · Focus · Disabled · Loading</span></li>
+              <li><b>Usage</b><span>เมื่อไหร่ใช้ Primary, Secondary หรือ Destructive</span></li>
+              <li><b>Accessibility</b><span>Contrast · Keyboard Navigation · Focus Indicator</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- DS2 · โครงสร้าง Design System -->
   <div class="slide" data-slide="DS2">
-    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Structure</div><div class="slide-number">38</div></div>
-    <div class="slide-title">จาก Token สู่ทั้งเว็บ</div>
-    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">เล็ก → ใหญ่ ประกอบกันเป็นชั้น ๆ</div>
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Structure</div><div class="slide-number">40</div></div>
+    <div class="slide-title">โครงสร้าง Design System ที่ดี</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,22px)">มาตรฐานการออกแบบและพัฒนา Product — ประกอบกันเป็นชั้น จากรากถึงกฎการใช้</div>
     <div class="slide-content">
       <div class="flow-container">
         <div class="flow-row anim-item">
-          <div class="flow-step"><span class="icon">🎨</span>Tokens</div><span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="icon">🌱</span>Foundations</div><span class="flow-arrow">→</span>
+          <div class="flow-step"><span class="icon">🎨</span>Design Tokens</div><span class="flow-arrow">→</span>
           <div class="flow-step"><span class="icon">🧩</span>Components</div><span class="flow-arrow">→</span>
-          <div class="flow-step"><span class="icon">🧱</span>Patterns</div><span class="flow-arrow">→</span>
-          <div class="flow-step highlight"><span class="icon">📄</span>Pages</div>
+          <div class="flow-step highlight"><span class="icon">📐</span>Patterns &amp; Guidelines</div>
         </div>
       </div>
-      <div class="cards-grid cols-3" style="max-width:1080px;margin-top:clamp(14px,1.8vw,24px)">
-        <div class="card anim-item"><span class="card-icon">🎨</span><div class="card-title">Tokens — DNA</div><div class="card-desc">ค่าพื้นฐานที่ใช้ซ้ำ เช่น <code>--primary</code> <code>#2E42C9</code> · <code>--r 18px</code> ของ SUMDAY</div><span class="card-tag tag-blue">ตัวแปร CSS</span></div>
-        <div class="card anim-item"><span class="card-icon">🧩</span><div class="card-title">Components</div><div class="card-desc">ปุ่ม · การ์ดเมนู · badge — ประกอบขึ้นจาก token ชุดเดียวกัน</div><span class="card-tag tag-green">ใช้ซ้ำ</span></div>
-        <div class="card anim-item"><span class="card-icon">🧱</span><div class="card-title">Patterns &amp; Pages</div><div class="card-desc">เอา component มาเรียงเป็นหน้า เช่น หน้าเมนู SUMDAY ทั้งหน้า</div><span class="card-tag tag-pink">ทั้งระบบ</span></div>
+      <div class="cards-grid cols-4" style="max-width:1120px;margin-top:clamp(14px,1.8vw,24px)">
+        <div class="card anim-item"><span class="card-icon">🌱</span><div class="card-title">01 · Foundations</div><div class="card-desc">Colors, Typography, Spacing, Grid — ค่าพื้นฐานของแบรนด์</div><span class="card-tag tag-orange">ราก</span></div>
+        <div class="card anim-item"><span class="card-icon">🎨</span><div class="card-title">02 · Design Tokens</div><div class="card-desc">ตั้งชื่อให้ค่า เช่น <code>--primary</code> <code>#2E42C9</code> · <code>--r 18px</code> ของ SUMDAY · Surface · Shadow</div><span class="card-tag tag-blue">ตัวแปร CSS</span></div>
+        <div class="card anim-item"><span class="card-icon">🧩</span><div class="card-title">03 · Components</div><div class="card-desc">Button, Input, Select, Modal — ประกอบจาก token ชุดเดียวกัน</div><span class="card-tag tag-green">ใช้ซ้ำ</span></div>
+        <div class="card anim-item"><span class="card-icon">📐</span><div class="card-title">04 · Patterns &amp; Guidelines</div><div class="card-desc">Form, Table, Navigation + กฎ UX ว่าใช้อะไร เมื่อไหร่</div><span class="card-tag tag-pink">ทั้งระบบ</span></div>
       </div>
+    </div>
+  </div>
+
+  <!-- DSE · สรุป -->
+  <div class="slide" data-slide="DSE">
+    <div class="slide-header"><div class="slide-badge d2"><span class="dot"></span>Recap</div><div class="slide-number">42</div></div>
+    <div class="slide-title">สรุป: Component vs Design System</div>
+    <div class="slide-content">
+      <div class="big-eq anim-item">
+        <div class="be c"><div class="k">🧩 Component</div><div class="v">= สิ่งที่เรา<b>สร้างมาใช้ซ้ำ</b></div></div>
+        <div class="be d"><div class="k">📘 Design System</div><div class="v">= มาตรฐานที่ทำให้<b>ทุกคนสร้างและใช้</b>สิ่งเหล่านั้นอย่างสอดคล้องกัน</div></div>
+      </div>
+      <div class="section-label anim-item" style="max-width:1040px;margin:clamp(14px,1.8vw,24px) auto clamp(8px,1vw,12px)">🪜 UI Kit · Component Library · Design System เป็นคนละระดับ — ไม่จำเป็นต้องมีครบทั้งสามทุกโปรเจกต์</div>
+      <div class="cards-grid cols-3" style="max-width:1040px">
+        <div class="card anim-item"><span class="card-icon">🖼️</span><div class="card-title">UI Kit</div><div class="card-desc">ชุดหน้าจอ/องค์ประกอบสำเร็จรูปไว้หยิบประกอบงาน — เน้นหน้าตา</div></div>
+        <div class="card anim-item"><span class="card-icon">📦</span><div class="card-title">Component Library</div><div class="card-desc">Component ที่ใช้ซ้ำได้จริง มี variants/states — ใน Figma หรือในโค้ด</div></div>
+        <div class="card anim-item"><span class="card-icon">📘</span><div class="card-title">Design System</div><div class="card-desc">Library + Tokens + Guidelines + ทีมใช้ตรงกันทั้ง Designer และ Dev</div></div>
+      </div>
+      
     </div>
   </div>
 
@@ -1347,6 +1481,109 @@ button.hero-link{border:none;cursor:pointer;font-family:inherit;}
           <span class="hero-chip">🤝 export ส่งเดฟ/AI</span>
         </div>
         <a class="hero-link" href="examples/coffee-design-system.html" target="_blank">เปิด Token Playground →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- DSW1 · Workshop: Design System กลาง -->
+  <div class="slide" data-slide="DSW1">
+    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Workshop · Design System</div><div class="slide-number">50</div></div>
+    <div class="slide-title">Workshop: สร้าง Design System กลางของกลุ่ม</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(12px,1.6vw,20px)">ทำ "แหล่งความจริงเดียว" ไว้ก่อน แล้วทุกคนในกลุ่มหยิบไปใช้ตอนทำหน้าของตัวเอง</div>
+    <div class="slide-content">
+      <div class="two-col" style="max-width:1100px;gap:clamp(16px,2.4vw,36px);align-items:stretch">
+        <div class="anim-item" style="display:flex;flex-direction:column;gap:clamp(10px,1.2vw,14px)">
+          <div class="section-label">🤔 ทำไมต้องมี Design System กลาง?</div>
+          <div style="font-size:clamp(12px,1.15vw,15.5px);color:var(--text-secondary);line-height:1.6">โปรเจกต์จริง <b style="color:var(--text-primary)">มีคนทำหน้า UI (Frontend) หลายคน</b> — ถ้าต่างคนต่างทำ จะได้ปุ่ม 3 แบบ สี 3 เฉด ระยะไม่เท่ากัน</div>
+          <div class="hub">
+            <div class="core">📘 design-system.html<small>tokens.css · components · guidelines</small></div>
+            <div class="arrows">↓↓↓</div>
+            <div class="devs">
+              <div class="dev"><b>👩‍💻 FE คน A</b>หน้า Login<div class="mini"><i style="background:#5B5EE8"></i><i style="background:#B9A8F5"></i><i style="background:#E8709A"></i></div></div>
+              <div class="dev"><b>🧑‍💻 FE คน B</b>หน้า Dashboard<div class="mini"><i style="background:#5B5EE8"></i><i style="background:#B9A8F5"></i><i style="background:#E8709A"></i></div></div>
+              <div class="dev"><b>👨‍💻 FE คน C</b>หน้า Settings<div class="mini"><i style="background:#5B5EE8"></i><i style="background:#B9A8F5"></i><i style="background:#E8709A"></i></div></div>
+            </div>
+          </div>
+          <div class="tip-box" style="margin-top:auto">✅ ใช้จาก DS กลางได้เลย → <b>หน้าตาเหมือนกันทั้งระบบ</b> · แก้สีที่เดียว ทุกหน้าเปลี่ยนตาม</div>
+        </div>
+        <div class="anim-item" style="display:flex;flex-direction:column;gap:clamp(10px,1.2vw,14px)">
+          <div class="section-label">🛠️ ภารกิจของกลุ่ม (ใช้ระบบที่กลุ่มคิดไว้ตอน brainstorm)</div>
+          <div class="steps" style="gap:clamp(8px,1vw,12px)">
+            <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">เลือกสีของระบบเอง</div><div class="step-sub" style="margin:0">Primary · Secondary · Accent · Background · Text · Success / Warning / Danger</div></div></div>
+            <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">ใช้ Prompt สร้าง <code>design-system.html</code></div><div class="step-sub" style="margin:0">ใส่สีของกลุ่มลงใน prompt ตัวอย่างหน้าถัดไป</div></div></div>
+            <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">ตรวจด้วยตาดีไซน์</div><div class="step-sub" style="margin:0">contrast อ่านออกไหม · ครบทุก state ไหม · สั่งแก้ต่อเป็นภาษาคน</div></div></div>
+            <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">แบ่งกันทำหน้า โดยใช้ DS กลาง</div><div class="step-sub" style="margin:0">แต่ละคนแนบ <code>design-system.html</code> ให้ Claude ตอนสร้างหน้าของตัวเอง → ไปต่อ Capstone</div></div></div>
+          </div>
+          <div class="hero-chips" style="margin-top:auto;justify-content:flex-start">
+            <span class="hero-chip">👥 ทำเป็นกลุ่ม</span>
+            <span class="hero-chip">⏱️ 30–40 นาที</span>
+            <span class="hero-chip">📦 ได้ design-system.html</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DSW2 · Prompt สร้าง Design System -->
+  <div class="slide" data-slide="DSW2">
+    <div class="slide-header"><div class="slide-badge work"><span class="dot"></span>Workshop · Prompt</div><div class="slide-number">51</div></div>
+    <div class="slide-title">ตัวอย่าง Prompt: สร้าง Design System เป็น HTML</div>
+    <div class="slide-subtitle" style="margin-bottom:clamp(10px,1.4vw,18px)"><b>ระบุสีเอง</b> ให้ชัด — AI ไม่ต้องเดา และทุกหน้าจะออกมาเป็นระบบเดียวกัน</div>
+    <div class="slide-content">
+      <div class="dsw2-grid" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(16px,2.2vw,32px);max-width:1120px;width:100%;margin:0 auto;align-items:stretch">
+        <div class="anim-item" style="display:flex;flex-direction:column;gap:clamp(7px,0.9vw,11px);min-width:0">
+          <div class="section-label">✍️ Prompt — แก้สีเป็นของกลุ่ม</div>
+          <div class="sw-strip"><span class="sw-pill"><i style="background:#5B5EE8"></i>Primary <code>#5B5EE8</code></span><span class="sw-pill"><i style="background:#B9A8F5"></i>Secondary <code>#B9A8F5</code></span><span class="sw-pill"><i style="background:#E8709A"></i>Accent <code>#E8709A</code></span><span class="sw-pill"><i style="background:#FFF8FC"></i>Background <code>#FFF8FC</code></span><span class="sw-pill"><i style="background:#23213F"></i>Text <code>#23213F</code></span><span class="sw-pill"><i style="background:#3E9E7E"></i>Success <code>#3E9E7E</code></span><span class="sw-pill"><i style="background:#F2B45A"></i>Warning <code>#F2B45A</code></span><span class="sw-pill"><i style="background:#C93A62"></i>Danger <code>#C93A62</code></span></div>
+          <div class="prompt-box" style="flex:1;min-height:0;max-height:clamp(190px,36vh,480px)"><button class="copy-btn" type="button" data-copy="dsPrompt">📋 คัดลอก</button><span id="dsPrompt">สร้าง "Design System" ของโปรเจกต์ [ชื่อระบบของกลุ่ม เช่น ระบบจองห้องประชุม]
+เป็นไฟล์ HTML เดียวจบ (รวม CSS + JS) ชื่อ design-system.html เปิดในเบราว์เซอร์ได้ทันที
+
+🎨 สีของแบรนด์ (ใช้ตามนี้เท่านั้น ห้ามคิดสีเพิ่ม)
+- Primary: #5B5EE8 (Periwinkle) → ปุ่มหลัก ลิงก์ สิ่งที่อยากให้กด
+- Secondary: #B9A8F5 (Lavender) → ปุ่มรอง ไฮไลต์
+- Accent: #E8709A (Rose Pink) → จุดเด่นเล็ก ๆ เช่น page indicator
+- Gradient: #6C6FF5 → #F3C6E3 → พื้นหลัง/ส่วนตกแต่งเท่านั้น (โทนพาสเทล ฝันๆ)
+- Background: #FFF8FC · Surface: #FFFFFF · Border: #F1E2EE
+- Text: #23213F · Text muted: #66627F
+- Success: #3E9E7E · Warning: #F2B45A · Danger: #C93A62
+
+🔤 Typography: ฟอนต์ "IBM Plex Sans Thai" (Google Fonts)
+   H1 32 · H2 24 · H3 20 · Body 16 · Small 14
+📏 Spacing: 4 / 8 / 12 / 16 / 24 / 32 · Radius: 8 / 12 / 18 · Shadow 2 ระดับ
+
+🧱 สิ่งที่ต้องมีในหน้า
+1) Tokens — ประกาศทุกค่าเป็น CSS variables ใน :root
+   (--color-primary, --space-4, --radius-md ...) แสดง swatch + ชื่อตัวแปร + hex กดคัดลอกได้
+2) Typography — ตัวอย่างทุกระดับ
+3) Components — Button (Primary / Secondary / Ghost / Destructive × S/M/L
+   + Hover / Focus / Disabled / Loading), Input + error, Select, Checkbox,
+   Badge สถานะ, Card, Modal (กดเปิดได้จริง), Table
+4) Usage Guidelines — ใต้แต่ละ component เขียน "ใช้เมื่อไหร่ / ไม่ควรใช้เมื่อไหร่"
+5) ปุ่ม "คัดลอก tokens.css" ไว้ส่งให้เพื่อนในทีม
+
+✅ กติกา
+- ทุก component ใช้ค่าจาก CSS variables เท่านั้น ห้าม hardcode สี
+- contrast ผ่าน WCAG AA และมี focus ring ชัดเจน
+- responsive ดูบนมือถือได้</span></div>
+        </div>
+        <div class="anim-item" style="display:flex;flex-direction:column;gap:clamp(7px,0.9vw,11px);min-width:0">
+          <div class="section-label">✳️ Output ที่ได้จาก Prompt นี้</div>
+          <div onclick="window.open('examples/design-system-example.html','_blank','noopener')" title="คลิกเพื่อเปิด design-system.html ตัวอย่างในแท็บใหม่" style="border-radius:14px;border:1px solid var(--border-color);overflow:hidden;box-shadow:0 14px 36px rgba(30,27,46,0.16);background:#fff;flex:1;display:flex;flex-direction:column;cursor:pointer;transition:transform 0.2s ease,box-shadow 0.2s ease" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 20px 46px rgba(30,27,46,0.24)'" onmouseout="this.style.transform='';this.style.boxShadow='0 14px 36px rgba(30,27,46,0.16)'">
+            <div style="display:flex;gap:6px;align-items:center;padding:8px 13px;background:#F1EEF9;border-bottom:1px solid var(--border-color)">
+              <span style="width:9px;height:9px;border-radius:50%;background:#FF5F57"></span>
+              <span style="width:9px;height:9px;border-radius:50%;background:#FEBC2E"></span>
+              <span style="width:9px;height:9px;border-radius:50%;background:#28C840"></span>
+              <span style="margin-left:8px;font-size:11px;color:var(--text-muted)">design-system.html</span>
+              <span style="margin-left:auto;font-size:11px;font-weight:700;color:var(--primary)">↗ คลิกเปิดจริง</span>
+            </div>
+            <div style="position:relative;flex:1;min-height:clamp(120px,20vh,300px);overflow:hidden;background:#FFF8FC">
+              <iframe src="examples/design-system-example.html" title="design-system.html preview" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" style="position:absolute;top:0;left:0;width:200%;height:200%;border:0;transform:scale(0.5);transform-origin:top left;pointer-events:none"></iframe>
+            </div>
+          </div>
+          <div class="section-label" style="margin-top:clamp(2px,0.4vw,6px)">🔁 แล้วตอนเพื่อนแต่ละคนทำหน้าของตัวเอง</div>
+          <div class="prompt-box" style="padding-top:clamp(10px,1.1vw,14px);padding-right:96px"><button class="copy-btn" type="button" data-copy="dsReusePrompt">📋 คัดลอก</button><span id="dsReusePrompt">สร้างหน้า [ชื่อหน้า เช่น หน้ารายการจอง] ของระบบเรา
+โดยใช้ token และ component จาก design-system.html ที่แนบมาเท่านั้น
+ห้ามสร้างสี ฟอนต์ หรือสไตล์ปุ่มใหม่</span></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1633,10 +1870,10 @@ function openLightbox(src){const lb=document.getElementById('lightbox');document
     'Workshop: Bad UX รอบตัว','Challenge: User Inyerface',
     'User Persona คืออะไร','องค์ประกอบของ Persona','ตัวอย่าง: ลูกค้า SUMDAY',
     'MoSCoW Method',
-    'Workshop A: FigJam','— Figma จากศูนย์ —','ทัวร์ Figma','Frame & รูปทรง','Pen, Text & Stroke','Effects: เงา & เบลอ','Auto Layout คืออะไร','Resizing: Hug/Fixed/Fill','Components คืออะไร','Figma = โค้ดที่คุณรู้','Wireframe Lo-fi/Hi-fi',
-    'Workshop 1: Wireframe','สรุป Day 1',
+    'Workshop: FigJam','— Figma จากศูนย์ —','ทัวร์ Figma','Frame & รูปทรง','Pen, Text & Stroke','Effects: เงา & เบลอ','Auto Layout คืออะไร','Resizing: Hug/Fixed/Fill','Components คืออะไร','Figma = โค้ดที่คุณรู้','Wireframe Lo-fi/Hi-fi',
+    'Workshop: Wireframe','สรุป Day 1',
     '— Day 2: AI → HTML —','AI Landscape','เครื่องมือ AI','Pipeline','Hands-on: Stitch','Hands-on: Figma Make',
-    'Hands-on: Claude → HTML','Design System คืออะไร','จาก Token สู่ทั้งเว็บ','Hands-on: Token Playground','อ่านงาน AI ออก','Prompt ให้ดี','ตัวอย่าง: Prompt → Output','ส่งมอบให้เดฟ','Capstone','เรียนต่อ','Now Go Build!'
+    'Hands-on: Claude → HTML','Design System คืออะไร','Component vs Design System','ตัวอย่าง: ปุ่ม 2 ระดับ','โครงสร้าง Design System','สรุป: Component vs DS','Hands-on: Token Playground','Workshop: Design System กลาง','Prompt: สร้าง Design System','อ่านงาน AI ออก','Prompt ให้ดี','ตัวอย่าง: Prompt → Output','ส่งมอบให้เดฟ','Capstone','เรียนต่อ','Now Go Build!'
   ];
   slideTitles.splice(33,1); // ลบ phantom 'Figma = โค้ดที่คุณรู้' (เลื่อน →33 หลังเพิ่ม Auto Layout/Components)
   const navProgress=document.getElementById('navProgress');
@@ -1655,20 +1892,21 @@ function openLightbox(src){const lb=document.getElementById('lightbox');document
     {label:'Wireframe & สรุป Day 1',items:[33,34,35]},
     {label:'Day 2 · AI → HTML',items:[36,37,38,39]},
     {label:'ลองใช้ AI Tools',items:[40,41,42]},
-    {label:'Design System',items:[43,44,45]},
-    {label:'วิจารณ์งาน & Prompt',items:[46,47,48]},
-    {label:'ส่งมอบ & ปิดคอร์ส',items:[49,50,51,52]}
+    {label:'Design System',items:[43,44,45,46,47,48,49,50]},
+    {label:'วิจารณ์งาน & Prompt',items:[51,52,53]},
+    {label:'ส่งมอบ & ปิดคอร์ส',items:[54,55,56,57]}
   ];
   const sbNav=document.getElementById('sbNav');
   const sidebar=document.getElementById('sidebar');
   const cleanT=t=>t.replace(/^—\s*/,'').replace(/\s*—$/,'');
-  const sbIcons=['🏠','🗺️','🎯','🧠','⬇️','🔗','⚔️','🧭','🎨','🔀','👥','🧩','💬','👁️','♿','🚧','🍵','🍅','🔍','🎮','🧑‍💼','🧬','☕','📊','🧠','🧰','🗂️','🔲','✒️','🌫️','🧲','↔️','🧩','💻','✏️','🛠️','✅','🚀','🌐','🤖','🔁','🧵','🪄','✳️','🎨','🧱','🎛️','👀','✍️','🖥️','🤝','🏁','📚','🎉'];
+  const sbIcons=['🏠','🗺️','🎯','🧠','⬇️','🔗','⚔️','🧭','🎨','🔀','👥','🧩','💬','👁️','♿','🚧','🍵','🍅','🔍','🎮','🧑‍💼','🧬','☕','📊','🧠','🧰','🗂️','🔲','✒️','🌫️','🧲','↔️','🧩','💻','✏️','🛠️','✅','🚀','🌐','🤖','🔁','🧵','🪄','✳️','🎨','⚖️','🔘','🧱','📌','🎛️','🏗️','📝','👀','✍️','🖥️','🤝','🏁','📚','🎉'];
   sbIcons.splice(33,1); // ลบไอคอน phantom (เลื่อน →33 หลังเพิ่ม Auto Layout/Components)
   sbGroups.forEach(g=>{
     const gl=document.createElement('div');gl.className='sb-group-label';gl.textContent=g.label;sbNav.appendChild(gl);
     g.items.forEach(i=>{
       const it=document.createElement('div');it.className='sb-item'+(i===0?' active':'');it.dataset.idx=i;
       it.innerHTML='<span class="ix">'+String(i+1).padStart(2,'0')+'</span><span class="ic">'+(sbIcons[i]||'•')+'</span><span>'+cleanT(slideTitles[i])+'</span>';
+      if(/^Workshop/.test(slideTitles[i]))it.classList.add('ws');
       it.addEventListener('click',()=>{goToSlide(i);if(window.innerWidth<=768)sidebar.classList.add('hidden');});
       sbNav.appendChild(it);
     });
@@ -2077,6 +2315,17 @@ function openLightbox(src){const lb=document.getElementById('lightbox');document
   document.getElementById('fmCopy').addEventListener('click',()=>copyText(PROMPTS[active].text));
   modal.addEventListener('click',e=>{if(e.target===modal)closeFmPrompts();});
 })();
+</script>
+<script>
+/* ปุ่มคัดลอก prompt ในสไลด์ (data-copy="id ของข้อความ") */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.copy-btn[data-copy]'); if(!b)return;
+  const el=document.getElementById(b.dataset.copy); if(!el)return;
+  const t=el.innerText.trim(), o=b.textContent;
+  const done=()=>{b.textContent='✅ คัดลอกแล้ว';setTimeout(()=>{b.textContent=o;},1600);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done).catch(()=>{});}
+  else{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(err){}document.body.removeChild(ta);}
+});
 </script>
 </body>
 </html>

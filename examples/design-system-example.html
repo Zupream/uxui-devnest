@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeetSpace · Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- ===== tokens.css — แหล่งความจริงเดียวของทั้งระบบ ===== -->
+<style id="tokens">
+:root{
+  /* Brand */
+  --color-primary:#5B5EE8;        /* Periwinkle */
+  --color-primary-hover:#4346C9;
+  --color-primary-soft:#EEEEFD;
+  --color-secondary:#B9A8F5;      /* Lavender */
+  --color-secondary-ink:#5A3FC0;
+  --color-secondary-soft:#F1ECFE;
+  --color-accent:#E8709A;         /* Rose Pink — ตกแต่งเท่านั้น */
+  --color-on-primary:#FFFFFF;
+  --gradient-brand:linear-gradient(90deg,#6C6FF5 0%,#B9A8F5 55%,#F3C6E3 100%);
+  --gradient-glow:radial-gradient(60% 50% at 15% 0%,#FBE3F1 0%,transparent 70%),radial-gradient(50% 45% at 95% 10%,#E8E6FD 0%,transparent 70%);
+
+  /* Neutral */
+  --color-bg:#FFF8FC;
+  --color-surface:#FFFFFF;
+  --color-border:#F1E2EE;
+  --color-text:#23213F;
+  --color-text-muted:#66627F;
+
+  /* Status */
+  --color-success:#3E9E7E;
+  --color-success-ink:#1F6B55;
+  --color-success-soft:#E4F5EE;
+  --color-warning:#F2B45A;
+  --color-warning-ink:#7A5300;
+  --color-warning-soft:#FDF1DC;
+  --color-danger:#C93A62;
+  --color-danger-hover:#A82E50;
+  --color-danger-soft:#FCE6ED;
+
+  /* Typography */
+  --font-sans:'IBM Plex Sans Thai',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+  --text-h1:32px;
+  --text-h2:24px;
+  --text-h3:20px;
+  --text-body:16px;
+  --text-small:14px;
+
+  /* Spacing */
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-6:24px;
+  --space-8:32px;
+
+  /* Radius */
+  --radius-sm:8px;
+  --radius-md:12px;
+  --radius-lg:18px;
+
+  /* Shadow & focus */
+  --shadow-sm:0 1px 3px rgba(35,33,63,.06),0 1px 2px rgba(35,33,63,.04);
+  --shadow-md:0 16px 36px rgba(91,94,232,.14);
+  --focus-ring:0 0 0 3px rgba(91,94,232,.35);
+}
+</style>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-sans);font-size:var(--text-body);line-height:1.6;color:var(--color-text);background:var(--gradient-glow),var(--color-bg);background-attachment:fixed;}
+code{font-family:var(--font-mono);font-size:.86em;background:var(--color-primary-soft);color:var(--color-primary-hover);padding:1px 6px;border-radius:6px;}
+:focus-visible{outline:none;box-shadow:var(--focus-ring);}
+
+/* ---------- layout ---------- */
+.topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--color-border);}
+.topbar .in{max-width:1120px;margin:0 auto;padding:var(--space-3) var(--space-6);display:flex;align-items:center;gap:var(--space-6);}
+.brand{display:flex;align-items:center;gap:var(--space-3);font-weight:700;}
+.brand .mk{width:36px;height:36px;border-radius:var(--radius-md);background:var(--gradient-brand);color:var(--color-on-primary);display:grid;place-items:center;font-size:18px;}
+.brand small{display:block;font-weight:500;font-size:12px;color:var(--color-text-muted);line-height:1.2;}
+.topnav{display:flex;gap:var(--space-1);margin-left:auto;}
+.topnav a{color:var(--color-text-muted);text-decoration:none;font-size:var(--text-small);font-weight:600;padding:var(--space-2) var(--space-3);border-radius:var(--radius-sm);}
+.topnav a:hover{background:var(--color-primary-soft);color:var(--color-primary-hover);}
+main{max-width:1120px;margin:0 auto;padding:var(--space-8) var(--space-6) 80px;}
+.hero{margin-bottom:var(--space-8);}
+.hero .bar{height:6px;width:120px;border-radius:999px;background:var(--gradient-brand);margin-top:var(--space-4);}
+.dots{display:inline-flex;gap:6px;align-items:center;}
+.dots i{width:8px;height:8px;border-radius:999px;background:var(--color-border);}
+.dots i.on{width:22px;background:var(--color-accent);}
+.hero .k{font-size:var(--text-small);font-weight:700;color:var(--color-secondary-ink);letter-spacing:.08em;text-transform:uppercase;}
+.hero h1{font-size:var(--text-h1);line-height:1.25;margin:var(--space-2) 0;}
+.hero p{color:var(--color-text-muted);max-width:62ch;}
+section{margin-top:56px;scroll-margin-top:80px;}
+section#export>h2{margin-bottom:var(--space-4);}
+section>h2{font-size:var(--text-h2);line-height:1.3;display:flex;align-items:center;gap:var(--space-3);}
+section>h2 .n{font-size:var(--text-small);font-weight:700;color:var(--color-primary-hover);background:var(--color-primary-soft);border-radius:999px;padding:2px 10px;}
+section>.lead{color:var(--color-text-muted);margin:var(--space-1) 0 var(--space-6);}
+h3{font-size:var(--text-h3);line-height:1.35;margin-bottom:var(--space-3);}
+.panel{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-6);box-shadow:var(--shadow-sm);}
+.panel+.panel{margin-top:var(--space-4);}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3);}
+.lbl{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-muted);margin:var(--space-4) 0 var(--space-2);}
+.lbl:first-child{margin-top:0;}
+.guide{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);margin-top:var(--space-4);}
+.guide div{border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);font-size:var(--text-small);line-height:1.55;}
+.guide .do{background:var(--color-success-soft);color:var(--color-success-ink);}
+.guide .dont{background:var(--color-danger-soft);color:var(--color-danger-hover);}
+.guide b{display:block;margin-bottom:2px;}
+
+/* ---------- tokens ---------- */
+.swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:var(--space-3);}
+.swatch{all:unset;cursor:pointer;display:flex;flex-direction:column;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);transition:transform .15s;}
+.swatch:hover{transform:translateY(-2px);}
+.swatch:focus-visible{box-shadow:var(--focus-ring);}
+.swatch .chip{height:52px;border-bottom:1px solid var(--color-border);}
+.swatch .meta{padding:var(--space-2) var(--space-3);}
+.swatch b{display:block;font-size:var(--text-small);}
+.swatch span{display:block;font-family:var(--font-mono);font-size:12px;color:var(--color-text-muted);}
+.scale{display:flex;flex-direction:column;gap:var(--space-2);}
+.scale .it{display:grid;grid-template-columns:120px 60px 1fr;align-items:center;gap:var(--space-3);font-size:var(--text-small);}
+.scale .bar{height:12px;border-radius:4px;background:var(--color-primary);}
+.radii,.shadows{display:flex;gap:var(--space-4);flex-wrap:wrap;}
+.radii div,.shadows div{width:120px;height:80px;background:var(--color-primary-soft);border:1px solid var(--color-border);display:grid;place-items:center;font-size:12px;font-family:var(--font-mono);color:var(--color-primary-hover);}
+.shadows div{background:var(--color-surface);border-radius:var(--radius-md);}
+
+/* ---------- typography ---------- */
+.type-row{display:grid;grid-template-columns:150px 1fr;gap:var(--space-4);align-items:baseline;padding:var(--space-3) 0;border-bottom:1px dashed var(--color-border);}
+.type-row:last-child{border-bottom:0;}
+.type-row .spec{font-family:var(--font-mono);font-size:12px;color:var(--color-text-muted);}
+
+/* ---------- components ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);font-family:inherit;font-weight:600;border:1.5px solid transparent;border-radius:var(--radius-md);cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .1s;text-decoration:none;white-space:nowrap;
+  font-size:var(--text-body);padding:var(--space-2) var(--space-4);min-height:44px;}
+.btn-sm{font-size:var(--text-small);padding:var(--space-1) var(--space-3);min-height:36px;border-radius:var(--radius-sm);}
+.btn-lg{font-size:18px;padding:var(--space-3) var(--space-6);min-height:52px;}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--color-primary);color:var(--color-on-primary);}
+.btn-primary:hover,.btn-primary.is-hover{background:var(--color-primary-hover);}
+.btn-secondary{background:var(--color-secondary-soft);color:var(--color-secondary-ink);}
+.btn-secondary:hover,.btn-secondary.is-hover{border-color:var(--color-secondary);}
+.btn-ghost{background:transparent;color:var(--color-primary-hover);}
+.btn-ghost:hover,.btn-ghost.is-hover{background:var(--color-primary-soft);}
+.btn-danger{background:var(--color-danger);color:var(--color-on-primary);}
+.btn-danger:hover,.btn-danger.is-hover{background:var(--color-danger-hover);}
+.btn.is-focus{box-shadow:var(--focus-ring);}
+.btn:disabled,.btn[aria-disabled="true"]{background:var(--color-border);color:var(--color-text-muted);border-color:transparent;cursor:not-allowed;transform:none;}
+.btn .spin{width:16px;height:16px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.field{display:flex;flex-direction:column;gap:var(--space-1);min-width:220px;flex:1;}
+.field label{font-size:var(--text-small);font-weight:600;}
+.input,.select{font-family:inherit;font-size:var(--text-body);color:var(--color-text);background:var(--color-surface);border:1.5px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3);min-height:44px;width:100%;transition:border-color .15s,box-shadow .15s;}
+.input::placeholder{color:var(--color-text-muted);}
+.input:focus,.select:focus,.input.is-focus{outline:none;border-color:var(--color-primary);box-shadow:var(--focus-ring);}
+.input.is-error{border-color:var(--color-danger);}
+.input.is-error:focus{box-shadow:0 0 0 3px rgba(201,58,98,.25);}
+.input:disabled{background:var(--color-bg);color:var(--color-text-muted);cursor:not-allowed;}
+.help{font-size:var(--text-small);color:var(--color-text-muted);}
+.help.err{color:var(--color-danger);}
+.select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2366627F' stroke-width='2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
+.check{display:inline-flex;align-items:center;gap:var(--space-2);font-size:var(--text-body);cursor:pointer;}
+.check input{appearance:none;width:20px;height:20px;border:1.5px solid var(--color-border);border-radius:6px;background:var(--color-surface);display:grid;place-items:center;cursor:pointer;margin:0;}
+.check input:checked{background:var(--color-primary);border-color:var(--color-primary);}
+.check input:checked::after{content:"";width:5px;height:10px;border:solid var(--color-on-primary);border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px);}
+.check input:focus-visible{box-shadow:var(--focus-ring);}
+
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:var(--text-small);font-weight:600;border-radius:999px;padding:2px var(--space-3);}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;}
+.badge-success{background:var(--color-success-soft);color:var(--color-success-ink);}
+.badge-warning{background:var(--color-warning-soft);color:var(--color-warning-ink);}
+.badge-danger{background:var(--color-danger-soft);color:var(--color-danger-hover);}
+.badge-primary{background:var(--color-primary-soft);color:var(--color-primary-hover);}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--space-4);}
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;transition:box-shadow .15s,transform .15s;}
+.card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.card .cover{height:96px;display:grid;place-items:center;font-size:40px;background:var(--color-primary-soft);}
+.card .body{padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-2);flex:1;}
+.card .t{display:flex;justify-content:space-between;align-items:center;gap:var(--space-2);}
+.card .t b{font-size:18px;}
+.card .meta{font-size:var(--text-small);color:var(--color-text-muted);}
+.card .btn{margin-top:auto;}
+
+.table-wrap{overflow-x:auto;border:1px solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface);}
+table{width:100%;border-collapse:collapse;font-size:var(--text-small);min-width:560px;}
+th,td{text-align:left;padding:var(--space-3) var(--space-4);border-bottom:1px solid var(--color-border);}
+th{background:var(--color-bg);font-weight:700;color:var(--color-text-muted);font-size:12px;letter-spacing:.04em;text-transform:uppercase;}
+tbody tr:last-child td{border-bottom:0;}
+tbody tr:hover{background:var(--color-primary-soft);}
+
+.overlay{position:fixed;inset:0;background:rgba(35,33,63,.4);display:none;align-items:center;justify-content:center;padding:var(--space-4);z-index:50;}
+.overlay.open{display:flex;}
+.modal{background:var(--color-surface);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);width:100%;max-width:440px;padding:var(--space-6);}
+.modal h3{margin-bottom:var(--space-2);}
+.modal p{color:var(--color-text-muted);font-size:var(--text-small);}
+.modal .sum{background:var(--color-bg);border-radius:var(--radius-md);padding:var(--space-3) var(--space-4);margin:var(--space-4) 0;font-size:var(--text-small);display:grid;grid-template-columns:auto 1fr;gap:var(--space-1) var(--space-4);}
+.modal .sum span{color:var(--color-text-muted);}
+.modal .acts{display:flex;justify-content:flex-end;gap:var(--space-2);}
+
+/* ---------- tokens.css export ---------- */
+.code{position:relative;background:var(--color-text);color:#F1ECFE;border-radius:var(--radius-lg);padding:var(--space-6);font-family:var(--font-mono);font-size:13px;line-height:1.7;white-space:pre;overflow:auto;max-height:420px;}
+.code .btn{position:absolute;top:var(--space-3);right:var(--space-3);}
+
+.toast{position:fixed;left:50%;bottom:var(--space-6);transform:translate(-50%,20px);opacity:0;background:var(--color-text);color:var(--color-surface);font-size:var(--text-small);font-weight:600;padding:var(--space-2) var(--space-4);border-radius:999px;box-shadow:var(--shadow-md);transition:all .2s;pointer-events:none;z-index:60;}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+
+@media(max-width:760px){
+  .topnav{display:none;}
+  main{padding:var(--space-6) var(--space-4) 64px;}
+  .guide{grid-template-columns:1fr;}
+  .type-row{grid-template-columns:1fr;gap:var(--space-1);}
+  .scale .it{grid-template-columns:100px 48px 1fr;}
+  .topbar .in{padding:var(--space-3) var(--space-4);}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="in">
+    <div class="brand"><span class="mk">🗓️</span><div>MeetSpace<small>Design System v1.0</small></div></div>
+    <nav class="topnav" aria-label="สารบัญ">
+      <a href="#tokens">Tokens</a><a href="#type">Typography</a><a href="#components">Components</a><a href="#export">tokens.css</a>
+    </nav>
+    <button class="btn btn-primary btn-sm" id="copyAll" type="button">📋 คัดลอก tokens.css</button>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="k">ระบบจองห้องประชุม</div>
+    <h1>MeetSpace Design System</h1>
+    <p>กติกาดีไซน์กลางของทีม — ทุกหน้าใน MeetSpace ใช้สี ตัวอักษร ระยะ และ component จากหน้านี้เท่านั้น ใครทำหน้าไหนก็แนบไฟล์นี้ให้ AI/เดฟได้เลย</p>
+    <div class="bar" aria-hidden="true"></div>
+  </div>
+
+  <!-- ===== 1 Tokens ===== -->
+  <section id="tokens">
+    <h2><span class="n">01</span>Tokens</h2>
+    <p class="lead">ค่าพื้นฐานทุกอย่างประกาศเป็น CSS variables ใน <code>:root</code> — กดที่สีเพื่อคัดลอกชื่อตัวแปร</p>
+
+    <div class="panel">
+      <div class="lbl">Brand</div>
+      <div class="swatches" data-group="brand"></div>
+      <div class="lbl">Gradient · Accent (ตกแต่งเท่านั้น)</div>
+      <div class="row">
+        <div style="flex:1;min-width:220px;height:52px;border-radius:var(--radius-md);background:var(--gradient-brand)"></div>
+        <span class="dots" aria-label="ตัวอย่าง page indicator"><i class="on"></i><i></i><i></i></span>
+        <span class="help">ใช้กับพื้นหลัง แถบตกแต่ง และ indicator — ไม่วางตัวอักษรบน gradient/สีชมพู เพราะ contrast ไม่พอ</span>
+      </div>
+      <div class="lbl">Neutral</div>
+      <div class="swatches" data-group="neutral"></div>
+      <div class="lbl">Status</div>
+      <div class="swatches" data-group="status"></div>
+    </div>
+
+    <div class="panel">
+      <div class="lbl">Spacing</div>
+      <div class="scale" id="spaceScale"></div>
+      <div class="lbl">Radius</div>
+      <div class="radii">
+        <div style="border-radius:var(--radius-sm)">radius-sm · 8</div>
+        <div style="border-radius:var(--radius-md)">radius-md · 12</div>
+        <div style="border-radius:var(--radius-lg)">radius-lg · 18</div>
+      </div>
+      <div class="lbl">Shadow</div>
+      <div class="shadows">
+        <div style="box-shadow:var(--shadow-sm)">shadow-sm</div>
+        <div style="box-shadow:var(--shadow-md)">shadow-md</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 2 Typography ===== -->
+  <section id="type">
+    <h2><span class="n">02</span>Typography</h2>
+    <p class="lead">ฟอนต์ IBM Plex Sans Thai — อ่านภาษาไทยและอังกฤษได้ชัดทุกขนาด</p>
+    <div class="panel">
+      <div class="type-row"><div class="spec">H1 · 32 / 700</div><div style="font-size:var(--text-h1);font-weight:700;line-height:1.25">จองห้องประชุมในคลิกเดียว</div></div>
+      <div class="type-row"><div class="spec">H2 · 24 / 700</div><div style="font-size:var(--text-h2);font-weight:700;line-height:1.3">ห้องที่ว่างวันนี้</div></div>
+      <div class="type-row"><div class="spec">H3 · 20 / 600</div><div style="font-size:var(--text-h3);font-weight:600;line-height:1.35">ห้อง Sky · ชั้น 12</div></div>
+      <div class="type-row"><div class="spec">Body · 16 / 400</div><div>เลือกวันและเวลา แล้วระบบจะแสดงห้องที่ว่างพร้อมจำนวนที่นั่ง</div></div>
+      <div class="type-row"><div class="spec">Small · 14 / 400</div><div style="font-size:var(--text-small);color:var(--color-text-muted)">ยกเลิกได้ฟรีก่อนเวลาประชุม 30 นาที</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 3 Components ===== -->
+  <section id="components">
+    <h2><span class="n">03</span>Components</h2>
+    <p class="lead">ทุก component ใช้ค่าจาก token ด้านบนเท่านั้น — ไม่มีสีหรือขนาดที่ hardcode</p>
+
+    <!-- Button -->
+    <div class="panel">
+      <h3>Button</h3>
+      <div class="lbl">Variants</div>
+      <div class="row">
+        <button class="btn btn-primary" type="button">จองห้อง</button>
+        <button class="btn btn-secondary" type="button">ดูตารางห้อง</button>
+        <button class="btn btn-ghost" type="button">ยกเลิก</button>
+        <button class="btn btn-danger" type="button">ลบการจอง</button>
+      </div>
+      <div class="lbl">Sizes — S / M / L</div>
+      <div class="row">
+        <button class="btn btn-primary btn-sm" type="button">Small</button>
+        <button class="btn btn-primary" type="button">Medium</button>
+        <button class="btn btn-primary btn-lg" type="button">Large</button>
+      </div>
+      <div class="lbl">States</div>
+      <div class="row">
+        <button class="btn btn-primary" type="button">Default</button>
+        <button class="btn btn-primary is-hover" type="button">Hover</button>
+        <button class="btn btn-primary is-focus" type="button">Focus</button>
+        <button class="btn btn-primary" type="button" disabled>Disabled</button>
+        <button class="btn btn-primary" type="button" id="loadingDemo"><span class="spin" aria-hidden="true"></span>กำลังจอง…</button>
+      </div>
+      <div class="guide">
+        <div class="do"><b>✓ ใช้เมื่อไหร่</b>Primary = การกระทำหลักของหน้า มีได้ 1 ปุ่มต่อหน้าจอ · Secondary = ทางเลือกรอง · Ghost = ยกเลิก/ปิด · Destructive = ลบหรือยกเลิกการจองเท่านั้น</div>
+        <div class="dont"><b>✗ ไม่ควรใช้เมื่อไหร่</b>อย่าวาง Primary สองปุ่มติดกัน · อย่าใช้สีแดงกับปุ่มที่ไม่ได้ลบข้อมูล · Secondary ใช้พื้นอ่อน + ตัวอักษรเข้ม เพราะตัวอักษรขาวบน #B9A8F5 contrast ไม่ผ่าน AA</div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div class="panel">
+      <h3>Input · Select · Checkbox</h3>
+      <div class="row" style="align-items:flex-start">
+        <div class="field"><label for="f1">ชื่อการประชุม</label><input class="input" id="f1" placeholder="เช่น Weekly Sync"><span class="help">ไม่เกิน 40 ตัวอักษร</span></div>
+        <div class="field"><label for="f2">อีเมลผู้จอง</label><input class="input is-error" id="f2" value="arisa@company" aria-invalid="true" aria-describedby="f2e"><span class="help err" id="f2e">รูปแบบอีเมลไม่ถูกต้อง</span></div>
+        <div class="field"><label for="f3">ห้อง (ปิดใช้งาน)</label><input class="input" id="f3" value="Sky · ชั้น 12" disabled></div>
+      </div>
+      <div class="row" style="margin-top:var(--space-4);align-items:flex-end">
+        <div class="field" style="max-width:280px"><label for="f4">ช่วงเวลา</label>
+          <select class="select" id="f4"><option>09:00 – 10:00</option><option>10:00 – 11:00</option><option>13:00 – 14:00</option></select></div>
+        <label class="check"><input type="checkbox" checked> ต้องการจอภาพ</label>
+        <label class="check"><input type="checkbox"> แจ้งเตือนก่อน 15 นาที</label>
+      </div>
+      <div class="guide">
+        <div class="do"><b>✓ ใช้เมื่อไหร่</b>มี label เหนือช่องเสมอ · ข้อความ error บอกวิธีแก้ ไม่ใช่แค่ "ผิด" · Select ใช้เมื่อมีตัวเลือก 4 ข้อขึ้นไป</div>
+        <div class="dont"><b>✗ ไม่ควรใช้เมื่อไหร่</b>อย่าใช้ placeholder แทน label · อย่าแสดง error ก่อนผู้ใช้พิมพ์เสร็จ · ตัวเลือก 2–3 ข้อใช้ radio/checkbox แทน select</div>
+      </div>
+    </div>
+
+    <!-- Badge + Card -->
+    <div class="panel">
+      <h3>Badge สถานะ · Card</h3>
+      <div class="row" style="margin-bottom:var(--space-4)">
+        <span class="badge badge-success">ว่าง</span>
+        <span class="badge badge-warning">รออนุมัติ</span>
+        <span class="badge badge-danger">ไม่ว่าง</span>
+        <span class="badge badge-primary">จองแล้ว</span>
+      </div>
+      <div class="cards">
+        <article class="card"><div class="cover" style="background:var(--gradient-glow),var(--color-primary-soft)">🔮</div><div class="body">
+          <div class="t"><b>Sky</b><span class="badge badge-success">ว่าง</span></div>
+          <div class="meta">ชั้น 12 · 8 ที่นั่ง · จอ TV</div>
+          <button class="btn btn-primary" type="button" data-open-modal="Sky">จองห้องนี้</button></div></article>
+        <article class="card"><div class="cover" style="background:var(--color-secondary-soft)">🌊</div><div class="body">
+          <div class="t"><b>Ocean</b><span class="badge badge-warning">รออนุมัติ</span></div>
+          <div class="meta">ชั้น 8 · 12 ที่นั่ง · Projector</div>
+          <button class="btn btn-secondary" type="button">ดูรายละเอียด</button></div></article>
+        <article class="card"><div class="cover" style="background:var(--color-danger-soft)">🌸</div><div class="body">
+          <div class="t"><b>Blossom</b><span class="badge badge-danger">ไม่ว่าง</span></div>
+          <div class="meta">ชั้น 5 · 4 ที่นั่ง · Video call</div>
+          <button class="btn btn-primary" type="button" disabled>ไม่ว่างช่วงนี้</button></div></article>
+      </div>
+      <div class="guide">
+        <div class="do"><b>✓ ใช้เมื่อไหร่</b>Badge บอกสถานะสั้น ๆ 1–2 คำ ใช้สีตามความหมายเสมอ (เขียว = ว่าง, แดง = ไม่ว่าง) · Card ใช้แสดงห้องทีละรายการ มีปุ่มหลักได้ 1 ปุ่ม</div>
+        <div class="dont"><b>✗ ไม่ควรใช้เมื่อไหร่</b>อย่าใช้ badge แทนปุ่ม · อย่าสื่อสถานะด้วยสีอย่างเดียว ต้องมีข้อความกำกับ</div>
+      </div>
+    </div>
+
+    <!-- Modal + Table -->
+    <div class="panel">
+      <h3>Modal · Table</h3>
+      <div class="row" style="margin-bottom:var(--space-4)">
+        <button class="btn btn-primary" type="button" data-open-modal="Sky">เปิด Modal ยืนยันการจอง</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ห้อง</th><th>วันที่</th><th>เวลา</th><th>ผู้จอง</th><th>สถานะ</th></tr></thead>
+          <tbody>
+            <tr><td>Sky</td><td>12 พ.ย.</td><td>09:00 – 10:00</td><td>คุณอริสา</td><td><span class="badge badge-primary">จองแล้ว</span></td></tr>
+            <tr><td>Ocean</td><td>12 พ.ย.</td><td>13:00 – 14:30</td><td>คุณภูริ</td><td><span class="badge badge-warning">รออนุมัติ</span></td></tr>
+            <tr><td>Blossom</td><td>13 พ.ย.</td><td>10:00 – 11:00</td><td>คุณมายด์</td><td><span class="badge badge-danger">ยกเลิก</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="guide">
+        <div class="do"><b>✓ ใช้เมื่อไหร่</b>Modal ใช้ยืนยันการกระทำสำคัญ (จอง/ลบ) ปิดได้ด้วย Esc · Table ใช้เทียบข้อมูลหลายแถว เลื่อนแนวนอนได้บนมือถือ</div>
+        <div class="dont"><b>✗ ไม่ควรใช้เมื่อไหร่</b>อย่าเปิด modal ซ้อน modal · อย่าใส่ฟอร์มยาวใน modal · อย่าใช้ table กับข้อมูลน้อยกว่า 3 แถว (ใช้ card แทน)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 4 Export ===== -->
+  <section id="export">
+    <h2><span class="n">04</span>tokens.css</h2>
+    <div class="code" id="tokensCode"><button class="btn btn-secondary btn-sm" type="button" id="copyCode">📋 คัดลอก</button><span id="tokensText"></span></div>
+  </section>
+</main>
+
+<div class="overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="modal">
+    <h3 id="mTitle">ยืนยันการจองห้อง</h3>
+    <p>ตรวจสอบรายละเอียดก่อนกดยืนยัน ระบบจะส่งอีเมลแจ้งผู้เข้าร่วมทุกคน</p>
+    <div class="sum"><span>ห้อง</span><b id="mRoom">Sky</b><span>วันที่</span><b>12 พ.ย. 2026</b><span>เวลา</span><b>09:00 – 10:00</b></div>
+    <div class="acts">
+      <button class="btn btn-ghost" type="button" data-close>ยกเลิก</button>
+      <button class="btn btn-primary" type="button" id="confirmBtn">ยืนยันการจอง</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const css=getComputedStyle(document.documentElement);
+const v=n=>css.getPropertyValue(n).trim();
+
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1800);}
+function copy(text,msg){
+  const done=()=>toast(msg||'คัดลอกแล้ว ✓');
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done).catch(()=>fallback());}
+  else fallback();
+  function fallback(){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}ta.remove();}
+}
+
+/* swatches */
+const SW={
+  brand:[['Primary','--color-primary'],['Primary hover','--color-primary-hover'],['Primary soft','--color-primary-soft'],['Secondary','--color-secondary'],['Secondary ink','--color-secondary-ink'],['Secondary soft','--color-secondary-soft'],['Accent','--color-accent']],
+  neutral:[['Background','--color-bg'],['Surface','--color-surface'],['Border','--color-border'],['Text','--color-text'],['Text muted','--color-text-muted']],
+  status:[['Success','--color-success'],['Success ink','--color-success-ink'],['Warning','--color-warning'],['Warning ink','--color-warning-ink'],['Danger','--color-danger'],['Danger soft','--color-danger-soft']],
+};
+document.querySelectorAll('.swatches').forEach(box=>{
+  box.innerHTML=SW[box.dataset.group].map(([name,token])=>
+    `<button class="swatch" type="button" data-token="${token}" aria-label="คัดลอก ${token}"><div class="chip" style="background:var(${token})"></div><div class="meta"><b>${name}</b><span>${token}</span><span>${v(token).toUpperCase()}</span></div></button>`).join('');
+});
+document.addEventListener('click',e=>{
+  const s=e.target.closest('.swatch'); if(s)copy(`var(${s.dataset.token})`,`คัดลอก var(${s.dataset.token}) แล้ว`);
+});
+
+/* spacing scale */
+$('#spaceScale').innerHTML=['--space-1','--space-2','--space-3','--space-4','--space-6','--space-8'].map(t=>
+  `<div class="it"><code>${t}</code><span>${v(t)}</span><div class="bar" style="width:calc(var(${t}) * 6)"></div></div>`).join('');
+
+/* tokens.css export */
+const tokensCss=$('#tokens').textContent.trim();
+$('#tokensText').textContent=tokensCss;
+$('#copyCode').addEventListener('click',()=>copy(tokensCss,'คัดลอก tokens.css แล้ว ✓'));
+$('#copyAll').addEventListener('click',()=>copy(tokensCss,'คัดลอก tokens.css แล้ว ✓'));
+
+/* modal */
+const modal=$('#modal');let lastFocus=null;
+function openModal(room){lastFocus=document.activeElement;$('#mRoom').textContent=room;modal.classList.add('open');$('#confirmBtn').focus();}
+function closeModal(){modal.classList.remove('open');lastFocus&&lastFocus.focus();}
+document.querySelectorAll('[data-open-modal]').forEach(b=>b.addEventListener('click',()=>openModal(b.dataset.openModal)));
+modal.addEventListener('click',e=>{if(e.target===modal||e.target.closest('[data-close]'))closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))closeModal();});
+$('#confirmBtn').addEventListener('click',()=>{closeModal();toast('จองห้องเรียบร้อย ✓');});
+</script>
+</body>
+</html>
